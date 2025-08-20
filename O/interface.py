@@ -978,4 +978,78 @@ class NN_interface_sc_multimap_selective_evaluation:
 
         self.inds_solved_current = np.where(obj.estimates_BAR[2,:,0].mask == False)[0]
 
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+
+def NN_interface_sc_multimap_selective_evaluation_( 
+                                                    
+                                                    name,
+                                                    n_states = 1,
+
+                                                    # each state is an MD dataset with a certain n_MD_frames number of frames:
+                                                    # each dataset is single-component (with molecule X)
+                                                    list_r  = None, 
+                                                    # r : coordinates saved  during MD (NVT)
+                                                    # array shape  : (n_MD_frames, N, 3)
+                                                    # units        : nm
+                                                    # ergodic data : for each atom (all atoms are distinguishable in the model)
+                                                    # no PBC       : must have whole molecules that are not jumping in Cartesian space
+                                                    list_b0 = None, 
+                                                    # b0 : static box used during MD
+                                                    # array shape  : (3,3) 
+                                                    # units        : nm
+                                                    list_u  = None,
+                                                    # u : potential energies saved during MD
+                                                    # array shape  : (n_MD_frames, 1) 
+                                                    # unit         : kT
+                                                    # crystal      : not per molecule (not lattice energy)
+                                                    list_u_ = None,
+                                                    # u_ : potential energy function used during MD
+                                                    # function st. : u_(r) = u ; r shape (m,N,3) and u shape (m,1) 
+                                                    # unit         : kT
+                                                    # crystal      : not per molecule (not lattice energy)
+                                                    single_mol_pdb_file = None,
+                                                    # single_mol_pdb_files : .pdb file of simple molecule (X)
+
+                                                    training = False,
+
+                                                    fraction_training=  0.8,
+
+                                                    running_in_notebook = True,
+
+                                                    parent_class = NN_interface_sc_multimap,
+                                                    model_class = PGMcrys_v1,
+
+                                                    ):
+    " example shown in JN_4.5 "
+    nn = NN_interface_sc_multimap_selective_evaluation(parent_class=parent_class,
+                                                       name = name,
+                                                       paths_datasets = [0 for _ in range(n_states)],
+                                                       running_in_notebook = running_in_notebook,
+                                                       training = False,
+                                                       model_class = model_class,
+                                                       )
+    
+    if training:
+        assert all([len(x) == n_states for x in [list_r, list_b0, list_u, list_u_]]), 'all lists should be same length'
+
+        class pdb_for_rdkit:
+            def __init__(self, single_mol_pdb_file):
+                self._single_mol_pdb_file_ = single_mol_pdb_file
+
+        for k in range(n_states):
+            nn.nns[k].r          = np.array(list_r[k]).astype(np.float32)
+            nn.nns[k].b0         = np.array(list_b0[k])
+            nn.nns[k].u          = np.array(list_u[k])
+            nn.nns[k].u_mean     = list_u[k].mean()
+            nn.nns[k].n_training = int(list_u[k].shape[0]*fraction_training)
+            nn.nns[k].u_         = list_u_[k]
+            nn.nns[k].sc         = pdb_for_rdkit(single_mol_pdb_file)
+            nn.nns[k].training   = True
+
+        nn.training = True
+    else: pass
+
+    return nn
+
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+
