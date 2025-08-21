@@ -1047,7 +1047,11 @@ def NN_interface_sc_multimap_selective_evaluation_(
             nn.nns[k].training   = True
 
         nn.training = True
-    else: pass
+    else:
+        if list_u_ is not None: 
+            for k in range(n_states):
+                nn.nns[k].u_     = list_u_[k]
+        else: pass
 
     return nn
 
