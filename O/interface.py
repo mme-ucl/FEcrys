@@ -76,13 +76,13 @@ class NN_interface_helper:
             sys.modules['NN.representation_layers.SingleComponent_map'] = NN.representation_layers.SingleComponent_map
             self.model = self.model_class.load_model(self.name_save_model, VERSION='OLD')
 
-    def set_training_validation_split_(self, inds_rand=None):
+    def set_training_validation_split_(self, n_training, inds_rand=None):
         if self.inds_rand is None and inds_rand is None:
             inds_rand = None ; a=0
             while inds_rand is None:
                 a+=1
                 print('inds_rand attempt:',a)
-                inds_rand = find_split_indices_(self.u, split_where=self.n_training, tol=0.0001)
+                inds_rand = find_split_indices_(self.u, split_where=n_training, tol=0.0001)
             self.inds_rand = np.array(inds_rand)
 
         elif self.inds_rand is None and inds_rand is not None:
@@ -92,11 +92,11 @@ class NN_interface_helper:
         else:
             print('inds_rand, imported earlier, were used')
 
-        self.r_training = np.array(self.r[self.inds_rand][:self.n_training])
-        self.r_validation = np.array(self.r[self.inds_rand][self.n_training:])
+        self.r_training = np.array(self.r[self.inds_rand][:n_training])
+        self.r_validation = np.array(self.r[self.inds_rand][n_training:])
     
-        self.u_training = np.array(self.u[self.inds_rand][:self.n_training])
-        self.u_validation = np.array(self.u[self.inds_rand][self.n_training:])
+        self.u_training = np.array(self.u[self.inds_rand][:n_training])
+        self.u_validation = np.array(self.u[self.inds_rand][n_training:])
 
     def check_PES_matching_dataset_(self, m=1000):
         print('checking that PES matches the sampled dataset:')
@@ -422,35 +422,6 @@ class NN_interface_sc(NN_interface_helper):
 
             del self.simulation_data
 
-    def truncate_data_(self, m=None):
-        '''
-        trying to fix this by attaching and detaching batches especially if array is larger along other axes
-        
-        If needed: 
-            this function makes the dataset (self.r) smaller in size
-                ran as soon as NN_interface_sc initialised (at least before set_ic_map_step2)
-        
-        Why:
-        Memory (RAM) in larger supercells overflows such that tensorflow does not work:
-            - cause: tensorflow (tf) loading whole dataset into GPU memory
-                - cause: any one function in any part of ic_map, during dataset initialisation, not numpy but tf
-            - solutions (good): 
-                change all functions involved with dataset initialisation to numpy (i.e., have a numpy version of ic_map._forward_)
-                change to torch where small data batches attached to gpu at any time
-                use a computer with more (V)RAM
-            - solutions (bad):
-                use this function to be able to train something large, but at the cost of error bars being high.
-                    - cause: early overfitting = validation loss not properly minimised
-                        - cause: q (PGM) not symmetry aware --> needs plenty data in a larger supercell --> memory.
-        '''
-        m_initial = len(self.u)
-        inds = np.random.choice(m_initial, m_initial, replace=False)
-        self.r = self.r[inds][:m]
-        self.u = self.u[inds][:m]
-        assert len(self.r) == len(self.u)
-        self.n_training = int(self.u.shape[0]*self.fraction_training)
-        print(f'{m} out of {m_initial} datapoints will be used from this dataset')
-
     def set_ic_map_step1(self, ind_root_atom=11, option=None):
         '''
         self.sc.mol is available for this reason; to check the indices of atoms in the molecule
@@ -469,9 +440,20 @@ class NN_interface_sc(NN_interface_helper):
                          check_PES = True,
                          ):
         self.r = self.ic_map.remove_COM_from_data_(self.r)
-        self.set_training_validation_split_(inds_rand=inds_rand)
+        self.set_training_validation_split_(n_training=self.n_training, inds_rand=inds_rand)
         if check_PES: self.check_PES_matching_dataset_()
         else: pass
+
+    def truncate_data_(self, m=None):
+        m_initial = len(self.u)
+        assert hasattr(self, 'r_training')
+        self.set_training_validation_split_(n_training=m)
+        self.r = self.r_training
+        self.u = self.u_training
+        assert len(self.r) == len(self.u) == m
+        self.n_training = int(m*self.fraction_training)
+        self.set_training_validation_split_(n_training=self.n_training)
+        print(f'{m} out of {m_initial} datapoints will be used from this dataset')
 
     def set_ic_map_step3(self,
                          n_mol_unitcell : int = 1, # !! important in this new version
