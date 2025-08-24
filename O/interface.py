@@ -561,7 +561,6 @@ class NN_interface_sc_multimap(NN_interface_helper):
             self.nns[i].set_ic_map_step3(n_mol_unitcell = self.n_mol_unitcells[i],
                                          COM_remover = COM_remover,
                                         )
-        # TODO: check that the later merging reaches back into each nns[i].ic_map
 
     def set_model(self,
                   learning_rate = 0.001,
