@@ -363,8 +363,14 @@ class NN_interface_helper:
             plot.plot(self.evaluation_grid, BAR_V_FEs_averaged,                      color=colors[3], linewidth=2)
         else: pass
 
-        if ax is not None: plot.set_ylim(FE-window, FE+window)
-        else:              plot.ylim(FE-window, FE+window)
+        if ax is not None:
+            plot.set_ylim(FE-window, FE+window)
+            plot.set_xlabel('training batch', size=13)
+            plot.set_ylabel('FE / kT', size=13)
+        else:
+            plot.ylim(FE-window, FE+window)
+            plot.xlabel('training batch', size=13)
+            plot.ylabel('FE / kT', size=13)
 
         #print(f'     grid search estimate : {self.FEs[-1]/n_mol}  +/- standard deviation = {self.SDs[-1]/n_mol} ')
         #print(f'     final pymbar result  : {self.BAR_V_FE/n_mol} +/- standard error     = {self.BAR_V_SE/n_mol}')
