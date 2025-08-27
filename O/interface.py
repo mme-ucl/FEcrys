@@ -368,10 +368,12 @@ class NN_interface_helper:
 
         #print(f'     grid search estimate : {self.FEs[-1]/n_mol}  +/- standard deviation = {self.SDs[-1]/n_mol} ')
         #print(f'     final pymbar result  : {self.BAR_V_FE/n_mol} +/- standard error     = {self.BAR_V_SE/n_mol}')
-        print(f'     grid search estimate (kT) : {np.round(self.FEs[-1]/n_mol,  4)}  +/- standard deviation = {np.round(self.SDs[-1]/n_mol,  4)} ')
-        #print(f'     final pymbar result  (kT) : {np.round(self.BAR_V_FE/n_mol, 4)}  +/- standard error     = {np.round(self.BAR_V_SE/n_mol, 4)} ')
-        print(f'     final pymbar result  (kT) : {color_text_(np.round(self.BAR_V_FE/n_mol, 4),"B")}  \
-                 +/- standard error     = {color_text_(np.round(self.BAR_V_SE/n_mol, 4),"B")} ')
+        print(f'     grid search estimate (kT) : {np.round(self.FEs[-1]/n_mol,  4)}  +/- standard deviation : {np.round(self.SDs[-1]/n_mol,  4)} ')
+        se = np.round(self.BAR_V_SE/n_mol, 4)
+        color = "B" if se<0.5 else "R"
+        se = color_text_(se, color)
+        fe = color_text_(np.round(self.BAR_V_FE/n_mol, 4), color)
+        print(f'     final pymbar result  (kT) : {fe}  +/- standard error     : {se} ')
 
 class NN_interface_sc(NN_interface_helper):
     '''
