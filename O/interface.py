@@ -400,11 +400,13 @@ class NN_interface_sc(NN_interface_helper):
             if type(self.path_dataset) is str:
                 self.u = load_pickle_(self.path_dataset)['MD dataset']['u']
                 self.u_mean = self.u.mean()
+                print(f'This MD dataset contains {len(self.u)} datapoints')
             else:
                 self.u_mean = np.array(self.path_dataset)
         else:
             self.import_MD_dataset_()
- 
+            print(f'This MD dataset contains {len(self.u)} datapoints')
+            
     def import_MD_dataset_(self,):
             self.simulation_data = load_pickle_(self.path_dataset)
             self.sc = SingleComponent(**self.simulation_data['args_initialise_object'])
