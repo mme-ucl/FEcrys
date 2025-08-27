@@ -305,8 +305,8 @@ class itp2FF(MM_system_helper):
 
             assert np.abs(self._permute_molecule_to_top_[self._unpermute_molecule_from_top_] - np.arange(self.n_atoms_mol)).sum() == 0
 
-            print('forward permutation works:',np.abs(r_pdb[self._permute_molecule_to_top_] - r_gro).max())
-            print('inverse permatation works:',np.abs(r_pdb - r_gro[self._unpermute_molecule_from_top_]).max())
+            print('forward permutation works:', np.abs(r_pdb[self._permute_molecule_to_top_] - r_gro).max()     == 0.0)
+            print('inverse permatation works:', np.abs(r_pdb - r_gro[self._unpermute_molecule_from_top_]).max() == 0.0)
 
             save_pickle_([self._permute_molecule_to_top_, self._unpermute_molecule_from_top_], str(self.single_mol_permutations.absolute()))
             
