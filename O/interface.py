@@ -377,12 +377,12 @@ class NN_interface_helper:
         round_dp = 4
         _fe = np.round(self.FEs[-1]/n_mol,  round_dp)
         sd  = np.round(self.SDs[-1]/n_mol,  round_dp)
-        print( f'     grid search estimate (kT) : {_fe}'.ljust(50)        + f'+/- standard deviation : {sd}'.ljust(50) )
+        print( f'     grid search estimate (kT) : ' + f'{_fe:<20}' + f'+/- standard deviation : ' + f'{sd:<20}' )
         se = np.round(self.BAR_V_SE/n_mol, round_dp)
         color = "B" if se<0.5 else "R"
         se = color_text_(se, color)
         fe = color_text_(np.round(self.BAR_V_FE/n_mol, round_dp), color)
-        print( f'     final pymbar result  (kT) : {fe}'.ljust(50) + ' '*9 + f'+/- standard error     : {se}'.ljust(50) )
+        print( f'     final pymbar result  (kT) : ' + f'{fe:<33}'  + f'+/- standard error     : ' + f'{se:<20}'  )
 
 class NN_interface_sc(NN_interface_helper):
     '''
