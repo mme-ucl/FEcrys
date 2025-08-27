@@ -379,7 +379,7 @@ class NN_interface_helper:
         sd  = np.round(self.SDs[-1]/n_mol,  round_dp)
         print( f'     grid search estimate (kT) : ' + f'{_fe:<20}' + f'+/- standard deviation : ' + f'{sd:<20}' )
         se = np.round(self.BAR_V_SE/n_mol, round_dp)
-        color = "B" if se<0.5 else "R"
+        color = "B" if se < 0.5 else "O" if se < 1.0 else "R"
         se = color_text_(se, color)
         fe = color_text_(np.round(self.BAR_V_FE/n_mol, round_dp), color)
         print( f'     final pymbar result  (kT) : ' + f'{fe:<33}'  + f'+/- standard error     : ' + f'{se:<20}'  )
