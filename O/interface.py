@@ -366,8 +366,8 @@ class NN_interface_helper:
         if ax is not None: plot.set_ylim(FE-window, FE+window)
         else:              plot.ylim(FE-window, FE+window)
 
-        print(f'rough grid search estimate: {self.FEs[-1]/n_mol}  +/- standard deviation = {self.SDs[-1]/n_mol} ')
-        print(f'     pymbar final estimate: {self.BAR_V_FE/n_mol} +/- standard error     = {self.BAR_V_SE/n_mol}')
+        print(f'     grid search estimate : {self.FEs[-1]/n_mol}  +/- standard deviation = {self.SDs[-1]/n_mol} ')
+        print(f'     final pymbar result  : {self.BAR_V_FE/n_mol} +/- standard error     = {self.BAR_V_SE/n_mol}')
 
 class NN_interface_sc(NN_interface_helper):
     '''
