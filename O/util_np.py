@@ -334,6 +334,22 @@ def get_distance_np_(R, inds_2_atoms):
 
 ## ## 
 
+def color_text_(text, p='_R'):
+    # REF: https://stackoverflow.com/questions/8924173/how-can-i-print-bold-text-in-python
+    selection = ''
+    if '_' in p: selection += '\033[4m'
+    else: pass
+    if p.isupper(): selection += '\033[1m'
+    else: pass
+    color = {   'p'   : '\033[95m', 'c'   : '\033[96m', 'dc'  : '\033[36m',
+                'b'   : '\033[94m', 'g'   : '\033[92m', 'y'   : '\033[93m',
+                'r'   : '\033[91m', 'o'   : '\033[38;5;208m',
+    }[p.replace('_', '').lower()]
+    selection += color
+    return selection + str(text) + '\033[0m'
+
+## ## 
+
 class TestConverged_1D:
     def __init__(self,
                  x,
@@ -349,7 +365,11 @@ class TestConverged_1D:
         err = np.ma.divide(err,VAR)**0.5
         err *= 10.0
         self.err = np.array(err)
-        if verbose: print(f'with tol = {self.tol}, is converged:',self.__call__())
+        
+        if verbose:
+            gR_ = lambda _bool : ['R','g'][np.array(_bool).astype(np.int32)]
+            b = self.__call__()
+            print(f'with tol = {self.tol}, is converged: {color_text_(b, gR_(b))}')
         else: pass
         
         self.MU = MU
@@ -399,21 +419,6 @@ def C_to_K_(C):
 
 ## ## 
 
-def color_text_(text, p='_R'):
-    # REF: https://stackoverflow.com/questions/8924173/how-can-i-print-bold-text-in-python
-    selection = ''
-    if '_' in p: selection += '\033[4m'
-    else: pass
-    if p.isupper(): selection += '\033[1m'
-    else: pass
-    color = {   'p'   : '\033[95m', 'c'   : '\033[96m', 'dc'  : '\033[36m',
-                'b'   : '\033[94m', 'g'   : '\033[92m', 'y'   : '\033[93m',
-                'r'   : '\033[91m', 'o'   : '\033[38;5;208m',
-    }[p.replace('_', '').lower()]
-    selection += color
-    return selection + str(text) + '\033[0m'
-
-## ## 
 
 
 
