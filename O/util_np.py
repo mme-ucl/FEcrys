@@ -343,7 +343,7 @@ def color_text_(text, p='_R'):
     else: pass
     color = {   'p'   : '\033[95m', 'c'   : '\033[96m', 'dc'  : '\033[36m',
                 'b'   : '\033[94m', 'g'   : '\033[92m', 'y'   : '\033[93m',
-                'r'   : '\033[91m', 'o'   : '\033[38;5;208m',
+                'r'   : '\033[91m', 'o'   : '\033[38;5;208m', 'i' : '',
     }[p.replace('_', '').lower()]
     selection += color
     return selection + str(text) + '\033[0m'
@@ -418,6 +418,7 @@ def C_to_K_(C):
     return C + 273.15
 
 ## ## 
+
 
 
 
