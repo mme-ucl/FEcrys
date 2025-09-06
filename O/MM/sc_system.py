@@ -347,7 +347,7 @@ class SingleComponent:
         sc.stride_save_frame = dataset['MD dataset']['stride_save_frame']
         return sc
 
-def concatenate_datasets_(paths_datasets : list, remove_warmup=None):
+def concatenate_datasets_(paths_datasets : list, remove_warmup=None, stride=1):
     dataset_concat = {}
     a = 0
     keys = ['xyz', 'COMs', 'b', 'u', 'T']
@@ -361,17 +361,17 @@ def concatenate_datasets_(paths_datasets : list, remove_warmup=None):
 
             for key in keys:
                 dataset_concat['MD dataset'][key] = np.concatenate([dataset_concat['MD dataset'][key],
-                                                                           dataset['MD dataset'][key][remove_warmup:]],
-                                                                    axis=0)
+                                                                    dataset['MD dataset'][key][remove_warmup:][::stride],
+                                                                   ], axis=0)
         else:
             dataset_concat['args_initialise_object'] = dataset['args_initialise_object']
             dataset_concat['args_initialise_system'] = dataset['args_initialise_system']
             dataset_concat['args_initialise_simulation'] = dataset['args_initialise_simulation']
-            dataset_concat['MD dataset'] = {'xyz':dataset['MD dataset']['xyz'][remove_warmup:],
-                                            'COMs':dataset['MD dataset']['COMs'][remove_warmup:],
-                                            'b':dataset['MD dataset']['b'][remove_warmup:],
-                                            'u':dataset['MD dataset']['u'][remove_warmup:],
-                                            'T':dataset['MD dataset']['T'][remove_warmup:],
+            dataset_concat['MD dataset'] = {'xyz':dataset['MD dataset']['xyz'][remove_warmup:][::stride],
+                                            'COMs':dataset['MD dataset']['COMs'][remove_warmup:][::stride],
+                                            'b':dataset['MD dataset']['b'][remove_warmup:][::stride],
+                                            'u':dataset['MD dataset']['u'][remove_warmup:][::stride],
+                                            'T':dataset['MD dataset']['T'][remove_warmup:][::stride],
                                             'rbv':dataset['MD dataset']['rbv'],
                                             'stride_save_frame':dataset['MD dataset']['stride_save_frame'],
                                             }
@@ -1386,5 +1386,6 @@ class COST_FIX_permute_xyz_after_a_trajectory:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 """
+
 
 
