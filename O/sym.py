@@ -235,12 +235,12 @@ class DatasetSymmetryReduction:
             print('dealing with methyl group',i)
             [self._sort_methyl_(i, j, lookup_index = lookup_inds[j], offset=offsets[i]) for j in range(self.n_mol)];
     
-    def plot_methyl_(self, axes_off=True):
+    def plot_methyl_(self, axes_off=True, figsize=(6,6)):
         if hasattr(self, 'n_methyl_groups'): pass
         else: self._prepare_sort_methyl_()
 
         _range = [-np.pi, np.pi]
-        fig, ax = plt.subplots(max(self.n_mol, 2), max(self.n_methyl_groups, 2), figsize=(6,6))
+        fig, ax = plt.subplots(max(self.n_mol, 2), max(self.n_methyl_groups, 2), figsize=figsize)
         _r = reshape_to_molecules_np_(self.r, n_atoms_in_molecule=self.n_atoms_mol, n_molecules=self.n_mol)
         for i in range(self.n_methyl_groups):
             phi_h0 = get_torsion_np_(_r,  self.inds_torsions_ch3[i][0])
@@ -370,12 +370,12 @@ class DatasetSymmetryReduction:
             print('dealing with trimethyl group',i)
             [self._sort_trimethyl_(i, j, lookup_index = lookup_indices[j], offest=offest) for j in range(self.n_mol)];
 
-    def plot_trimethyl_(self, mask_0=True, axes_off=True):
+    def plot_trimethyl_(self, mask_0=True, axes_off=True, figsize=(2,10)):
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_trimethyl_()
 
         _range = [-np.pi, np.pi]
-        fig, ax = plt.subplots(self.n_mol, self.n_trimethyl_groups, figsize=(2,10))
+        fig, ax = plt.subplots(self.n_mol, self.n_trimethyl_groups, figsize=figsize)
         _r = reshape_to_molecules_np_(self.r, n_atoms_in_molecule=self.n_atoms_mol, n_molecules=self.n_mol)
         for i in range(self.n_trimethyl_groups):
             phi_h0 = get_torsion_np_(_r,  self.inds_torsions_trimethyl_cA[i][0])
@@ -463,13 +463,13 @@ class DatasetSymmetryReduction:
                 permutation = LOOKUPS[np.random.choice(2, 1, replace=False)[0]]
                 self.r[frame,inds_X_j,:] = np.take(self.r[frame,inds_X_j,:], permutation, axis=0)
 
-    def plot_n2_(self, inds_AB:list, axes_off=True):
+    def plot_n2_(self, inds_AB:list, axes_off=True, figsize=(6,6)):
 
         inds_A, inds_B = self.ic_map.ABCD_IC[[np.where(self.ic_map.ABCD_IC[:,0]==ind)[0][0] for ind in inds_AB]]
         assert [inds_A[i]==inds_B[i] for i in [1,2,3]] and inds_A[0]!=inds_B[0]
 
         _range = [-np.pi, np.pi]
-        fig, ax = plt.subplots(self.n_mol, figsize=(6,6))
+        fig, ax = plt.subplots(self.n_mol, figsize=figsize)
         _r = reshape_to_molecules_np_(self.r, n_atoms_in_molecule=self.n_atoms_mol, n_molecules=self.n_mol)
 
         phi_h0 = get_torsion_np_(_r, inds_A)
@@ -487,4 +487,5 @@ class DatasetSymmetryReduction:
         plt.tight_layout()
 
     ## ## ## ## 
+
 
