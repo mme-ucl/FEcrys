@@ -4,11 +4,11 @@ from .MM.sc_system import *
 
 ## ## ## ## 
 
-def cluster_symmetric_torsion_(x, symmetry_order:int=1, offest=np.pi):
+def cluster_symmetric_torsion_(x, symmetry_order:int=1, offset=np.pi):
     x = np.array(x).flatten()
     assert symmetry_order >= 1
     n = symmetry_order
-    decision_boundaries = np.linspace(-np.pi, np.pi, n+1)[:n] + offest/n
+    decision_boundaries = np.linspace(-np.pi, np.pi, n+1)[:n] + offset/n
     cluster_assignments = np.digitize(x, decision_boundaries)
     cluster_assignments = np.where(cluster_assignments==n, 0, cluster_assignments)
     #check = np.unique(cluster_assignments)
@@ -159,8 +159,8 @@ class DatasetSymmetryReduction:
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
-    def cluster_symmetric_torsion_(self, phi, symmetry_order:int, offest=np.pi):
-        C = [cluster_symmetric_torsion_(phi, symmetry_order=symmetry_order, offest=offest)]
+    def cluster_symmetric_torsion_(self, phi, symmetry_order:int, offset=np.pi):
+        C = [cluster_symmetric_torsion_(phi, symmetry_order=symmetry_order, offset=offset)]
         for _ in range(symmetry_order-1): 
             C.append(np.mod(C[-1]+1, symmetry_order))
         return np.stack(C, axis=-1).reshape([self.n_frames, symmetry_order])
@@ -190,7 +190,7 @@ class DatasetSymmetryReduction:
         a = ind_mol*self.n_atoms_mol ; b = a + self.n_atoms_mol
 
         phi_h0 = get_torsion_np_(reshape_to_molecules_np_(self.r[:,a:b], n_atoms_in_molecule=self.n_atoms_mol, n_molecules=1)[:,0], inds_torsions_0) 
-        C = self.cluster_symmetric_torsion_(phi_h0, 3, offest=offset)
+        C = self.cluster_symmetric_torsion_(phi_h0, 3, offset=offset)
         
         inds_H = np.array([inds_torsions_0, inds_torsions_1, inds_torsions_2])
         inds_H_j =  inds_H + ind_mol * self.n_atoms_mol
@@ -205,7 +205,7 @@ class DatasetSymmetryReduction:
                 permutation = self.LOOKUP_random_rotation[np.random.choice(3, 1, replace=False)[0]]
                 self.r[frame,inds_H_j,:] = np.take(self.r[frame,inds_H_j,:], permutation, axis=0)
 
-    ''' some cases need different offests for different methyl groups, adding.
+    ''' some cases need different offsets for different methyl groups, adding.
     def sort_methyl_(self, lookup_indices=[0,3]):
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_methyl_()
@@ -303,7 +303,7 @@ class DatasetSymmetryReduction:
         assert len(self.inds_torsions_trimethyl_cA) == len(self.inds_trimethyl_cA012h3)
         print('# trimethyl groups:', self.n_trimethyl_groups)
 
-    def _sort_trimethyl_(self, ind_trimethyl, ind_mol, lookup_index=0, offest=0):
+    def _sort_trimethyl_(self, ind_trimethyl, ind_mol, lookup_index=0, offset=0):
 
         occurrence = ind_trimethyl
         i = ind_mol
@@ -312,7 +312,7 @@ class DatasetSymmetryReduction:
         inds_cA0_cA1_cA2 = np.array([inds_torsions[0], inds_torsions[1], inds_torsions[2]])
         inds_A0h3_A1h3_A2h3 = np.array(self.inds_trimethyl_cA012h3[occurrence])
 
-        C = self.cluster_symmetric_torsion_(phi_cA0[:,i], 3, offest=offest)
+        C = self.cluster_symmetric_torsion_(phi_cA0[:,i], 3, offset=offset)
 
         ''' moving the carbons A0, A1, A2 (the main part) '''
         inds_cA0_cA1_cA2_i = inds_cA0_cA1_cA2 + i * self.n_atoms_mol
@@ -361,14 +361,14 @@ class DatasetSymmetryReduction:
                 self.r[frame, inds_h1, :] = np.take(r_h1_in[frame], permutation, axis=0)
                 self.r[frame, inds_h2, :] = np.take(r_h2_in[frame], permutation, axis=0)
         
-    def sort_trimethyl_(self, lookup_indices=[0,3], offest=0):
+    def sort_trimethyl_(self, lookup_indices=[0,3], offset=0):
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_trimethyl_()
 
         lookup_indices = (list(lookup_indices)*self.n_mol)[:self.n_mol]
         for i in range(self.n_trimethyl_groups):
             print('dealing with trimethyl group',i)
-            [self._sort_trimethyl_(i, j, lookup_index = lookup_indices[j], offest=offest) for j in range(self.n_mol)];
+            [self._sort_trimethyl_(i, j, lookup_index = lookup_indices[j], offset=offset) for j in range(self.n_mol)];
 
     def plot_trimethyl_(self, mask_0=True, axes_off=True, figsize=(2,10)):
         if hasattr(self, 'n_trimethyl_groups'): pass
@@ -430,23 +430,23 @@ class DatasetSymmetryReduction:
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
     ## reshuffle indices of two selected atoms:
 
-    def sort_n2_(self, inds_AB:list, lookup_indices:list=[-1], offest=0):
+    def sort_n2_(self, inds_AB:list, lookup_indices:list=[-1], offset=0):
 
         inds_A, inds_B = self.ic_map.ABCD_IC[[np.where(self.ic_map.ABCD_IC[:,0]==ind)[0][0] for ind in inds_AB]]
         assert [inds_A[i]==inds_B[i] for i in [1,2,3]] and inds_A[0]!=inds_B[0]
         
         lookup_indices = (list(lookup_indices)*self.n_mol)[:self.n_mol]
         print('dealing with custom n2 group')
-        [self._sort_n2_(inds_A, inds_B, j, lookup_index=lookup_indices[j], offest=offest) for j in range(self.n_mol)];
+        [self._sort_n2_(inds_A, inds_B, j, lookup_index=lookup_indices[j], offset=offset) for j in range(self.n_mol)];
 
-    def _sort_n2_(self, inds_A, inds_B, ind_mol, lookup_index=0, offest=0):
+    def _sort_n2_(self, inds_A, inds_B, ind_mol, lookup_index=0, offset=0):
         inds_torsions_0 = inds_A
         inds_torsions_1 = inds_B
 
         a = ind_mol*self.n_atoms_mol ; b = a + self.n_atoms_mol
 
         phi_h0 = get_torsion_np_(reshape_to_molecules_np_(self.r[:,a:b], n_atoms_in_molecule=self.n_atoms_mol, n_molecules=1)[:,0], inds_torsions_0) 
-        C = self.cluster_symmetric_torsion_(phi_h0, 2, offest=offest)
+        C = self.cluster_symmetric_torsion_(phi_h0, 2, offset=offset)
 
         inds_X_j = np.array([inds_torsions_0[0], inds_torsions_1[0]]) + ind_mol * self.n_atoms_mol
 
@@ -487,5 +487,6 @@ class DatasetSymmetryReduction:
         plt.tight_layout()
 
     ## ## ## ## 
+
 
 
