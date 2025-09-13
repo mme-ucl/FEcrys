@@ -222,6 +222,8 @@ class DatasetSymmetryReduction:
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_methyl_()
 
+        print(f'args provided: lookup_indices={lookup_indices}, offsets={offsets}')
+
         if type(lookup_indices[0]) is int:
             lookup_indices = [lookup_indices]*self.n_methyl_groups
             if len(offsets) > 1: print('!! check why this is printed')
@@ -365,6 +367,8 @@ class DatasetSymmetryReduction:
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_trimethyl_()
 
+        print(f'args provided: lookup_indices={lookup_indices}, offset={offset}')
+
         lookup_indices = (list(lookup_indices)*self.n_mol)[:self.n_mol]
         for i in range(self.n_trimethyl_groups):
             print('dealing with trimethyl group',i)
@@ -432,6 +436,8 @@ class DatasetSymmetryReduction:
 
     def sort_n2_(self, inds_AB:list, lookup_indices:list=[-1], offset=0):
 
+        print(f'args provided: inds_AB={inds_AB}, lookup_indices={lookup_indices}, offset={offset}')
+
         inds_A, inds_B = self.ic_map.ABCD_IC[[np.where(self.ic_map.ABCD_IC[:,0]==ind)[0][0] for ind in inds_AB]]
         assert [inds_A[i]==inds_B[i] for i in [1,2,3]] and inds_A[0]!=inds_B[0]
         
@@ -487,6 +493,7 @@ class DatasetSymmetryReduction:
         plt.tight_layout()
 
     ## ## ## ## 
+
 
 
 
