@@ -155,7 +155,7 @@ def PCA_(X0, removedims=3, diagonal=False, isotropic=False, not_whiten=False):
     return X0mean, Twhiten, Tblacken, std, _eigval
 
 class NotWhitenFlow:
-    def __init__(self, r_flat, removedims=3, whiten_anyway=True):
+    def __init__(self, r_flat, removedims=3, whiten_anyway=False):
 
         # r_flat : (m, dim) ; dim = n_mol*3
         self.dim_larger = r_flat.shape[1]
@@ -1736,4 +1736,5 @@ def box_inverse_(h):
                   tf.stack([ h[...,3], h[...,1], zero    ],axis=-1),
                   tf.stack([ h[...,4], h[...,5], h[...,2]],axis=-1),], axis=-2)
     return b, ladJ
+
 
