@@ -262,7 +262,7 @@ def pool_(x, ws=None):
 def tolBAR_(incuA, incuB,
             wsA=None, wsB=None,
             f_window_grain = [-180000.,60000.,30000],
-            tol=0.00001,
+            tol=0.0001,
             return_errs=False,
             ):
     
@@ -1067,3 +1067,4 @@ def plot_inv_test_res_(inv_test_result, mean_range=[True,True], forward_inverse=
             
         else: pass
     else: pass
+
