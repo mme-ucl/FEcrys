@@ -340,6 +340,34 @@ def scale_shift_x_(x,
 
     return tf.stack(y, axis=-1), ladJ
 
+def scale_shift_x_general_(x,
+                           physical_ranges_x,  # (n,)
+                           physical_centres_x, # (n,)
+                           model_range = 2.0,
+                           model_centre = 0.0,
+                           forward=True,
+                           ):
+    n_dof = x.shape[-1]
+
+    y = [] ; ladJ = 0.0
+    if forward:
+        for i in range(n_dof):
+            ji = model_range / physical_ranges_x[i]
+            y.append( ji*(x[...,i] - physical_centres_x[i]) + model_centre )
+            ladJ += tf.math.log(ji)
+
+    else:
+        for i in range(n_dof):
+            ji = physical_ranges_x[i] / model_range
+            y.append( ji*(x[...,i] - model_centre) + physical_centres_x[i] )
+            ladJ += tf.math.log(ji)
+    
+    if len(x.shape)>2:
+        ladJ *= tf.cast(tf.math.reduce_prod(x.shape[1:-1]),dtype=tf.float32)
+    else: pass
+
+    return tf.stack(y, axis=-1), ladJ
+
 def scale_shift_individual_x_(x,
                               physical_ranges_x,  # [1,...] use add_batch_axis True
                               physical_centres_x, # [1,...] use add_batch_axis True
@@ -1736,5 +1764,6 @@ def box_inverse_(h):
                   tf.stack([ h[...,3], h[...,1], zero    ],axis=-1),
                   tf.stack([ h[...,4], h[...,5], h[...,2]],axis=-1),], axis=-2)
     return b, ladJ
+
 
 
