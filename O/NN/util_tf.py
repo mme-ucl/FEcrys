@@ -172,6 +172,7 @@ class NotWhitenFlow:
 
     def forward(self, x):
         ladJ = 0.0
+        
         x = tf.reshape(x, [-1,self.n_mol,3])
         x -= x[:,:1]
         x = x[:,1:]
@@ -1764,6 +1765,7 @@ def box_inverse_(h):
                   tf.stack([ h[...,3], h[...,1], zero    ],axis=-1),
                   tf.stack([ h[...,4], h[...,5], h[...,2]],axis=-1),], axis=-2)
     return b, ladJ
+
 
 
 
