@@ -491,7 +491,7 @@ def rqs_tfp_(
                                )
     '''
     knot_slopes = normalize_knot_slopes_tfp_(tf.reshape(s, [-1]+shape_parallel+[dim, n_bins-1]), knot_slope_range=knot_slope_range)
-    
+
     RQS_obj = RQS_class_tfp(bin_widths = cast_64_(bin_positons_x),
                             bin_heights = cast_64_(bin_positons_y),
                             knot_slopes = cast_64_(knot_slopes),
@@ -640,4 +640,5 @@ def test_periodic_rqs_tfp_parallel_(n_bins = 8,
     plt.show()
 
 #"""
+
 
