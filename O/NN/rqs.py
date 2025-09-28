@@ -403,8 +403,8 @@ def test_periodic_rqs_parallel_(n_bins = 8,
 ############################################################################################
 # optional : the offical tensorflow implementation of RationalQuadraticSpline
 
-#""" * reason why commented out this block:
-''' * #
+"""
+''' * # old comment
     commenting out to remove dependency: tensorflow_probability
     while commented out, the 'use_tfp' argument only works when it is False
         if want to change this (i.e., start using use_tfp=True somewhere):
@@ -639,6 +639,5 @@ def test_periodic_rqs_tfp_parallel_(n_bins = 8,
     plt.plot(ladJxy[...,0]+ladJyx[...,0],color='red')
     plt.show()
 
-#"""
-
+"""
 
