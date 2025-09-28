@@ -454,7 +454,7 @@ def rqs_tfp_(
         x, # (..., dim           ) all elements inside the interval specified below
         w, # (..., dim*n_bins    ) unconstrained real numbers
         h, # (..., dim*n_bins    ) unconstrained real numbers
-        s, # (..., dim*(n_bins+1)) unconstrained real numbers
+        s, # (..., dim*(n_bins-1)) unconstrained real numbers
         interval = [-1.0, 1.0],  
         forward = True,
         min_bin_width = 1e-4,
@@ -509,7 +509,7 @@ def rqs_tfp_(
 def periodic_rqs_tfp_(x,                    # (..., dim)
                       list_w,               # 2 * [(..., n_bins * dim)]
                       list_h,               # 2 * [(..., n_bins * dim)]
-                      list_s,               # 2 * [(..., (n_bins+1) * dim)]
+                      list_s,               # 2 * [(..., (n_bins-1) * dim)]
                       list_shifts,          # 2 * [(..., dim)]
                       interval = [-1.0, 1.0],
                       forward = True,
@@ -640,3 +640,4 @@ def test_periodic_rqs_tfp_parallel_(n_bins = 8,
     plt.show()
 
 #"""
+
