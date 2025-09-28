@@ -94,10 +94,7 @@ def softplus_with_a_softcap_(x, a=9.0, s=0.2):
 def normalize_knot_slopes_(x, # elementwise
                            knot_slope_range, # list
                            ):
-    ''' 
-    in this .py file, knot slopes that are learned cannot be too high or too low.
-    This is a filter to allow this:
-    '''
+    ''' better when slopes are not too low, and also not too high '''
     min_knot_slope, max_knot_slope = knot_slope_range 
     return softplus_with_a_softcap_(x, a = max_knot_slope) + min_knot_slope
 
@@ -406,8 +403,8 @@ def test_periodic_rqs_parallel_(n_bins = 8,
 ############################################################################################
 # optional : the offical tensorflow implementation of RationalQuadraticSpline
 
-""" * reason why commented out this block:
-''' *
+#""" * reason why commented out this block:
+''' * #
     commenting out to remove dependency: tensorflow_probability
     while commented out, the 'use_tfp' argument only works when it is False
         if want to change this (i.e., start using use_tfp=True somewhere):
@@ -443,6 +440,16 @@ def knot_slopes_(MLP_output, # (..., dim*(n_bins-1))
     knot_slopes = tf.nn.softplus(MLP_output) + min_knot_slope
     return knot_slopes # (..., dim, n_bins-1)
 
+def soft_cap_tfp_(x, a, s):
+    exp_a = tf.exp(a)
+    c = s*(1.0+exp_a)/exp_a
+    return s*tf.math.log( (x/c) + 1.0 - (a/c) ) + tf.math.log(1.0 + exp_a)
+def softplus_with_a_softcap_tfp_(x, a=9.0, s=0.2):
+    return tf.where(x<=a, softplus_(x), soft_cap_tfp_(x, a=a, s=s))
+def normalize_knot_slopes_tfp_(x, knot_slope_range):
+    min_knot_slope, max_knot_slope = knot_slope_range 
+    return softplus_with_a_softcap_tfp_(x, a = max_knot_slope) + min_knot_slope
+
 def rqs_tfp_(
         x, # (..., dim           ) all elements inside the interval specified below
         w, # (..., dim*n_bins    ) unconstrained real numbers
@@ -450,15 +457,14 @@ def rqs_tfp_(
         s, # (..., dim*(n_bins+1)) unconstrained real numbers
         interval = [-1.0, 1.0],  
         forward = True,
-        min_bin_width = 0.001,
-        knot_slope_range = [0.001, None],
+        min_bin_width = 1e-4,
+        knot_slope_range = [1e-4, 50.0],
         ):
-    min_knot_slope = knot_slope_range[0]
-
+    
     dim = x.shape[-1]
     shape_parallel = [_ for _ in x.shape[1:-1]] 
     n_bins = w.shape[-1] // dim
-
+    
     xy_min, xy_max = interval
     domain_width = xy_max - xy_min
 
@@ -476,13 +482,16 @@ def rqs_tfp_(
                                    min_bin_width = min_bin_width,
                                    shape_parallel = shape_parallel,
                                    )
+    '''
     knot_slopes = knot_slopes_(s,
                                dim = dim,
                                n_bins = n_bins,
-                               min_knot_slope = min_knot_slope,
+                               min_knot_slope = knot_slope_range[0],
                                shape_parallel = shape_parallel,
                                )
- 
+    '''
+    knot_slopes = normalize_knot_slopes_tfp_(tf.reshape(s, [-1]+shape_parallel+[dim, n_bins-1]), knot_slope_range=knot_slope_range)
+    
     RQS_obj = RQS_class_tfp(bin_widths = cast_64_(bin_positons_x),
                             bin_heights = cast_64_(bin_positons_y),
                             knot_slopes = cast_64_(knot_slopes),
@@ -504,8 +513,8 @@ def periodic_rqs_tfp_(x,                    # (..., dim)
                       list_shifts,          # 2 * [(..., dim)]
                       interval = [-1.0, 1.0],
                       forward = True,
-                      min_bin_width = 0.001,
-                      knot_slope_range = [0.001, None],
+                      min_bin_width = 1e-4,
+                      knot_slope_range = [1e-4, 50.0],
                      ):
     n_transforms = list_h.shape[0] # len(list_h) # =2 in practice
 
@@ -534,8 +543,8 @@ def periodic_rqs_tfp_(x,                    # (..., dim)
 
 def test_periodic_rqs_tfp_(n_bins = 8,
                            n_transforms = 2,
-                           min_bin_width = 0.001,
-                           knot_slope_range = [0.001, None],
+                           min_bin_width = 1e-4,
+                           knot_slope_range = [1e-4, 50.0],
                            ):
     m = 1000
     import numpy as np
@@ -582,8 +591,8 @@ def test_periodic_rqs_tfp_(n_bins = 8,
 
 def test_periodic_rqs_tfp_parallel_(n_bins = 8,
                                     n_transforms = 2,
-                                    min_bin_width = 0.001,
-                                    knot_slope_range = [0.001, None],
+                                    min_bin_width = 1e-4,
+                                    knot_slope_range = [1e-4, 50.0],
                                     ):
     m = 1000
     import numpy as np
@@ -630,4 +639,4 @@ def test_periodic_rqs_tfp_parallel_(n_bins = 8,
     plt.plot(ladJxy[...,0]+ladJyx[...,0],color='red')
     plt.show()
 
-"""
+#"""
