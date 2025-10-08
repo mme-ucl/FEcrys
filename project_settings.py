@@ -366,8 +366,9 @@ def PGM_(
                 else: path_dataset += sr_KEY 
 
                 if not os.path.exists(path_dataset):
-                    path_dataset = 0
                     print('!! dataset related this training run was not found')
+                    #print(path_dataset)
+                    path_dataset = 0
                     assert checking, '(checking = False) = training; this dataset is needed'
                 else: pass
 
@@ -668,8 +669,9 @@ supercell_details_mivebresib = {
             }
 
 def symmetry_reduction_step_miv_(path_dataset, Form, T, checking=True):
-    sr_KEY = '_sym_reduced'
-    if checking or sr_KEY != '': pass
+    if FF_name == 'GAFF': sr_KEY = '_sym_adjusted'
+    else: sr_KEY = '_sym_reduced'
+    if checking: pass
     else: 
         if os.path.exists(path_dataset + sr_KEY):
             print(f'this {sr_KEY} dataset aready exists')
@@ -2236,3 +2238,4 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
