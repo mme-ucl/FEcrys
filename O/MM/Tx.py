@@ -489,7 +489,7 @@ class g_of_T:
                 key_ij = (Ti, Tj)
                 enthalpy_i_on_data_j = self.evaluations[key_ij][-m:]
 
-                if len(enthalpy_i_on_data_j) != m: print(f'! warning: sample-size m={m} not available in self.evaluations[{key_ij}] (dataset sampled at T={Tj})')
+                if len(enthalpy_i_on_data_j) != m and m>0: print(f'! warning: sample-size m={m} not available in self.evaluations[{key_ij}] (dataset sampled at T={Tj})')
                 else: pass
 
                 Q_i.append(enthalpy_i_on_data_j)
@@ -718,3 +718,4 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
