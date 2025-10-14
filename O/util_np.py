@@ -116,7 +116,7 @@ def take_random_(x, m=20000):
     '''
     return x[np.random.choice(x.shape[0],min([m,x.shape[0]]),replace=False)]
 
-def find_split_indices_(u, split_where:int, tol=0.00001):
+def find_split_indices_(u, split_where:int, tol=0.00001, verbose=True):
     ''' training : validation split where both sets have same average potential energy within tol
     Inputs:
         u : (m,1) array of potential energies during MD sampling
@@ -136,10 +136,12 @@ def find_split_indices_(u, split_where:int, tol=0.00001):
         inds_rand = np.random.choice(n,n,replace=False)
         randomised = np.array(u[inds_rand])
         if np.abs(randomised[:split_where].mean() - target) < tol and np.abs(randomised[split_where:].mean() - target) < tol:
-            print('found !')
+            if verbose: print('found !')
+            else: pass
             return inds_rand
         else: pass
-    print('! not found')
+    if verbose: print('! not found')
+    else: pass
     return None
 
 def joint_grid_from_marginal_grids_(*marginal_grids, flatten_output=True):
@@ -444,6 +446,7 @@ def C_to_K_(C):
     return C + 273.15
 
 ## ## 
+
 
 
 
