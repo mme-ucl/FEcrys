@@ -560,32 +560,6 @@ def get_FE_estimates_(
                                 ])
     return running_estimates, inv_test_result
 
-def find_split_indices_(u, split_where:int, tol=0.00001):
-    ''' training : validation split where both sets have same average potential energy within tol
-    Inputs:
-        u : (m,1) array of potential energies during MD sampling
-        split_where : int, how many samples wanted in the training set
-        tol : how similar should average energy of training set be to the average energy of the validation set
-    Outputs:
-        inds_rand or None: run multiple times until returns not None, or increase tol
-            inds_rand : permutation of u (i.e., u[inds_rand]),
-            where the first split_where points/samples are belong to the training set,
-            and the rest of the array (i.e., u[inds_rand][split_where:]) validation set.
-            Use this permuation on any other array relevant for training: r, u, w, b
-    '''
-    u = np.array(u)
-    n = u.shape[0]
-    target = u.mean()
-    for i in range(1000):
-        inds_rand = np.random.choice(n,n,replace=False)
-        randomised = np.array(u[inds_rand])
-        if np.abs(randomised[:split_where].mean() - target) < tol and np.abs(randomised[split_where:].mean() - target) < tol:
-            print('found !')
-            return inds_rand
-        else: pass
-    print('! not found')
-    return None
-
 def FE_of_model_(AVMD_V, BAR_V):
     ''' weighted average of raw BAR_V FE estimates 
         the weights = np.exp(AVMD_V) ; higher is better (lower validation error)
@@ -1067,4 +1041,5 @@ def plot_inv_test_res_(inv_test_result, mean_range=[True,True], forward_inverse=
             
         else: pass
     else: pass
+
 
