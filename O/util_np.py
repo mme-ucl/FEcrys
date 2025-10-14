@@ -116,6 +116,32 @@ def take_random_(x, m=20000):
     '''
     return x[np.random.choice(x.shape[0],min([m,x.shape[0]]),replace=False)]
 
+def find_split_indices_(u, split_where:int, tol=0.00001):
+    ''' training : validation split where both sets have same average potential energy within tol
+    Inputs:
+        u : (m,1) array of potential energies during MD sampling
+        split_where : int, how many samples wanted in the training set
+        tol : how similar should average energy of training set be to the average energy of the validation set
+    Outputs:
+        inds_rand or None: run multiple times until returns not None, or increase tol
+            inds_rand : permutation of u (i.e., u[inds_rand]),
+            where the first split_where points/samples are belong to the training set,
+            and the rest of the array (i.e., u[inds_rand][split_where:]) validation set.
+            Use this permuation on any other array relevant for training: r, u, w, b
+    '''
+    u = np.array(u)
+    n = u.shape[0]
+    target = u.mean()
+    for i in range(1000):
+        inds_rand = np.random.choice(n,n,replace=False)
+        randomised = np.array(u[inds_rand])
+        if np.abs(randomised[:split_where].mean() - target) < tol and np.abs(randomised[split_where:].mean() - target) < tol:
+            print('found !')
+            return inds_rand
+        else: pass
+    print('! not found')
+    return None
+
 def joint_grid_from_marginal_grids_(*marginal_grids, flatten_output=True):
     
     ''' like np.meshgrid but easier to use 
@@ -418,6 +444,7 @@ def C_to_K_(C):
     return C + 273.15
 
 ## ## 
+
 
 
 
