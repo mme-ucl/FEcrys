@@ -358,6 +358,13 @@ class g_of_T:
     '''
 
     def compute_all_evaluations_(self, m=None, try_loading_from_save=True, save=True):
+        if m is not None:
+            assert all([len(self.NPT_systems[T].u)>=m for T in self.Ts]), f'at least one dataset does not have {m} datapoints'
+        else:
+            m = np.min([len(self.NPT_systems[T].u) for T in self.Ts])
+            print('')
+            print(f'#### {m} points per state, can, or will be involved in enthalpy evaluations ####')
+            print('')
         
         sign = None
         if try_loading_from_save:
@@ -422,6 +429,9 @@ class g_of_T:
 
         if save and any_changes: self.save_evaluations_(only_m_evalautions=m) # already verbose
         else: pass
+
+        print('')
+        print(f'#### maximum batch size possible for MBAR: {self.maximum_batch_size} points / state ####')
         print('')
 
     ## ## ## ## 
@@ -473,6 +483,141 @@ class g_of_T:
         name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m)
         self.mbar, self.mbar_res = load_pickle_(name)
 
+    def save_mbar_instance_shuffled_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m) + f'_shuffled_from_M{self.maximum_batch_size}'
+        save_pickle_([self.mbar, self.mbar_res, self.evaluations_subsample_selection_indices], name)
+
+    def load_mbar_instance_shuffled_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m) + f'_shuffled_from_M{self.maximum_batch_size}'
+        self.mbar, self.mbar_res, self.evaluations_subsample_selection_indices = load_pickle_(name)
+        assert len(self.evaluations_subsample_selection_indices.keys()) == self.n_temperatures, '! this should not print'
+
+    ## ## ## ##
+
+    @property
+    def maximum_batch_size(self,):
+        # M >= m
+        return np.min([len(self.evaluations[(T, T)]) for T in self.Ts])
+    
+    def get_inds_select_(self, uii, m):
+        if m < self.maximum_batch_size:
+            inds_rand = None ; a=0
+            print('(...')
+            while inds_rand is None:
+                inds_rand = find_split_indices_(uii, split_where=m, tol=0.0001, verbose=False)
+                a+=1
+            inds_select = inds_rand[:m] # error if not found but max recusion length will be reached anyway
+            print(f'...): {a}')
+        else:
+            inds_select = np.arange(self.maximum_batch_size)
+        return inds_select
+
+    def _set_evaluations_subsample_selection_indices_SHUFFLED_(self, m):
+        assert self.maximum_batch_size >= m
+        self.evaluations_subsample_selection_indices = {}
+        for Ti in self.Ts:
+            self.evaluations_subsample_selection_indices[Ti]  = self.get_inds_select_(self.evaluations[(Ti,Ti)], m=m)
+
+    def _set_evaluations_subsample_selection_indices_basic_(self, m):
+        max_batch_size = int(self.maximum_batch_size)
+        assert max_batch_size >= m
+        self.evaluations_subsample_selection_indices = {}
+        for Ti in self.Ts:
+            ALL_indices = np.arange(len(self.evaluations[(Ti, Ti)]))
+            self.evaluations_subsample_selection_indices[Ti] = np.array(ALL_indices[-m:])
+
+    def set_evaluations_subsampled_(self,):
+        self.evaluations_subsampled = {}
+        for Tj in self.Ts:
+            inds_select_j = self.evaluations_subsample_selection_indices[Tj]
+            for Ti in self.Ts:
+                key_ij = (Ti, Tj)
+                enthalpy_i_on_data_j = self.evaluations[key_ij]
+                #print(key_ij, enthalpy_i_on_data_j.shape, inds_select_j.shape, inds_select_j.min(), inds_select_j.max())
+                self.evaluations_subsampled[key_ij] = np.array(enthalpy_i_on_data_j[inds_select_j])
+
+    def compute_MBAR_(self, m=None, rerun=False, save=True, 
+                      use_representative_subsets = False, # comment
+                     ):
+        assert hasattr(self, 'evaluations')
+
+        if m is None: 
+            # case 0: using all data, dont need to do anything
+            m = self.maximum_batch_size # also x[-0:] = x
+            self.evaluations_subsampled = dict(self.evaluations)
+            self.SHUFFLED = False
+            # case 0: done
+        else:
+            ''' testing MBAR with less data than previously evalauted in self.evalautions
+                two options: use_representative_subsets True or False
+                    True : each dataset randomised (self.SHUFFLE := True) to select representative batches of m datapount from each entire dataset
+                    False: taking m point from the back of each dataset (self.SHUFFLE := False) 
+            '''
+            assert self.maximum_batch_size >= m, '!! sample-size m={m} is not available in self.evaluations'
+            if use_representative_subsets:
+                if rerun:
+                    # case 1: v2 asked, and happy to run rew result
+                    self._set_evaluations_subsample_selection_indices_SHUFFLED_(m)
+                    self.SHUFFLED = True
+                    # case 1: ok
+                else:
+                    # case 2 : v2 asked but trying to load one from before, rerun True if this does not load
+                    try:
+                        # case 2A: trying to load v2
+                        self.load_mbar_instance_shuffled_(m)
+                        self.SHUFFLED = True
+                        # case 2A: v2 loaded ok, done
+                    except:
+                        # case 2B = case 1 
+                        # rerun forced to True
+                        rerun = True
+                        # case 1:
+                        self._set_evaluations_subsample_selection_indices_SHUFFLED_(m)
+                        self.SHUFFLED = True
+            else:
+                # case 3: v2 not wanted, just do the v1 thing
+                self._set_evaluations_subsample_selection_indices_basic_(m)
+                self.SHUFFLED = False
+                # case 3: ok
+            # apply either options
+            self.set_evaluations_subsampled_()
+
+        # dont want to save self.evaluations_subsampled each time, just saving indices to recreate it every time loading the same thing
+
+        self.Ns = np.array([self.evaluations_subsampled[(T_i,T_i)].shape[0] for T_i in self.Ts])
+        self.Q = np.zeros([self.n_temperatures, self.Ns.sum()])
+        assert self.Ns.sum() == self.n_temperatures * m, f'{self.Ns.sum()} != {self.n_temperatures * m}'
+
+        for i in range(self.n_temperatures):
+            Ti = self.Ts[i]
+            Q_i = []
+            for Tj in self.Ts:
+                key_ij = (Ti, Tj)
+                enthalpy_i_on_data_j = self.evaluations_subsampled[key_ij]
+                Q_i.append(enthalpy_i_on_data_j)
+            self.Q[i] = np.concatenate(Q_i, axis=0)
+
+        if not rerun:
+            try:
+                if self.SHUFFLED: self.load_mbar_instance_shuffled_(m)
+                else:             self.load_mbar_instance_(m)
+                print('rerun : file found.')
+            except:
+                print(f'rerun : file not found; running compute_MBAR_ with m = {m}')
+                self.compute_MBAR_(m=m, rerun=True, save=save)
+        else:
+            self.mbar = MBAR(self.Q, self.Ns, solver_protocol="robust")
+            self.mbar_res = self.mbar.compute_free_energy_differences()
+            if save:
+                if self.SHUFFLED: self.save_mbar_instance_shuffled_(m)
+                else:             self.save_mbar_instance_(m)
+            else: pass
+
+        self.mbar_Delta_f  = self.mbar_res['Delta_f']#[0,-1]
+        self.mbar_dDelta_f = self.mbar_res['dDelta_f']#[0,-1]
+        print('')
+        
+    '''
     def compute_MBAR_(self, m=0, rerun=False, save=True):
         assert hasattr(self, 'evaluations')
 
@@ -511,7 +656,8 @@ class g_of_T:
         self.mbar_Delta_f  = self.mbar_res['Delta_f']#[0,-1]
         self.mbar_dDelta_f = self.mbar_res['dDelta_f']#[0,-1]
         print('')
-        
+    '''
+
     @property
     def mbar_sample_size(self,):
         return self.mbar.N_k[0] # same for all states at the moment
@@ -618,6 +764,16 @@ class g_of_T:
         m = self.mbar_sample_size
         return self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+'_'.join([str(x) for x in self.Ts])+f'_Tref_{self.Tref}{self.ANI}_RES_m{m}'
 
+    def load_RES_(self, name_RES):
+        if self.SHUFFLED: name_RES += '_shuffled'
+        else: pass
+        return load_pickle_(name_RES)
+
+    def save_RES_(self, name_RES):
+        if self.SHUFFLED: name_RES += '_shuffled'
+        else: pass
+        save_pickle_(self.RES, name_RES)
+
     def get_result_(self, Tmin=50, Tmax=800, Tstride=500, save=True):
         
         if self.f2g_correction_params == {'version':1, 'bins':40}: key = ''
@@ -626,7 +782,7 @@ class g_of_T:
         name_RES = self.path_RES + f'_{Tmin}_{Tmax}_{Tstride}' + key
 
         try:
-            RES = load_pickle_(name_RES)
+            RES = self.load_RES_(name_RES)
             #print(name_RES)
             #print(self.paths_datasets_NPT[self.ind_ref])
             #print(self.Tref_box)
@@ -672,7 +828,7 @@ class g_of_T:
             RES['ref']['n_mol']                         = self.n_mol
 
             self.RES = RES
-            if save: save_pickle_(RES, name_RES)
+            if save: self.save_RES_(name_RES)
             else: pass
 
         print('')
@@ -718,4 +874,5 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
