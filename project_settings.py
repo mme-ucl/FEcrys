@@ -447,6 +447,7 @@ def MBAR_(
             get_result = True,
 
             f2g_correction_params = {'version':1, 'bins':40},
+            use_representative_subsets = False,
         ):
     
     Tref, FEref, SEref = Tref_FEref_SEref
@@ -479,7 +480,7 @@ def MBAR_(
     curve.compute_all_evaluations_(m=batch_size)
     if clear_memory: curve.clear_memory_()
     else: pass
-    curve.compute_MBAR_(m=batch_size)
+    curve.compute_MBAR_(m=batch_size, use_representative_subsets=use_representative_subsets)
     print(color_text_(f'mbar : number of FF evaluations involved: {curve.n_energy_evalautions}','I'))
     print(f'average lattice enthalpy interpolation; maximum error: {curve._test_average_enthalpy_interpolator_(m=batch_size)}kT')
     
@@ -2238,4 +2239,5 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
 
