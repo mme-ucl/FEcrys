@@ -1872,7 +1872,7 @@ def plot_box_lengths_angles_histograms_(boxes, b0 = None, b1=None):
     plt.tight_layout()
     plt.show()
 
-def plot_PGM_results_(evaluation, window=3, plot_raw_errors = True, figsize=(10,4)):
+def plot_PGM_results_(evaluation, window=3, plot_raw_errors = True, figsize=(10,4), **kwargs):
     keys = evaluation.keys()
     Ts = np.array(list(set([key[1] for key in keys])))
     Ts = np.sort(Ts)
@@ -1886,6 +1886,7 @@ def plot_PGM_results_(evaluation, window=3, plot_raw_errors = True, figsize=(10,
                                                     window=window,
                                                     ax = _ax,
                                                     plot_raw_errors = plot_raw_errors,
+                                                    **kwargs,
                                                     )
         _ax.set_title(f'T = {key[1]}K', size=13)
     plt.tight_layout()
@@ -2272,6 +2273,7 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
 
 
 
