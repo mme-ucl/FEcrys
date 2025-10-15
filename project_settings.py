@@ -1219,6 +1219,39 @@ def mivebresib_tmFF_lr_():
         assert var_name in locals(), f'could not find {var_name}'
         globals()[var_name] = locals()[var_name]
 
+def mivebresib_gaff_lr_():
+    PME_cutoff = 0.5 ; KEY = f'_lr{PME_cutoff}'
+
+    mol_name = 'mivebresib'
+    PATH = DIR_main+f'MM/GAFF_sc/{mol_name}/'
+    NPT_subfolder = 'gaff_lr'
+
+    single_molecule_PDB = PATH+f'{mol_name}_single_mol.pdb'
+    n_atoms_mol = 51
+
+    FF_class = GAFF
+    FF_name = FF_class.FF_name
+
+    supercell_details = dict(supercell_details_mivebresib)
+    list_Forms = list(supercell_details['list_Forms'])
+    for Form in list_Forms:
+        supercell_details[Form]['PDB_unitcell'] = PATH+f'{mol_name}_{Form}_unitcell.pdb'
+    supercell_details['I']['list_n_mol'] = [16]
+    supercell_details['II']['list_n_mol'] = [16]
+    supercell_details['III']['list_n_mol'] = [16]
+
+    ind_rO = 22 ; option = 0
+    symmetry_reduction_step_ = symmetry_reduction_step_miv_
+    
+    #### #### #### #### #### #### #### #### #### #### 
+    steps_followed = ''
+
+    #### #### #### #### #### #### #### #### #### #### 
+    # make global all the constants
+    for var_name in list_make_global:
+        assert var_name in locals(), f'could not find {var_name}'
+        globals()[var_name] = locals()[var_name]
+
 """ i need to sort this out, some of this will be put as notebooks, two more needed VEL and ABT072
 ###################################################################################################################
 ## veliparib:
@@ -2239,5 +2272,6 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
 
 
