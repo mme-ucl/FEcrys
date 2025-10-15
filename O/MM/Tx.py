@@ -2,6 +2,11 @@ from O.MM.ecm_basic import *
 import glob
 ## ## ## ## ## 
 
+'''
+THIS WHOLE FILE NEEDS TO BE REDONE, IT WORKS BUT not easy to follow or maintain anymore (too much patching)
+'''
+
+
 class SingleComponent_proxy:
     def __init__(self, name):
         '''
@@ -50,7 +55,6 @@ class g_of_T:
         return PV_reduced + ladJ_Vto6  # kT
 
     def ladJ_Vto6_(self, boxes):
-        # just to prevent re-evalauting everything again when only this is the differences
         assert all_lower_triangular_(boxes), 'box not lower-triangular'
         h22, h33 = boxes[...,1,1], boxes[...,2,2]
         ladJ_Vto6 = np.log(h22) + 2.0*np.log(h33)
@@ -116,7 +120,7 @@ class g_of_T:
                 xyz_not_in_datasets : bool = False, # in the presence of self.evalautions that are loaded from save, CUT datasets save time in most scenarious.
                 f2g_correction_params : dict = {'version':1, 'bins':40},
                 ):
-        ''' This whole class deals with only on polymorph. To get Tx, need at least two instances. '''
+        ''' This whole class deals with only one polymorph. To get Tx, need at least two instances. '''
         
         self.Tref = Tref                                   # reference temperature in Kelvin
         self.Tref_FE = Tref_FE                             # crystal FE computed at the reference temperature
@@ -175,12 +179,18 @@ class g_of_T:
             self.set_Tref_g_(**self.f2g_correction_params)
             print(f'Gibbs FE at Tref obtained: {self.Tref_g } +/- {self.Tref_SE} kT. This will be used.')
             print(f'This originates from Helmholtz FE at Tref provided: {self.Tref_FE} +/- {self.Tref_SE} kT.')
+            self.ISOTROPIC = True
         else:
             print('Anisotropic: Gibbs FEs computed are based on anisotropic fluctuations of the box \n')
             self.bT_to_reduced_PV_ = self.PV_anisotropic_
             self.Tref_g  = float(self.Tref_FE)
             print(f'Gibbs FE at Tref provided: {self.Tref_FE} +/- {self.Tref_SE} kT. This will be used.')
             self.Tref_f_to_g_correction = None
+            self.ISOTROPIC = False
+
+            ## this is for the patch where ladj should not be rescaled:
+            self.ladJ_ALL_data = dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
+            ## 
 
         ## ## ## ## 
         ## organising things for heat capacity plotting and _test_average_enthalpy_interpolator_
@@ -235,8 +245,8 @@ class g_of_T:
 
     @property
     def ANI(self,):
-        if self.Tref_box is not None: return ''
-        else:                         return '_ANI'
+        if self.ISOTROPIC: return ''
+        else:              return '_ANI'
 
     def save_evaluations_(self, only_m_evalautions=None):
         name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_enthalpy_evaluations'
@@ -244,7 +254,7 @@ class g_of_T:
         else: pass
         save_pickle_(self.evaluations, name)
 
-    def load_evalautions_(self, only_m_evalautions=None, ani=''):
+    def _load_evalautions_(self, only_m_evalautions=None, ani=''):
         '''
         the most unclear function in this file, but if there is a previous file found nothing is computed or defined here
 
@@ -368,13 +378,13 @@ class g_of_T:
         
         sign = None
         if try_loading_from_save:
-            if self.load_evalautions_(m, ani=self.ANI): 
+            if self._load_evalautions_(m, ani=self.ANI): 
                 print('try_loading_from_save : file found.')
             else: 
-                if self.load_evalautions_(m, ani=''):
+                if self._load_evalautions_(m, ani=''):
                     sign =  1.0
                     print('isotropic evalautions found, these will be converted and saved in a sperate file')
-                elif self.load_evalautions_(m, ani='_ANI'):
+                elif self._load_evalautions_(m, ani='_ANI'):
                     sign = -1.0
                     print('anisotropic evalautions found, these will be converted and saved in a sperate file')
                 else:
@@ -429,6 +439,15 @@ class g_of_T:
 
         if save and any_changes: self.save_evaluations_(only_m_evalautions=m) # already verbose
         else: pass
+
+        #### this is for the patch where ladj should not be rescaled:
+        if not self.ISOTROPIC:
+            self.ladJ_evaluated_data = {} #dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
+            for T in self.Ts:
+                m_T = len(self.evaluations[(T, T)])
+                self.ladJ_evaluated_data[T] = np.array(self.ladJ_ALL_data[T][-m_T:])
+        else: pass
+        ####
 
         print('')
         print(f'#### maximum batch size possible for MBAR: {self.maximum_batch_size} points / state ####')
@@ -613,10 +632,30 @@ class g_of_T:
                 else:             self.save_mbar_instance_(m)
             else: pass
 
+        if not self.ISOTROPIC: self.finalise_patch_related_to_ladJ_should_not_be_rescaled_()
+        else: pass
+
         self.mbar_Delta_f  = self.mbar_res['Delta_f']#[0,-1]
         self.mbar_dDelta_f = self.mbar_res['dDelta_f']#[0,-1]
         print('')
         
+    def finalise_patch_related_to_ladJ_should_not_be_rescaled_(self,):
+        #### this is for the patch where ladj should not be rescaled:
+        self.ladJ_subsampled_data = {} #dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
+        for T in self.Ts:
+            inds_select = self.evaluations_subsample_selection_indices[T]
+            self.ladJ_subsampled_data[T] = np.array(self.ladJ_evaluated_data[T][inds_select])
+        self.not_Q = np.zeros([self.n_temperatures, self.Ns.sum()])
+        for i in range(self.n_temperatures):
+            Ti = self.Ts[i]
+            not_Q_i = []
+            for Tj in self.Ts:
+                key_ij = (Ti, Tj)
+                not_enthalpy_i_on_data_j = np.array(self.ladJ_subsampled_data[Tj])
+                not_Q_i.append(not_enthalpy_i_on_data_j)
+            self.not_Q[i] = np.concatenate(not_Q_i, axis=0)
+        ####
+
     '''
     def compute_MBAR_(self, m=0, rerun=False, save=True):
         assert hasattr(self, 'evaluations')
@@ -674,10 +713,30 @@ class g_of_T:
     
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
     ## Gibbs FE
-    
+
+    def g_(self, T):
+        # g_whith_patch_related_to_ladJ_should_not_be_rescaled_
+        if not self.ISOTROPIC:
+            index = self.ind_ref
+            arg = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            arg += np.array(self.not_Q[index:index+2])
+            self.res = self.mbar.compute_perturbed_free_energies(arg)
+            FE = self.res['Delta_f'][0,1]  + self.Tref_g
+            SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
+            return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol     
+        else:
+            index = self.ind_ref
+            arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            self.res = self.mbar.compute_perturbed_free_energies(arg)
+            FE = self.res['Delta_f'][0,1]  + self.Tref_g
+            SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
+            return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
+            
+    """
     def g_(self, T):
         ''' output: g_{crys}(T) for scalar T : continuous gibbs FE estimates as a function of temperature '''
         index = self.ind_ref
+
         arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
         self.res = self.mbar.compute_perturbed_free_energies(arg)
 
@@ -685,7 +744,7 @@ class g_of_T:
         SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
 
         return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
-    
+    """
     @property
     def g(self,):
         ''' g_{crys}(T \in self.Ts) : discrete gibbs FE estimates as a function of temperature '''
@@ -696,6 +755,44 @@ class g_of_T:
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
     ## Average enthalpy [using u as the symbol for enthalpy here, not the usual potential energy]
 
+    def av_u_(self,T):
+        # av_u_whith_patch_related_to_ladJ_should_not_be_rescaled_
+        if not self.ISOTROPIC:
+            index = self.ind_ref
+            u_ln = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            A_in = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / T
+            u_ln += np.array(self.not_Q[index:index+2])
+            A_in += np.array(self.not_Q[index:index+2])
+            state_map = np.array([[0,1],[0,1]])
+            _mbar = copy.deepcopy(self.mbar)
+            res = _mbar.compute_expectations_inner(
+                    A_in,
+                    u_ln,
+                    state_map,
+                    return_theta=True,
+                    uncertainty_method=None,
+                    warning_cutoff=1.0e-10,
+                )
+            av_u = res['observables'][-1]
+            return av_u
+
+        else:
+            index = self.ind_ref
+            u_ln = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            A_in = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / T
+            state_map = np.array([[0,1],[0,1]])
+            _mbar = copy.deepcopy(self.mbar)
+            res = _mbar.compute_expectations_inner(
+                    A_in,
+                    u_ln,
+                    state_map,
+                    return_theta=True,
+                    uncertainty_method=None,
+                    warning_cutoff=1.0e-10,
+                )
+            av_u = res['observables'][-1]
+            return av_u
+    """
     def av_u_(self,T):
 
         index = self.ind_ref
@@ -718,7 +815,7 @@ class g_of_T:
         av_u = res['observables'][-1]
 
         return av_u 
-
+    """
     def _test_average_enthalpy_interpolator_(self, m=None):
         # it should pass through all the points where data was actually sampled
         interpolation = np.array([self.av_u_(T) for T in self.Ts])
@@ -874,5 +971,3 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
-
-
