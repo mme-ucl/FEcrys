@@ -1725,6 +1725,31 @@ def extract_subcell_from_supercell_(n_mol_in:int, n_atoms_mol:int,
     else: pass
     return r_out, b_out
 
+""" 
+
+# might do this properly later to compare with this LangevinMiddle:
+# setting \Theta_{\text{friction}} to 0 gives VV in this, and otherwise
+# it converges to the correct cumulative average T, even at high timestep.
+'''
+\begin{align}
+\nonumber&\boldsymbol{r}_{i}(t+\Delta t)=\boldsymbol{r}_{i}(t)+\left(
+\dot{\boldsymbol{r}}_{i}(t) + 
+\frac{\Delta t}{2 \text{m}_{i}}\boldsymbol{F}_{i}(\boldsymbol{r}(t))
+\right)\Delta t\\
+\nonumber&\dot{\boldsymbol{r}}_{i}(t+\Delta t)=\left(
+\dot{\boldsymbol{r}}_{i}(t) + 
+\frac{\Delta t}{2 \text{m}_{i}}\boldsymbol{F}_{i}(\boldsymbol{r}(t))
+\right)\alpha +
+\boldsymbol{z}_{i}  +
+\frac{\Delta t}{2 \text{m}_{i}}\boldsymbol{F}_{i}(\boldsymbol{r}(t+\Delta t))\\
+&\text{where} 
+\;\;
+\alpha=\exp{(-\Theta_{\text{friction}}\Delta t)} 
+\;\;\text{and} \;\;
+\boldsymbol{z}_{i} \sim \mathcal{N}\left(\boldsymbol{0},\left(\frac{k_{B}T(1-\alpha^{2})}{\text{m}_{i}}\right)\mathbf{I}\right)\label{Eq:LangevinMiddleIntegrator}
+\end{align}
+'''
+
 def CustomIntegrator_(temperature = 300*unit.kelvin,
                       friction = 5.0/unit.picosecond,
                       timestep = 0.002*unit.picoseconds,
@@ -1764,13 +1789,13 @@ def CustomIntegrator_(temperature = 300*unit.kelvin,
 
     if VV:
 
-        """ 
+        ''' 
         not using because unstable (hydrogens break) in alchemical states at fast timestep compared to LangevinMiddle
 
         Velocity-Verlet (REF : openmm-master\openmmapi\include\openmm\CustomIntegrator.h)
         with 
         Bussi Donadio Parrinello thermostat (REF : arXiv:0803.4060v1) 
-        """
+        '''
         # friction : higher -> (more thermal coupling, less smooth dynamics, faster convergence to temperature)
 
         integrator.addGlobalVariable("A", np.exp(-friction*timestep))
@@ -1916,5 +1941,5 @@ def CustomIntegrator_(temperature = 300*unit.kelvin,
         integrator.addComputePerDof("x", "x + 0.5*dt*v")
 
     return integrator
-
+"""
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
