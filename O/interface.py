@@ -335,7 +335,9 @@ class NN_interface_helper:
     '''
     def plot_result_(self, window=1, entropy_only=False,
                      plot_red=True, n_mol=1, colors=['green', 'blue', 'm', 'red'], ax=None,
-                     plot_raw_errors = True):
+                     plot_raw_errors = True,
+                     alpha_raw_errors = 0.4,
+                     ):
         if ax is not None: plot = ax
         else: plot = plt
 
@@ -350,7 +352,7 @@ class NN_interface_helper:
         plot.plot(self.evaluation_grid, self.estimates[0,:,7]/n_mol, color=colors[1], linewidth=0.3, linestyle='--')
 
         if plot_raw_errors:
-            plot.fill_between(self.evaluation_grid, BAR_V_FEs_raw-BAR_V_SEs_raw, BAR_V_FEs_raw+BAR_V_SEs_raw, alpha=0.4, color=colors[0])
+            plot.fill_between(self.evaluation_grid, BAR_V_FEs_raw-BAR_V_SEs_raw, BAR_V_FEs_raw+BAR_V_SEs_raw, alpha=alpha_raw_errors, color=colors[0])
         else: pass
         
         if plot_red:
