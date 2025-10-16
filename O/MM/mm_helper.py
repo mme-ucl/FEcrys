@@ -1373,6 +1373,10 @@ def reorder_atoms_unitcell_(PDB:str, PDB_ref:str, n_atoms_mol:int):
     def split_(PDB, n_atoms_mol, ref=False):
         path_name = PDB.split('/')
         path = path_name[:-1]
+        
+        folder_needed = '/'.join(path+ ['temp'])
+        assert os.path.exists(folder_needed), f'please create empty temp folder here: {folder_needed}'
+
         name = path_name[-1]
         traj = mdtraj.load(PDB,PDB)
         n_mol = traj.n_atoms//n_atoms_mol
