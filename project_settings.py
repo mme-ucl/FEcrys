@@ -184,7 +184,8 @@ def NPT_(
 
                         try:
                             assert FF_class.FF_name == FF_name, ''
-                            
+
+                            assert os.path.exists(f'{PATH}/data/NPT/{NPT_subfolder}')
                             print(color_text_(f'\n starting trajectory, this will be saved into folder {PATH}/data/NPT/{NPT_subfolder} \n', 'I'))
 
                             if rerun_unconverged:
@@ -2273,6 +2274,7 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
 
 
 
