@@ -812,8 +812,8 @@ class SingleMolecule_map(SingleComponent_map):
         # r_dataset : (m,N,3)
 
         X_IC, X_CB = self._forward_init_(r_dataset, batch_size=batch_size)[:2]
-        X_IC = X_IC.numpy()
-        X_CB = [x.numpy() for x in X_CB]
+        #X_IC = X_IC.numpy()
+        #X_CB = [x.numpy() for x in X_CB]
         a, d0, d1 = X_CB
 
         assert self.n_mol == self.n_mol_supercell == 1
@@ -1007,6 +1007,7 @@ class SingleMolecule_map(SingleComponent_map):
         return r, ladJ
 
 ####################################################################################################
+
 
 
 
