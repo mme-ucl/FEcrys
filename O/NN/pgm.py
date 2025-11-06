@@ -846,7 +846,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
     ''' molecule should have >3 atoms'''
     @staticmethod
     def load_model(path_and_name : str):
-        return PGMmol.load_model_(path_and_name, PGMmol)
+        return PGMmol._load_model_(path_and_name, PGMmol)
     
     def __init__(self,
                  ic_maps : list,
@@ -1291,5 +1291,6 @@ class PGMcrys_v2(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
 """
 
 ####################################################################################################
+
 
 
