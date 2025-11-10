@@ -1018,7 +1018,7 @@ def NN_interface_sc_multimap_selective_evaluation_(
 
                                                     parent_class = NN_interface_sc_multimap,
                                                     model_class = PGMcrys_v1,
-
+                                                    ic_map_class = SingleComponent_map,
                                                     ):
     " example shown in JN_4.5 "
     nn = NN_interface_sc_multimap_selective_evaluation(parent_class=parent_class,
@@ -1027,6 +1027,7 @@ def NN_interface_sc_multimap_selective_evaluation_(
                                                        running_in_notebook = running_in_notebook,
                                                        training = False,
                                                        model_class = model_class,
+                                                       ic_map_class = ic_map_class,
                                                        )
     
     if training:
