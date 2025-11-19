@@ -181,9 +181,10 @@ class SingleComponent:
             # self.system.setDefaultPeriodicBoxVectors(*self.b0)
             
         self.SwitchingFunction_factor = SwitchingFunction_factor
-        self.turn_ON_nonbonded_SwitchingFunction(factor=self.SwitchingFunction_factor)
-        if self.n_molecules > 1: self.print('set SwitchingFunction to',self.SwitchingFunction_factor,'* PME_cutoff =',
-                                             self.PME_cutoff*self.SwitchingFunction_factor, 'nm')
+        if self.n_molecules > 1:
+            self.turn_ON_nonbonded_SwitchingFunction(factor=self.SwitchingFunction_factor)
+            self.print('set SwitchingFunction to',self.SwitchingFunction_factor,'* PME_cutoff =',
+                        self.PME_cutoff*self.SwitchingFunction_factor, 'nm')
         else: pass
         self.custom_EwaldErrorTolerance = custom_EwaldErrorTolerance 
         self.adjust_EwaldErrorTolerance(self.custom_EwaldErrorTolerance, verbose = self.n_molecules>1 and self.verbose)
@@ -1386,6 +1387,7 @@ class COST_FIX_permute_xyz_after_a_trajectory:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 """
+
 
 
 
