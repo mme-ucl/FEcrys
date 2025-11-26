@@ -702,9 +702,9 @@ class MM_system_helper:
     
     # plotting:
 
-    def plot_simulation_info_(self,):
+    def plot_simulation_info_(self, figsize=(10,10)):
         ' one plot with all information about the simulation '
-        plot_simulation_info_(self)
+        plot_simulation_info_(self, figsize=figsize)
 
     def plot_temperature_(self, window : float=None):
         Ts = np.array(self.temperature).flatten()
@@ -868,7 +868,7 @@ class MM_system_helper:
 
 ## ## 
 
-def plot_simulation_info_(self:object):
+def plot_simulation_info_(self:object, figsize=(10,10)):
     '''
     after running an NVT or NPT simulation using SingleComponent, this plots some of the information about the simulation as a function of time
     the plots include:
@@ -880,8 +880,8 @@ def plot_simulation_info_(self:object):
 
     useful for checking consistency (e.g., in NPT, does the supercell always relax to the same state and is this converged or needs to run longer)
     '''
-    if self.NPT: fig, ax = plt.subplots(6,figsize=(10,10))
-    else:        fig, ax = plt.subplots(2,figsize=(10,10))
+    if self.NPT: fig, ax = plt.subplots(6, figsize=figsize)
+    else:        fig, ax = plt.subplots(2, figsize=figsize)
 
     fig.suptitle('timescale of the simulation so far: '+str(self.timescale)+'ns ('+str(self.n_frames_saved)+' frames)', fontsize=20)
 
