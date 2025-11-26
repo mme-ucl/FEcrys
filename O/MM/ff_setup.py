@@ -200,6 +200,7 @@ class methods_for_permutation:
             print(info, end='\r')
 
         self._xyz += [x for x in self._unpermute_(np.array(self._xyz_top_), axis=-2)] # permute after
+        self._xyz_top_ = [] # missing this line was not an error when running one simulation all in one go
         # ! interupting run_simulation_ will not save any xyz data. 
 
     def u_(self, r, b=None):
