@@ -739,6 +739,27 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                             n_P2C = number_of_parallel_molecules,
                         ) for i in range(self.n_layers)]
 
+        if self.n_att_heads in [None, 0]:
+            half_layer_class = SPLINE_COUPLING_HALF_LAYER
+            kwargs_for_given_half_layer_class = {
+                                                'n_hidden' : 2,
+                                                'dims_hidden' : None,
+                                                'hidden_activation' : hidden_activation,
+                                                }
+        else:
+            half_layer_class = SPLINE_COUPLING_HALF_LAYER_AT
+            kwargs_for_given_half_layer_class = {
+                                                'flow_mask' : None,
+                                                'n_mol' : number_of_parallel_molecules,
+                                                'n_heads' : self.n_att_heads, # 4
+                                                'embedding_dim' : self.DIM_connection,
+                                                'n_hidden_kqv' : [2,2,2],
+                                                'hidden_activation' : hidden_activation,
+                                                'one_hot_kqv' : [True]*3,
+                                                'n_hidden_decode' : 1,
+                                                #'new' : False,
+                                                }
+
         self.layers_C = [ CONFORMER_FLOW_LAYER(
                             periodic_mask = self.periodic_mask,
                             layer_index = i,
@@ -746,18 +767,8 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                             n_mol = number_of_parallel_molecules,
                             DIM_C2P_connection = self.DIM_C2P_connection,
                             n_hidden_connection = n_hidden_connection,
-                            half_layer_class = SPLINE_COUPLING_HALF_LAYER_AT,
-                            kwargs_for_given_half_layer_class = {
-                                        'flow_mask' : None,
-                                        'n_mol' : number_of_parallel_molecules,
-                                        'n_heads' : self.n_att_heads, # 4
-                                        'embedding_dim' : self.DIM_connection,
-                                        'n_hidden_kqv' : [2,2,2],
-                                        'hidden_activation' : hidden_activation,
-                                        'one_hot_kqv' : [True]*3,
-                                        'n_hidden_decode' : 1,
-                                        #'new' : False,
-                                        },
+                            half_layer_class = half_layer_class,
+                            kwargs_for_given_half_layer_class = kwargs_for_given_half_layer_class,
                             use_tfp = False,
                             n_bins = n_bins,
                             min_bin_width = 0.001,
@@ -1291,6 +1302,7 @@ class PGMcrys_v2(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
 """
 
 ####################################################################################################
+
 
 
 
