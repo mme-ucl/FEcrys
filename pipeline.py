@@ -19,7 +19,7 @@ work in progress
 cell_to_cell_str_ = lambda cell : ''.join([str(x) for x in cell])
 
 class NEW_PROJECT:
-    
+
     def __init__(self, name):
         self.molecules_folder = './O/MM/molecules'
 
@@ -154,7 +154,7 @@ class NEW_PROJECT:
                         else: supercell_from_unitcell_(unitcell, cell=cell)
                     self.supercell_details[form][n_mol] = cell
                     cell_str = cell_to_cell_str_(cell)
-                    self.files[form+f'_ideal_supercell_{cell_str}'] =  f'{self.molecules_folder}/{self.name}/{self.name}_{form}_unitcell_cell{cell_str}.pdb'
+                    self.files[form+f'_ideal_supercell_{n_mol}'] =  f'{self.molecules_folder}/{self.name}/{self.name}_{form}_unitcell_cell{cell_str}.pdb'
                 else: pass
 
         return a_supercell_found
@@ -185,7 +185,8 @@ class NEW_PROJECT:
                     PDB_supercell = self.files[form+f'_ideal_supercell_{cell_str}']
                     boxes.append(PDB_to_box_(PDB_supercell))
                 else:
-                    print(f'form {form}, no supercell with : (min_n_mol={min_n_mol}) <= (n_mol={ n_mol}) <= (max_n_mol={max_n_mol})')
+                    pass
+                    #print(f'form {form}, no supercell with : (min_n_mol={min_n_mol}) <= (n_mol={ n_mol}) <= (max_n_mol={max_n_mol})')
 
         boxes = np.stack(boxes)
         cutoff_max = np.min([boxes[...,i,i].min() for i in range(3)]) * 0.5
@@ -287,9 +288,24 @@ class NEW_PROJECT:
         else: pass
 
 class PIPELINE(NEW_PROJECT):
-    def __init__(self, name, FF_class):
+    def __init__(self, name):
         super().__init__(name)
+
+    def set_FF_(self, FF_class):
+        list_possible_FF_class = [GAFF, GAFF_general, OPLS_general, tmFF]
+        print('checking forcefield is set up')
+        if FF_class == list_possible_FF_class[0]:
+            self.check_parametrise_with_GAFF_automatic_()
+        elif FF_class == list_possible_FF_class[1]:
+            self.check_parametrise_with_GAFF_()
+        elif FF_class == list_possible_FF_class[2]:
+            self.check_parametrise_with_OPLS_()
+        elif FF_class == list_possible_FF_class[3]:
+            self.check_parametrise_with_TMFF_()
+        else: assert FF_class in list_possible_FF_class, '! please check the FF_class is supported'
         self.FF_class = FF_class
+
+
         '''
         fix the chosen cutoff and n_mol settings
         '''
@@ -298,5 +314,3 @@ class PIPELINE(NEW_PROJECT):
     run the functions from project settings from here using self.constants .. (currently as globals in those functions)
     TODO: copy them here and test them on a new project
     '''
-
-
