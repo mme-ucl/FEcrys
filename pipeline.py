@@ -19,15 +19,6 @@ work in progress
 cell_to_cell_str_ = lambda cell : ''.join([str(x) for x in cell])
 
 class NEW_PROJECT:
-
-    # name -> load all setting, from text file
-
-    # add mol
-    # add FF: GAFF atomatic, itp gro for others
-    # add form
-    # add supercell
-
-    # add SR settings
     
     def __init__(self, name):
         self.molecules_folder = './O/MM/molecules'
@@ -307,4 +298,5 @@ class PIPELINE(NEW_PROJECT):
     run the functions from project settings from here using self.constants .. (currently as globals in those functions)
     TODO: copy them here and test them on a new project
     '''
+
 
