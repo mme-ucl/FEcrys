@@ -182,7 +182,7 @@ class NEW_PROJECT:
                 if min_n_mol <= n_mol <=  max_n_mol:
                     cell = self.supercell_details[form][n_mol]
                     cell_str = cell_to_cell_str_(cell)
-                    PDB_supercell = self.files[form+f'_ideal_supercell_{cell_str}']
+                    PDB_supercell = self.files[form+f'_ideal_supercell_{n_mol}']
                     boxes.append(PDB_to_box_(PDB_supercell))
                 else:
                     pass
@@ -314,3 +314,4 @@ class PIPELINE(NEW_PROJECT):
     run the functions from project settings from here using self.constants .. (currently as globals in those functions)
     TODO: copy them here and test them on a new project
     '''
+
