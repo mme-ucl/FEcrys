@@ -202,7 +202,7 @@ class NEW_PROJECT:
     def FFname_form_cell_T_to_eqm_supercell_PDB_(self, 
                                                  FFname, form, cell, T, key='',
                                                  ):
-        return f'{self.molecules_folder}/{self.name}/{self._name}_{FFname.lower()}_equilibrated_form_{form}_Cell_{cell_to_cell_str_(cell)}_Temp_{T}{key}.pdb'
+        return f'{self.molecules_folder}/{self.name}/{self.name}_{FFname.lower()}_equilibrated_form_{form}_Cell_{cell_to_cell_str_(cell)}_Temp_{T}{key}.pdb'
 
     ## ## ## ## 
     ## ## ## ## 
@@ -295,6 +295,9 @@ class PIPELINE(NEW_PROJECT):
         '''
         super().__init__(name)
 
+    def set_IC_(self,):
+        self.IC = SC_helper(self.files['single_mol_main'])
+
     def set_FF_(self, FF_class):
         '''
         choosing force field
@@ -311,6 +314,8 @@ class PIPELINE(NEW_PROJECT):
             self.check_parametrise_with_TMFF_()
         else: assert FF_class in list_possible_FF_class, '! please check the FF_class is supported'
         self.FF_class = FF_class
+        ## 
+        self.set_IC_()
 
     def set_d_cut_(self, d_cut):
         '''
@@ -1120,3 +1125,4 @@ def plot_curves_under_(curves,
     return ax
 
 ####################################################################################################################
+
