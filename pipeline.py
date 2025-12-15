@@ -335,7 +335,7 @@ class PIPELINE(NEW_PROJECT):
         '''
         method should have 
         args:
-            path_dataset, Form, T
+            path_dataset, form, T
         kwargs:
             checking
         '''
