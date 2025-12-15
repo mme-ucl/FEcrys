@@ -8,7 +8,9 @@ from O.MM.Tx import *
 from O.NN.pgm_rb import *
 
 """
-work in process, will be updated over time
+Keeping this older setup for reference. Everything will be done in pipeline.py from this point. 
+
+## work in process, will be updated over time ## (in pipeline.py)
 """
 
 ## ## ## ##
@@ -2274,6 +2276,7 @@ def run_NPT_with_restraint_(
                 print('##################################################################################')
     print('done')
 """
+
 
 
 
