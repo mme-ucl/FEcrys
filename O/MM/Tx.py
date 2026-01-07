@@ -3,6 +3,10 @@ import glob
 ## ## ## ## ## 
 
 '''
+Correction: self.evaluations does not need to be explicitly calculated; can be obtained directly from the data.
+            This means that there are zero potential energy evaluations to make in this file.
+            This needs to be fixed.
+
 THIS WHOLE FILE NEEDS TO BE REDONE, IT WORKS BUT not easy to follow or maintain anymore (too much patching)
 '''
 
@@ -971,3 +975,4 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
