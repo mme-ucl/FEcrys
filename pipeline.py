@@ -728,8 +728,6 @@ class PIPELINE(NEW_PROJECT):
                 FEref_SEref_is_Helmholtz = True,
                 Tref_box = None, # in case PDB file missing or replaced, can find the box inside nn.model.ic_maps and provide it here
 
-                clear_memory = True,
-                xyz_not_in_datasets = False,
                 get_result = True,
 
                 f2g_correction_params = {'version':1, 'bins':40},
@@ -761,14 +759,11 @@ class PIPELINE(NEW_PROJECT):
                     Tref_box = Tref_box,
 
                     paths_datasets_NPT = list_dataset_names,
-                    xyz_not_in_datasets = xyz_not_in_datasets, # bool # True if xyz (only) in the dataset was cut short to save memory (when self.evalautions can be loaded)
-
+                    check_energies = True,
+            
                     f2g_correction_params =  f2g_correction_params,
                     )
             
-        curve.compute_all_evaluations_(m=batch_size)
-        if clear_memory: curve.clear_memory_()
-        else: pass
         curve.compute_MBAR_(m=batch_size, use_representative_subsets=use_representative_subsets)
         print(color_text_(f'mbar : number of FF evaluations involved: {curve.n_energy_evalautions}','I'))
         print(f'average lattice enthalpy interpolation; maximum error: {curve._test_average_enthalpy_interpolator_(m=batch_size)}kT')
@@ -1125,4 +1120,5 @@ def plot_curves_under_(curves,
     return ax
 
 ####################################################################################################################
+
 
