@@ -2,6 +2,679 @@ from O.MM.ecm_basic import *
 import glob
 ## ## ## ## ## 
 
+# will finish testing this new version later this day.
+"""
+class SingleComponent_lite:
+    def __init__(self, name, check_energies=True):
+        '''
+        saves a lot of time initialising g_of_T when energies already evaluated
+        '''
+        dataset = load_pickle_(name)
+        self.P = dataset['args_initialise_simulation']['P']
+        self.n_atoms_mol = dataset['args_initialise_object']['n_atoms_mol']
+        self.N = PDB_to_xyz_(dataset['args_initialise_object']['PDB']).shape[0]
+        self.n_mol = self.N // self.n_atoms_mol
+        self.T = dataset['args_initialise_simulation']['T']
+        
+        self.boxes = dataset['MD dataset']['b']
+        self.u     = dataset['MD dataset']['u']
+        self.temperature = dataset['MD dataset']['T']
+        self.n_DOF = 3*(self.N - 1)
+
+        if check_energies:
+            sc = SingleComponent(**dataset['args_initialise_object'])
+            sc.verbose = False
+            sc.initialise_system_(**dataset['args_initialise_system'])
+            sc.initialise_simulation_(**dataset['args_initialise_simulation'])
+            u_eval = sc.u_(dataset['MD dataset']['xyz'][:50], b=dataset['MD dataset']['b'][:50]) 
+            err = np.abs(u_eval - self.u[:50]).max() 
+
+            if err < 0.01: print(color_text_('check_energies: ok', 'g'))
+            else:  print(color_text_(f'check_energies: ! (max standard error = {err})', 'R'))
+        else: pass
+
+# 1 (atm) * (nm**3) = 0.0610193412507 kJ/mol
+CONST_PV_to_kJ_per_mol = 0.0610193412507
+
+all_lower_triangular_ = lambda boxes : all([np.abs(boxes[...,i,j]).max() < 1e-5 for i,j in zip([0,0,1],[1,2,2])])
+
+class g_of_T:
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## if self.Tref_FE is a Helmholtz FE, this is used to convert it to Gibbs FE (default: isotropic box fluctuations)
+
+    def set_Tref_g_(self, Tref_FE=None, version=1, bins:int=40):
+        if Tref_FE is not None: self.Tref_FE = Tref_FE
+        else: pass
+        '''
+        def log_gaussian_1D_(x, data):
+            mu = np.mean(data)
+            sd = ((data - mu)**2).mean()**0.5
+            px = np.exp(-0.5*((x-mu)/sd)**2) / (sd*np.sqrt(2*np.pi))
+            ln_px = np.log(px)
+            return ln_px
+        '''
+        self.f2g_correction_params = {'version':version, 'bins':bins}
+
+        def log_histogram_1D_(x, data, bins=40):
+            h,ax = np.histogram(data, bins=bins, density=True)
+            ax = ax[1:]-0.5*(ax[1]-ax[0])
+            idx_bin = np.argmin((ax - x)**2)
+            p_x = h[idx_bin]
+            return np.log(p_x)
+            
+        #if bins is None: log_1D_model_ = lambda x, data: log_gaussian_1D_(x, data)
+        #else:            log_1D_model_ = lambda x, data: log_histogram_1D_(x, data, bins=bins)
+        log_1D_model_ = lambda x, data: log_histogram_1D_(x, data, bins=bins)
+
+        b = np.array(self.NPT_systems[self.Tref].boxes)
+
+        if version == 0:
+            self.ln_pV = 0.0
+        elif version == 1:
+            self.ln_pV = log_1D_model_(np.linalg.det(self.Tref_box), data=np.linalg.det(b))
+        else:
+            self.ln_pV = log_1D_model_(self.Tref_box[0,0], data=b[:,0,0])
+            self.ln_pV += log_1D_model_(self.Tref_box[1,1], data=b[:,1,1])
+            self.ln_pV += log_1D_model_(self.Tref_box[2,2], data=b[:,2,2])
+            if version == 3:
+                self.ln_pV += log_1D_model_(self.Tref_box[1,0], data=b[:,1,0])
+                self.ln_pV += log_1D_model_(self.Tref_box[2,0], data=b[:,2,0])
+                self.ln_pV += log_1D_model_(self.Tref_box[2,1], data=b[:,2,1])
+            else: pass
+
+        beta_ref = 1/(CONST_kB*self.Tref)
+        V_ref = np.linalg.det(self.Tref_box)
+        PV_reduced = beta_ref * CONST_PV_to_kJ_per_mol * self.P * V_ref
+
+        self.Tref_f_to_g_correction = PV_reduced + self.ln_pV 
+        self.Tref_g = self.Tref_FE + self.Tref_f_to_g_correction
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## init 
+
+    def __init__(self,
+                Tref : float = 300,
+                Tref_FE : float = 0.0,        # f_crys or g_crys (not *_latt; NOT divided by n_mol)
+                Tref_SE : float = 0.0,        # se_crys                      (NOT divided by n_mol)
+                Tref_box : np.ndarray = None, # if None, FE assumed to be already Gibbs, and anisotropic
+
+                paths_datasets_NPT : list = [],
+                check_energies = True,
+                f2g_correction_params : dict = {'version':1, 'bins':40},
+                ):
+        ''' This whole class deals with only one polymorph. To get Tx, need at least two instances. '''
+        
+        self.Tref = Tref                                   # reference temperature in Kelvin
+        self.Tref_FE = Tref_FE                             # crystal FE computed at the reference temperature
+        self.Tref_SE = Tref_SE                             # crystal standard error computed at the reference temperature
+        self.Tref_box = Tref_box                           # if the computed FE above is Helmholtz, this is not None
+                                                           #     if not None: (3,3) fixed box used during NVT
+        self.paths_datasets_NPT = paths_datasets_NPT       # list of paths (list of strings) to all the temperature replica NPT datasets
+
+        self.f2g_correction_params = f2g_correction_params # if the computed FE above is Helmholtz, this is used inside set_Tref_g_
+        
+        ## ## ## ## 
+        ## organising self.NPT_systems
+
+        self.NPT_systems = [SingleComponent_lite(name, check_energies) for name in self.paths_datasets_NPT]
+        self.datasets_converged = np.array([TestConverged_1D(sc.u, verbose=False)() for sc in self.NPT_systems])
+        self.P = self.NPT_systems[0].P # atm
+        self.n_mol = self.NPT_systems[0].n_mol
+        self.n_DOF = self.NPT_systems[0].n_DOF
+        assert all([item.P == self.P for item in self.NPT_systems]), 'pressure not the same in all NPT datasets'
+        assert all([item.n_mol == self.n_mol for item in self.NPT_systems]), 'number of molecules not the same in all NPT datasets'
+        assert all([item.N == self.NPT_systems[0].N for item in self.NPT_systems]), 'number of atoms not the same in all NPT datasets'
+        assert all([item.n_DOF == self.n_DOF for item in self.NPT_systems]), 'number of degrees of freedom not the same in all NPT datasets'
+        
+        print(f'n_mol = {self.n_mol}')
+        
+        self.Ts = np.array([item.T for item in self.NPT_systems]) # K
+        assert self.Tref in self.Ts, 'no NPT dataset found/provided (init arg #5), at the provided Tref (init arg #1)'
+        assert len(np.unique(self.Ts)) == len(self.Ts), 'duplicated dataset(s) provided (init arg #5)'
+        self.n_temperatures = len(self.Ts)
+        sort_by_increasing_T = np.argsort(self.Ts)
+        self.Ts = self.Ts[sort_by_increasing_T]
+        self.datasets_converged = self.datasets_converged[sort_by_increasing_T]
+        self.NPT_systems = dict(zip(self.Ts, [self.NPT_systems[i] for i in sort_by_increasing_T]))
+        self.paths_datasets_NPT = np.array(self.paths_datasets_NPT)[sort_by_increasing_T]
+
+        gR_ = lambda _bool : ['R','g'][np.array(_bool).astype(np.int32)]
+        print('datasets_converged \n'+''.join([f'{a}K : {color_text_(b,gR_(b))} \n' for a,b in zip(self.Ts, self.datasets_converged )]))
+
+        self.ind_ref = np.where(self.Ts == self.Tref)[0][0]
+        print(f'Tref = {self.Tref} (self.ind_ref: {self.ind_ref})')
+
+        ## ## ## ## 
+        ## organising the FE through which the final FE output curve will pass at Tref
+
+        if self.Tref_box is not None:
+            assert self.Tref_box.shape == (3,3), 'Tref_box provided (init arg #4) not a (3,3) array'
+            assert all_lower_triangular_(self.Tref_box), 'Tref_box provided (init arg #4) not lower trianguler'
+            print('Isotropic: Gibbs FEs computed are based on isotropic fluctuations of the box \n')
+            self.set_Tref_g_(**self.f2g_correction_params)
+            print(f'Gibbs FE at Tref obtained: {self.Tref_g } +/- {self.Tref_SE} kT. This will be used.')
+            print(f'This originates from Helmholtz FE at Tref provided: {self.Tref_FE} +/- {self.Tref_SE} kT.')
+            self.ISOTROPIC = True
+        else:
+            print('Anisotropic: Gibbs FEs computed are based on anisotropic fluctuations of the box \n')
+            self.Tref_g  = float(self.Tref_FE)
+            print(f'Gibbs FE at Tref provided: {self.Tref_FE} +/- {self.Tref_SE} kT. This will be used.')
+            self.Tref_f_to_g_correction = None
+            self.ISOTROPIC = False
+
+            ## this is for the patch where ladj should not be rescaled:
+            self.ladJ_ALL_data = dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
+            ## 
+
+        ## ## ## ## 
+        self.set_enthalpies_()
+
+        print('')
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+
+    def set_enthalpies_(self,):
+        '''
+        self.all_enthalpies = {
+            'u' = {(Ti_potental,Tj_data): ndarray, ...},
+            'pv' = {(Ti_potental,Tj_data): ndarray, ...},
+            'ladj' = {(Ti_potental,Tj_data): ndarray, ...},
+        }
+        '''
+        self.evaluations_parts = {'u':{},'pv':{},'ladj':{}}
+        self.evaluations = {}
+
+        self.sampled_potential_energies = {}
+        self.sampled_enthalpies = {}
+        self.sampled_kinetic_energies = {}
+
+        for Tj_data in self.Ts:
+            
+            ''' potential energy '''
+            uj = np.array(self.NPT_systems[Tj_data].u).flatten()    # kT units (U / (Tj*CONST_kB))
+            self.sampled_potential_energies[Tj_data] = np.array(uj) # kT units
+            self.average_sampled_potential_energy_ = lambda T : self.sampled_potential_energies[T].mean() # kT units
+
+            ''' PV term '''
+            boxes_j = np.array(self.NPT_systems[Tj_data].boxes) # nm units
+            assert all_lower_triangular_(boxes_j), 'box not lower-triangular'
+            h11, h22, h33 = boxes_j[...,0,0], boxes_j[...,1,1], boxes_j[...,2,2] # nm units
+            Vj = h11*h22*h33                       # nm**3 units
+            ladj_j = np.log(h22) + 2.0*np.log(h33) # kB units due to implicit 1/V0 factor ; V0 = 1 nm**3
+            beta_j = 1.0 / (CONST_kB * Tj_data)
+            pv_j   =  beta_j * CONST_PV_to_kJ_per_mol * self.P * Vj # kT units
+
+            self.sampled_enthalpies[Tj_data] = np.array(uj) + pv_j  # kT units
+
+            ''' non-rotating box entropy term '''
+            if self.ISOTROPIC: pass
+            else: self.sampled_enthalpies[Tj_data] += ladj_j        # kT units
+
+            #self.average_sampled_enthalpy_ = lambda T, m=None: self.sampled_enthalpies[T].mean() # kT units
+            
+            ''' kinetic energy
+            T(t) = (2./(self.n_DOF*CONST_kB)) * K(t) # T in Kelvin, and K(t) in kJ/mol
+            K(t) = T(t) / (2./(self.n_DOF*CONST_kB))
+                    = T(t) * 0.5 * self.n_DOF * CONST_kB ; in kJ/mol
+            beta*K(t) = T(t) * 0.5 * self.n_DOF / T   ; in kT
+            '''
+            Tj_t = np.array(self.NPT_systems[Tj_data].temperature)
+            self.sampled_kinetic_energies[Tj_data] = Tj_t * (0.5 * self.n_DOF / Tj_data) # kT units
+
+            ''' total energy (Hamiltonian) '''
+
+            self.total_energies_sampled_ = lambda T : self.sampled_enthalpies[T] + self.sampled_kinetic_energies[T]
+
+            for Ti_potentail in self.Ts:
+                u_ij = np.array((Tj_data/Ti_potentail) * uj )
+                self.evaluations_parts['u'][(Ti_potentail, Tj_data)] = u_ij       # kT units
+
+                beta_i = 1.0 / (CONST_kB * Ti_potentail)
+                pv_ij = np.array(beta_i * CONST_PV_to_kJ_per_mol * self.P * Vj)  
+                self.evaluations_parts['pv'][(Ti_potentail, Tj_data)] = pv_ij    # kT units
+                    
+                self.evaluations_parts['ladj'][(Ti_potentail, Tj_data)] = ladj_j # kB units
+
+                self.evaluations[(Ti_potentail, Tj_data)] = np.array(u_ij + pv_ij)
+                if self.ISOTROPIC: pass
+                else: self.evaluations[(Ti_potentail, Tj_data)] += np.array(ladj_j)
+
+        if self.ISOTROPIC: pass
+        else:
+            self.ladJ_evaluated_data = {}
+            for T in self.Ts:
+                self.ladJ_evaluated_data[T] = np.array(self.evaluations_parts['ladj'][(T,T)])
+
+        print('')
+        print(f'#### maximum batch size possible for MBAR: {self.maximum_batch_size} points / state ####')
+        print('')
+
+    def average_sampled_enthalpy_(self, T, m=None):
+        if m is None: m = 0
+        else: pass
+        return self.sampled_enthalpies[T][-m:].mean()
+
+    @property
+    def maximum_batch_size(self,):
+        return np.min([len(self.sampled_enthalpies[T]) for T in self.Ts])
+    
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## MBAR fitting 
+
+    @property
+    def ANI(self,):
+        if self.ISOTROPIC: return ''
+        else:              return '_ANI'
+
+    def save_mbar_instance_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m)
+        save_pickle_([self.mbar, self.mbar_res], name)
+
+    def load_mbar_instance_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m)
+        self.mbar, self.mbar_res = load_pickle_(name)
+
+    def save_mbar_instance_shuffled_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m) + f'_shuffled_from_M{self.maximum_batch_size}'
+        save_pickle_([self.mbar, self.mbar_res, self.evaluations_subsample_selection_indices], name)
+
+    def load_mbar_instance_shuffled_(self, m):
+        name = self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+ '_'.join([str(x) for x in self.Ts]) + self.ANI + '_mbar_instance_m'+str(m) + f'_shuffled_from_M{self.maximum_batch_size}'
+        self.mbar, self.mbar_res, self.evaluations_subsample_selection_indices = load_pickle_(name)
+        assert len(self.evaluations_subsample_selection_indices.keys()) == self.n_temperatures, '! this should not print'
+
+    ## ## ## ##
+
+    def get_inds_select_(self, uii, m):
+        if m < self.maximum_batch_size:
+            inds_rand = None ; a=0
+            print('(...')
+            while inds_rand is None:
+                inds_rand = find_split_indices_(uii, split_where=m, tol=0.0001, verbose=False)
+                a+=1
+            inds_select = inds_rand[:m] # error if not found but max recusion length will be reached anyway
+            print(f'...): {a}')
+        else:
+            inds_select = np.arange(self.maximum_batch_size)
+        return inds_select
+
+    def _set_evaluations_subsample_selection_indices_SHUFFLED_(self, m):
+        assert self.maximum_batch_size >= m
+        self.evaluations_subsample_selection_indices = {}
+        for Ti in self.Ts:
+            self.evaluations_subsample_selection_indices[Ti]  = self.get_inds_select_(self.evaluations[(Ti,Ti)], m=m)
+
+    def _set_evaluations_subsample_selection_indices_basic_(self, m):
+        max_batch_size = int(self.maximum_batch_size)
+        assert max_batch_size >= m
+        self.evaluations_subsample_selection_indices = {}
+        for Ti in self.Ts:
+            ALL_indices = np.arange(len(self.evaluations[(Ti, Ti)]))
+            self.evaluations_subsample_selection_indices[Ti] = np.array(ALL_indices[-m:])
+
+    def set_evaluations_subsampled_(self,):
+        self.evaluations_subsampled = {}
+        for Tj in self.Ts:
+            inds_select_j = self.evaluations_subsample_selection_indices[Tj]
+            for Ti in self.Ts:
+                key_ij = (Ti, Tj)
+                enthalpy_i_on_data_j = self.evaluations[key_ij]
+                #print(key_ij, enthalpy_i_on_data_j.shape, inds_select_j.shape, inds_select_j.min(), inds_select_j.max())
+                self.evaluations_subsampled[key_ij] = np.array(enthalpy_i_on_data_j[inds_select_j])
+
+    def compute_MBAR_(self, m=None, rerun=False, save=True, 
+                      use_representative_subsets = False, # comment
+                     ):
+ 
+        if m is None: 
+            # case 0: using all data, dont need to do anything
+            m = self.maximum_batch_size # also x[-0:] = x
+            self.evaluations_subsampled = dict(self.evaluations)
+            self.SHUFFLED = False
+            # case 0: done
+        else:
+            ''' testing MBAR with less data than previously evalauted in self.evalautions
+                two options: use_representative_subsets True or False
+                    True : each dataset randomised (self.SHUFFLE := True) to select representative batches of m datapount from each entire dataset
+                    False: taking m point from the back of each dataset (self.SHUFFLE := False) 
+            '''
+            assert self.maximum_batch_size >= m, '!! sample-size m={m} is not available in self.evaluations'
+            if use_representative_subsets:
+                if rerun:
+                    # case 1: v2 asked, and happy to run rew result
+                    self._set_evaluations_subsample_selection_indices_SHUFFLED_(m)
+                    self.SHUFFLED = True
+                    # case 1: ok
+                else:
+                    # case 2 : v2 asked but trying to load one from before, rerun True if this does not load
+                    try:
+                        # case 2A: trying to load v2
+                        self.load_mbar_instance_shuffled_(m)
+                        self.SHUFFLED = True
+                        # case 2A: v2 loaded ok, done
+                    except:
+                        # case 2B = case 1 
+                        # rerun forced to True
+                        rerun = True
+                        # case 1:
+                        self._set_evaluations_subsample_selection_indices_SHUFFLED_(m)
+                        self.SHUFFLED = True
+            else:
+                # case 3: v2 not wanted, just do the v1 thing
+                self._set_evaluations_subsample_selection_indices_basic_(m)
+                self.SHUFFLED = False
+                # case 3: ok
+            # apply either options
+            self.set_evaluations_subsampled_()
+
+        # dont want to save self.evaluations_subsampled each time, just saving indices to recreate it every time loading the same thing
+
+        self.Ns = np.array([self.evaluations_subsampled[(T_i,T_i)].shape[0] for T_i in self.Ts])
+        self.Q = np.zeros([self.n_temperatures, self.Ns.sum()])
+        assert self.Ns.sum() == self.n_temperatures * m, f'{self.Ns.sum()} != {self.n_temperatures * m}'
+
+        for i in range(self.n_temperatures):
+            Ti = self.Ts[i]
+            Q_i = []
+            for Tj in self.Ts:
+                key_ij = (Ti, Tj)
+                enthalpy_i_on_data_j = self.evaluations_subsampled[key_ij]
+                Q_i.append(enthalpy_i_on_data_j)
+            self.Q[i] = np.concatenate(Q_i, axis=0)
+
+        if not rerun:
+            try:
+                if self.SHUFFLED: self.load_mbar_instance_shuffled_(m)
+                else:             self.load_mbar_instance_(m)
+                print('rerun : file found.')
+            except:
+                print(f'rerun : file not found; running compute_MBAR_ with m = {m}')
+                self.compute_MBAR_(m=m, rerun=True, save=save)
+        else:
+            self.mbar = MBAR(self.Q, self.Ns, solver_protocol="robust")
+            self.mbar_res = self.mbar.compute_free_energy_differences()
+            if save:
+                if self.SHUFFLED: self.save_mbar_instance_shuffled_(m)
+                else:             self.save_mbar_instance_(m)
+            else: pass
+
+        if not self.ISOTROPIC: self.finalise_patch_related_to_ladJ_should_not_be_rescaled_()
+        else: pass
+
+        self.mbar_Delta_f  = self.mbar_res['Delta_f']#[0,-1]
+        self.mbar_dDelta_f = self.mbar_res['dDelta_f']#[0,-1]
+        print('')
+        
+    def finalise_patch_related_to_ladJ_should_not_be_rescaled_(self,):
+        #### this is for the patch where ladj should not be rescaled:
+        self.ladJ_subsampled_data = {} #dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
+        for T in self.Ts:
+            inds_select = self.evaluations_subsample_selection_indices[T]
+            self.ladJ_subsampled_data[T] = np.array(self.ladJ_evaluated_data[T][inds_select])
+
+        self.not_Q = np.zeros([self.n_temperatures, self.Ns.sum()])
+        not_Q_i = np.concatenate([np.array(self.ladJ_subsampled_data[Tj]) for Tj in self.Ts], axis=0)
+        for i in range(self.n_temperatures):
+            self.not_Q[i] = not_Q_i
+        ####
+
+    @property
+    def mbar_sample_size(self,):
+        return self.mbar.N_k[0] # same for all states at the moment
+
+    @property
+    def n_energy_evalautions(self,):
+        m = self.mbar_sample_size
+        n_states = len(self.mbar.N_k)
+        return m * (n_states**2 - n_states)
+
+    @property
+    def _mbar(self,):
+        return copy.deepcopy(self.mbar)
+    
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## Gibbs FE
+
+    def g_(self, T):
+        # g_with_patch_related_to_ladJ_should_not_be_rescaled_
+        if not self.ISOTROPIC:
+            index = self.ind_ref
+            arg = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            arg += np.array(self.not_Q[index:index+2])
+            self.res = self.mbar.compute_perturbed_free_energies(arg)
+            FE = self.res['Delta_f'][0,1]  + self.Tref_g
+            SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
+            return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol     
+        else:
+            index = self.ind_ref
+            arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            self.res = self.mbar.compute_perturbed_free_energies(arg)
+            FE = self.res['Delta_f'][0,1]  + self.Tref_g
+            SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
+            return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
+            
+    '''
+    def g_(self, T):
+        # output: g_{crys}(T) for scalar T : continuous gibbs FE estimates as a function of temperature
+        index = self.ind_ref
+
+        arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+        self.res = self.mbar.compute_perturbed_free_energies(arg)
+
+        FE = self.res['Delta_f'][0,1]  + self.Tref_g
+        SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
+
+        return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
+    '''
+
+    @property
+    def g(self,):
+        ''' g_{crys}(T \in self.Ts) : discrete gibbs FE estimates as a function of temperature '''
+        FEs = self.mbar_Delta_f[self.ind_ref] + self.Tref_g
+        SEs = self.mbar_dDelta_f[self.ind_ref] + self.Tref_SE
+        return FEs, SEs
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## Average enthalpy [using u as the symbol for enthalpy here, not the usual potential energy]
+
+    def av_u_(self,T):
+        # av_u_whith_patch_related_to_ladJ_should_not_be_rescaled_
+        if not self.ISOTROPIC:
+            index = self.ind_ref
+            u_ln = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            A_in = (self.Q[index:index+2] - self.not_Q[index:index+2]) * self.Ts[index:index+2].reshape([2,1]) / T
+            u_ln += np.array(self.not_Q[index:index+2])
+            A_in += np.array(self.not_Q[index:index+2])
+            state_map = np.array([[0,1],[0,1]])
+            _mbar = copy.deepcopy(self.mbar)
+            res = _mbar.compute_expectations_inner(
+                    A_in,
+                    u_ln,
+                    state_map,
+                    return_theta=True,
+                    uncertainty_method=None,
+                    warning_cutoff=1.0e-10,
+                )
+            av_u = res['observables'][-1]
+            return av_u
+
+        else:
+            index = self.ind_ref
+            u_ln = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+            A_in = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / T
+            state_map = np.array([[0,1],[0,1]])
+            _mbar = copy.deepcopy(self.mbar)
+            res = _mbar.compute_expectations_inner(
+                    A_in,
+                    u_ln,
+                    state_map,
+                    return_theta=True,
+                    uncertainty_method=None,
+                    warning_cutoff=1.0e-10,
+                )
+            av_u = res['observables'][-1]
+            return av_u
+    '''
+    def av_u_(self,T):
+
+        index = self.ind_ref
+
+        u_ln = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
+        
+        A_in = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / T
+
+        state_map = np.array([[0,1],[0,1]])
+
+        _mbar = copy.deepcopy(self.mbar)
+        res = _mbar.compute_expectations_inner(
+                A_in,
+                u_ln,
+                state_map,
+                return_theta=True,
+                uncertainty_method=None,
+                warning_cutoff=1.0e-10,
+            )
+        av_u = res['observables'][-1]
+
+        return av_u 
+    '''
+    def _test_average_enthalpy_interpolator_(self, m=None):
+        # it should pass through all the points where data was actually sampled
+        interpolation = np.array([self.av_u_(T) for T in self.Ts])
+        truth         = np.array([self.average_sampled_enthalpy_(T, m=m) for T in self.Ts])
+        return np.abs(truth - interpolation).max() / self.n_mol
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## Curves: FE, enthalpy [using u as the symbol for enthalpy here, not the usual potential energy]
+
+    def curve_(self, Tmin, Tmax, Tstride=100,  what='g'):
+        ''' output : g_{crys}(T) curve between T=Tmin and T=Tmax '''
+        if what == 'g':   # abs Gibbs FE
+            function_ = lambda T : self.g_(T)
+        elif what == 'u': # everage enthalpy (not average energy)
+            function_ = lambda T : [self.av_u_(T), 0.0]
+        elif what == 's': # entropy = u - g
+            print('! curve_ : what="s" may be noisy because what="u" is used (what="u" is often noisy)')
+            def function_(T):
+                g, se = self.g_(T)
+                av_u = self.av_u_(T)
+                return av_u - g, se
+        else: assert what in ['g', 'u', 's']
+
+        Ts = np.linspace(Tmin, Tmax, Tstride)
+        FEs = []
+        SEs = []
+        for T in Ts:
+            FE, SE = function_(T)
+            FEs.append(FE)
+            SEs.append(SE)
+        
+        FEs_latt = np.array(FEs) / self.n_mol
+        SEs_latt = np.array(SEs) / self.n_mol
+        # Ts : grid for plotting (x-axis)
+
+        return FEs_latt, SEs_latt, Ts
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## saving/loading final result
+
+    @property
+    def path_RES(self,):
+        m = self.mbar_sample_size
+        return self.paths_datasets_NPT[0].split('Temp')[0]+'Ts_'+'_'.join([str(x) for x in self.Ts])+f'_Tref_{self.Tref}{self.ANI}_RES_m{m}'
+
+    def load_RES_(self, name_RES):
+        if self.SHUFFLED: name_RES += '_shuffled'
+        else: pass
+        return load_pickle_(name_RES)
+
+    def save_RES_(self, name_RES):
+        if self.SHUFFLED: name_RES += '_shuffled'
+        else: pass
+        save_pickle_(self.RES, name_RES)
+
+    def get_result_(self, Tmin=50, Tmax=800, Tstride=500, save=True):
+        
+        if self.f2g_correction_params == {'version':1, 'bins':40}: key = ''
+        else: key = f'_f2g_setting_{self.f2g_correction_params["version"]}_{self.f2g_correction_params["bins"]}'
+
+        name_RES = self.path_RES + f'_{Tmin}_{Tmax}_{Tstride}' + key
+
+        try:
+            RES = self.load_RES_(name_RES)
+            #print(name_RES)
+            #print(self.paths_datasets_NPT[self.ind_ref])
+            #print(self.Tref_box)
+            #print(f"{RES['ref']['Helmholtz_FE']} vs. {self.Tref_FE}")
+            assert RES['ref']['Helmholtz_FE']  == self.Tref_FE
+            #print(f"{RES['ref']['SE']} vs. {self.Tref_SE}")
+            assert RES['ref']['SE']            == self.Tref_SE
+            #print(f"{RES['ref']['Gibbs_FE']} vs. {self.Tref_g}")
+            assert RES['ref']['Gibbs_FE']      == self.Tref_g
+            self.RES = RES
+            print('Found previously saved result with current settings. This is set to self.RES')
+
+        except:
+            print(f'Running new result. This will be set to self.RES' + (', and saved' if save else ''))
+            RES = {}
+
+            RES['ref']      = {}
+            RES['curve']    = {}
+            RES['discrete'] = {}
+
+            g, s, grid  = self.curve_( Tmin, Tmax, Tstride=Tstride,  what='g')
+            u, _, grid  = self.curve_( Tmin, Tmax, Tstride=Tstride,  what='u')
+            RES['curve']['grid']         = grid
+            RES['curve']['Gibbs_FE']     = g
+            RES['curve']['Gibbs_SE']     = s
+            RES['curve']['Enthalpy']     = u
+
+            RES['discrete']['grid']      = self.Ts
+            RES['discrete']['converged'] = np.array(self.datasets_converged).astype(np.int32)
+            RES['discrete']['Gibbs_FE']  = self.g[0] / self.n_mol
+            RES['discrete']['Gibbs_SE']  = self.g[1] / self.n_mol
+            m = self.mbar_sample_size
+            # Enthalpy : Enthalpy data used for mbar
+            RES['discrete']['Enthalpy']          = np.array([self.average_sampled_enthalpy_(T,m=m) for T in self.Ts]) / self.n_mol
+            RES['discrete']['Enthalpy_all_data'] = np.array([self.average_sampled_enthalpy_(T) for T in self.Ts])     / self.n_mol
+
+            RES['ref']['Tref']                          = self.Tref
+            RES['ref']['Helmholtz_FE']                  = self.Tref_FE
+            RES['ref']['SE']                            = self.Tref_SE
+            RES['ref']['Helmholtz_to_Gibbs_correction'] = self.Tref_f_to_g_correction # no error from correct assumed
+            RES['ref']['Gibbs_FE']                      = self.Tref_g
+            RES['ref']['Helmholtz_to_Gibbs_params']     = self.f2g_correction_params
+            RES['ref']['n_mol']                         = self.n_mol
+
+            self.RES = RES
+            if save: self.save_RES_(name_RES)
+            else: pass
+
+        print('')
+        
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
+    ## heat capacity:
+
+    def cP_(self, Tmin=50, Tmax=800, Tstride=500, include_KE=False):
+        if include_KE: book_ = lambda T : self.total_energies_sampled_(T)
+        else:          book_ = lambda T : self.sampled_enthalpies[T]
+
+        Ts = np.array(self.Ts)
+        Es = np.array([ book_(T).mean()*T*CONST_kB for T in Ts ]) / self.n_mol
+
+        lr = LineFit(Ts[:,np.newaxis], Es[:,np.newaxis])
+
+        Ts_fine_grid = np.linspace(Tmin, Tmax, Tstride)
+        Es_fine_grid = lr(Ts_fine_grid[:,np.newaxis])
+        cP = np.round(lr.W[0][0], 4)
+
+        print(r'$c_{P} \; / \; \text{kJ} \: \text{mol}^{-1} \text{K}^{-1} \text{molecule}^{-1} $'+f' = {cP}')
+
+        # Es : kJ/mol lattice energy
+
+        return [Ts,Es], [Ts_fine_grid, Es_fine_grid], cP
+"""
+#"""
 '''
 Correction: self.evaluations does not need to be explicitly calculated; can be obtained directly from the data.
             This means that there are zero potential energy evaluations to make in this file.
@@ -9,8 +682,6 @@ Correction: self.evaluations does not need to be explicitly calculated; can be o
 
 THIS WHOLE FILE NEEDS TO BE REDONE, IT WORKS BUT not easy to follow or maintain anymore (too much patching)
 '''
-
-
 class SingleComponent_proxy:
     def __init__(self, name):
         '''
@@ -332,12 +1003,12 @@ class g_of_T:
         # this needs to be changed first, probably add it as arg (path_incomplete_evaluation) in the next function.
 
         def fill_missing_evaluations_(self, path_incomplete_evaluations:str, m=None, save=True):
-            """
+            '''
             path_incomplete_evaluations : carefully specified by hand
 
             currently a way to add more temperatures without re-evaluating all other data again
             a better way would be automatically adding if missing (TODO)
-            """
+            '''
             self.evaluations = load_pickle_(path_incomplete_evaluations)
             KEYS = self.evaluations.keys()
 
@@ -736,9 +1407,9 @@ class g_of_T:
             SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
             return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
             
-    """
+    '''
     def g_(self, T):
-        ''' output: g_{crys}(T) for scalar T : continuous gibbs FE estimates as a function of temperature '''
+        # output: g_{crys}(T) for scalar T : continuous gibbs FE estimates as a function of temperature
         index = self.ind_ref
 
         arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
@@ -748,7 +1419,7 @@ class g_of_T:
         SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
 
         return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
-    """
+    '''
     @property
     def g(self,):
         ''' g_{crys}(T \in self.Ts) : discrete gibbs FE estimates as a function of temperature '''
@@ -796,7 +1467,7 @@ class g_of_T:
                 )
             av_u = res['observables'][-1]
             return av_u
-    """
+    '''
     def av_u_(self,T):
 
         index = self.ind_ref
@@ -819,7 +1490,7 @@ class g_of_T:
         av_u = res['observables'][-1]
 
         return av_u 
-    """
+    '''
     def _test_average_enthalpy_interpolator_(self, m=None):
         # it should pass through all the points where data was actually sampled
         interpolation = np.array([self.av_u_(T) for T in self.Ts])
@@ -955,7 +1626,7 @@ class g_of_T:
         # Es : kJ/mol lattice energy
 
         return [Ts,Es], [Ts_fine_grid, Es_fine_grid], cP
-
+#"""
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
 class LineFit:
@@ -975,4 +1646,5 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
