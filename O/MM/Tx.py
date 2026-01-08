@@ -170,7 +170,7 @@ class g_of_T:
 
     def set_enthalpies_(self,):
         '''
-        self.all_enthalpies = {
+        self.evaluations_parts = {
             'u' = {(Ti_potental,Tj_data): ndarray, ...},
             'pv' = {(Ti_potental,Tj_data): ndarray, ...},
             'ladj' = {(Ti_potental,Tj_data): ndarray, ...},
@@ -1601,6 +1601,7 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
 
 
