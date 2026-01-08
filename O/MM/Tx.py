@@ -2,8 +2,7 @@ from O.MM.ecm_basic import *
 import glob
 ## ## ## ## ## 
 
-# will finish testing this new version later this day.
-"""
+#""" correction: no evaluations needed for temperature replicas 
 class SingleComponent_lite:
     def __init__(self, name, check_energies=True):
         '''
@@ -673,8 +672,8 @@ class g_of_T:
         # Es : kJ/mol lattice energy
 
         return [Ts,Es], [Ts_fine_grid, Es_fine_grid], cP
-"""
 #"""
+"""
 '''
 Correction: self.evaluations does not need to be explicitly calculated; can be obtained directly from the data.
             This means that there are zero potential energy evaluations to make in this file.
@@ -1626,7 +1625,7 @@ class g_of_T:
         # Es : kJ/mol lattice energy
 
         return [Ts,Es], [Ts_fine_grid, Es_fine_grid], cP
-#"""
+"""
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
 class LineFit:
@@ -1646,5 +1645,6 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
 
