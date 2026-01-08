@@ -161,11 +161,7 @@ class g_of_T:
             print(f'Gibbs FE at Tref provided: {self.Tref_FE} +/- {self.Tref_SE} kT. This will be used.')
             self.Tref_f_to_g_correction = None
             self.ISOTROPIC = False
-
-            ## this is for the patch where ladj should not be rescaled:
-            self.ladJ_ALL_data = dict(zip(self.Ts, [self.ladJ_Vto6_(self.NPT_systems[T].boxes) for T in self.Ts]))
-            ## 
-
+            
         ## ## ## ## 
         self.set_enthalpies_()
 
@@ -1605,6 +1601,7 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
 
 
