@@ -226,7 +226,7 @@ class g_of_T:
 
             for Ti_potentail in self.Ts:
                 u_ij = np.array((Tj_data/Ti_potentail) * uj )
-                self.evaluations_parts['u'][(Ti_potentail, Tj_data)] = u_ij       # kT units
+                self.evaluations_parts['u'][(Ti_potentail, Tj_data)] = u_ij      # kT units
 
                 beta_i = 1.0 / (CONST_kB * Ti_potentail)
                 pv_ij = np.array(beta_i * CONST_PV_to_kJ_per_mol * self.P * Vj)  
@@ -451,21 +451,7 @@ class g_of_T:
             FE = self.res['Delta_f'][0,1]  + self.Tref_g
             SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
             return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
-            
-    '''
-    def g_(self, T):
-        # output: g_{crys}(T) for scalar T : continuous gibbs FE estimates as a function of temperature
-        index = self.ind_ref
-
-        arg = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
-        self.res = self.mbar.compute_perturbed_free_energies(arg)
-
-        FE = self.res['Delta_f'][0,1]  + self.Tref_g
-        SE = self.res['dDelta_f'][0,1] + self.Tref_SE # in the case of f->g conversion; assuming no error added
-
-        return FE, SE # g_crys, se_crys in kT # *_crys : not divided by n_mol 
-    '''
-
+    
     @property
     def g(self,):
         ''' g_{crys}(T \in self.Ts) : discrete gibbs FE estimates as a function of temperature '''
@@ -474,7 +460,7 @@ class g_of_T:
         return FEs, SEs
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
-    ## Average enthalpy [using u as the symbol for enthalpy here, not the usual potential energy]
+    ## Average enthalpy [using u as the symbol for enthalpy here]
 
     def av_u_(self,T):
         # av_u_whith_patch_related_to_ladJ_should_not_be_rescaled_
@@ -513,30 +499,7 @@ class g_of_T:
                 )
             av_u = res['observables'][-1]
             return av_u
-    '''
-    def av_u_(self,T):
 
-        index = self.ind_ref
-
-        u_ln = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / np.array([self.Tref,T]).reshape([2,1])
-        
-        A_in = self.Q[index:index+2] * self.Ts[index:index+2].reshape([2,1]) / T
-
-        state_map = np.array([[0,1],[0,1]])
-
-        _mbar = copy.deepcopy(self.mbar)
-        res = _mbar.compute_expectations_inner(
-                A_in,
-                u_ln,
-                state_map,
-                return_theta=True,
-                uncertainty_method=None,
-                warning_cutoff=1.0e-10,
-            )
-        av_u = res['observables'][-1]
-
-        return av_u 
-    '''
     def _test_average_enthalpy_interpolator_(self, m=None):
         # it should pass through all the points where data was actually sampled
         interpolation = np.array([self.av_u_(T) for T in self.Ts])
@@ -1645,6 +1608,7 @@ class LineFit:
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## two-state BAR for NVT / NPT FE differences between similar macrostates [not included because not yet used in a publication]
+
 
 
 
