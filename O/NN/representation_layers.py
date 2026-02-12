@@ -278,7 +278,7 @@ class SC_helper:
 class SingleComponent_map(SC_helper):
     ''' !! : molecule must have >3 atoms to use this M_{IC} layer '''
     def __init__(self,
-                 PDB_single_mol: str,   
+                 PDB_single_mol: str,
                 ):
         super().__init__(PDB_single_mol)
         self.VERSION = 'NEW'
@@ -405,7 +405,7 @@ class SingleComponent_map(SC_helper):
         X_IC, X_CB = self._forward_init_(r_dataset, batch_size=batch_size)[:2]
         rO, q, a, d0, d1 = X_CB
 
-        assert  self.n_mol_supercell // n_mol_unitcell ==  self.n_mol_supercell / n_mol_unitcell
+        assert not self.n_mol_supercell % n_mol_unitcell, 'ic_map.initialise_ : please check n_mol_unitcell is a factor of n_mol (number of molecules in r_dataset)'
         self.n_mol_unitcell = n_mol_unitcell
         self.n_unitcells = self.n_mol_supercell // self.n_mol_unitcell
 
@@ -1007,6 +1007,7 @@ class SingleMolecule_map(SingleComponent_map):
         return r, ladJ
 
 ####################################################################################################
+
 
 
 
