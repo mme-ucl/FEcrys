@@ -400,6 +400,7 @@ class SingleComponent_map(SC_helper):
                    n_mol_unitcell = 1,
                    COM_remover = NotWhitenFlow, # WhitenFlow
                    focused = True,
+                   assert_no_jumping_molecules = True,
                    ):
         # r_dataset : (m,N,3)
         # b0        : (3,3) or (m,3,3)
@@ -429,10 +430,12 @@ class SingleComponent_map(SC_helper):
 
         rO_flat = reshape_to_flat_np_(rO, self.n_mol, 1) # (m, 3*n_mol)
 
-        'checking for molecules not to be jumping more than half box length'
-        check = get_ranges_centres_(rO_flat, axis=[0])
-        assert all([x < 0.5 for x in check[0]])
-
+        if assert_no_jumping_molecules:
+            'checking for molecules not to be jumping more than half box length'
+            check = get_ranges_centres_(rO_flat, axis=[0])
+            assert all([x < 0.5 for x in check[0]]), 'molecules are jumping across PBCs; if this is NVT data please use SingleComponent_map_r instead'
+        else: pass
+            
         self.WF = COM_remover(rO_flat, removedims=3)
         xO_flat = self.WF._forward_np(rO_flat)                # (m, 3*n_mol-3)
         self.ranges_xO, self.centres_xO = get_ranges_centres_(xO_flat, axis=[0]) # (3*n_mol-3,)
@@ -1007,6 +1010,7 @@ class SingleMolecule_map(SingleComponent_map):
         return r, ladJ
 
 ####################################################################################################
+
 
 
 
