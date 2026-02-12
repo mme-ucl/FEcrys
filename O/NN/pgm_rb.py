@@ -177,6 +177,9 @@ class SingleComponent_map_rb(SingleComponent_map):
         self.FA = NotWhitenFlow(sO_flat, whiten_anyway=False)
         sO_flat = self.FA._forward_np(sO_flat)
 
+        # adding safety step just in case data translated (COM not removed during initialisation)
+        sO_flat = np.mod(sO_flat, 1.0) # fixed atom at 0 and missing, can do this.
+
         self.ranges_sO = np2tf_(np.ones(3*(self.n_mol-1)))      # 1
         self.centres_sO = np2tf_(np.ones(3*(self.n_mol-1))*0.5) # 0.5
 
@@ -352,6 +355,9 @@ class SingleComponent_map_rb(SingleComponent_map):
 
         sO_flat = self.FA.forward(reshape_to_flat_tf_(sO, n_molecules=self.n_mol, n_atoms_in_molecule=1))[0]
 
+        # adding safety step just in case data translated (COM not removed during initialisation)
+        sO_flat = tf.math.floormod(sO_flat, 1.0) # fixed atom at 0 and missing, can do this.
+
         sO_flat, ladJ_scale_sO = scale_shift_x_general_(sO_flat,
                                                         physical_ranges_x = self.ranges_sO, 
                                                         physical_centres_x = self.centres_sO,
@@ -425,6 +431,9 @@ class SingleComponent_map_rb(SingleComponent_map):
                                                         model_range = 2.0*PI, model_centre = 0.0,
                                                         forward = False)
         ladJ += ladJ_scale_sO
+
+        # adding safety step just in case data translated (COM not removed during initialisation)
+        sO_flat = tf.math.floormod(sO_flat, 1.0) # fixed atom at 0 and missing, can do this.
 
         sO = reshape_to_atoms_tf_(self.FA.inverse(sO_flat)[0], n_molecules=self.n_mol, n_atoms_in_molecule=1)
 
@@ -1143,5 +1152,6 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                 self.samples_from_model.append(load_pickle_(self.name_save_samples+'_crystal_index='+str(crystal_index)))
         else:
             self.samples_from_model = load_pickle_(self.name_save_samples+'_crystal_index='+str(crystal_index))
+
 
 
