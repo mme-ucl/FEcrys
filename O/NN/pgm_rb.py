@@ -166,7 +166,7 @@ class SingleComponent_map_rb(SingleComponent_map):
         X_IC, X_CB = self._forward_init_(r_dataset, batch_size=batch_size)[:2]
         rO, q, a, d0, d1 = X_CB
 
-        assert  self.n_mol_supercell // n_mol_unitcell ==  self.n_mol_supercell / n_mol_unitcell
+        assert not self.n_mol_supercell % n_mol_unitcell, 'ic_map.initialise_ : please check n_mol_unitcell is a factor of n_mol (number of molecules in r_dataset)'
         self.n_mol_unitcell = n_mol_unitcell
         self.n_unitcells = self.n_mol_supercell // self.n_mol_unitcell
 
@@ -1152,6 +1152,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                 self.samples_from_model.append(load_pickle_(self.name_save_samples+'_crystal_index='+str(crystal_index)))
         else:
             self.samples_from_model = load_pickle_(self.name_save_samples+'_crystal_index='+str(crystal_index))
+
 
 
 
