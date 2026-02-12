@@ -1,10 +1,7 @@
 
 ''' representation_layers.py
-    c : SC_helper           ; TODO: merge/expand for part 1 of the project
-    c : SingleComponent_map ; done
-    
-    TODO: !! add back rep for single molecule in vacuum  (P1 reproducibility)
-    TODO: ! add back rep for molecule with only 3 atoms (P2 reproducibility)
+    c : SC_helper           ; has redundant methods
+    TODO: ! add back support for the ice case
 '''
 
 import numpy as np
@@ -15,7 +12,7 @@ from .github_wutobias_r2z import ZMatrix # REF : https://github.com/wutobias/r2z
 from .util_tf import *
 from ..util_np import *
 
-from .representation_layers import *
+from .representation_layers import * # ?
 
 class SC_helper:
     ''' 
@@ -1010,6 +1007,7 @@ class SingleMolecule_map(SingleComponent_map):
         return r, ladJ
 
 ####################################################################################################
+
 
 
 
