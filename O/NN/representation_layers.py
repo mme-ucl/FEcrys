@@ -1008,6 +1008,218 @@ class SingleMolecule_map(SingleComponent_map):
 
 ####################################################################################################
 
+class SingleComponent_map_r(SingleComponent_map):
+    '''
+    rO atoms
+
+    a small udpate for the NVT model (PGMcrys_v1) to allow jumping whole molecules in the fixed periodic box
+    
+    SingleComponent_map parent class here still deals with all other atoms (not rO), as in original NVT version
+
+    rO steps here are mostly copied from the more general case of the NPT model (seperate in pgm_rb.py)
+    
+    '''
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    
+    ''' !! : molecule must have >3 atoms to use this M_{IC} layer '''
+    ''' this is same as SingleCompoment_map but whole molecules can jump PBC in the perodic box '''
+    def __init__(self,
+                 PDB_single_mol: str,   
+                ):
+        super().__init__(PDB_single_mol)
+        self.VERSION = 'NEW'
+        
+    ## ## ## ##
+
+    #def remove_COM_from_data_(self, r):
+    ''' ok to remove COM using the default inherited method.
+        In later steps this does not matter; single atom will be fixed instead.
+    '''
+
+    def initalise_(self,
+                   r_dataset,
+                   b0,
+                   batch_size=10000,
+                   n_mol_unitcell = 1,
+                   COM_remover = 'blank', 
+                   focused = 'blank',
+                   whiten_setting = 0, # 0 : no whitening, 1 : whitening only positions.
+                   ):
+        # r_dataset : (m,N,3)
+        # b0        : (3,3)
+
+        if not b0.shape == (3,3):
+            b0 = np.array(b0[0])
+            assert b0.shape == (3,3), 'ic_map.initialise_ : please check b0 provided'
+            print('ic_map.initialise_ : ! using only the first box provided. Please used methods in pgm_rb.py to train on NPT data. NB: Multimap with states in different boxes is not fully implemented for NVT.')
+        else: pass
+
+        super().initalise_(r_dataset,
+                           np.stack([b0]*len(r_dataset), axis=0), 
+                           # to set regime self.single_box_in_dataset to False
+                           batch_size=batch_size,
+                           n_mol_unitcell=n_mol_unitcell,
+                           COM_remover = NotWhitenFlow, # with default setting whiten_anyway = False
+                           focused = True,
+                           assert_no_jumping_molecules = False, # the key difference
+                           )
+
+        rO = self._forward_init_(r_dataset, batch_size=batch_size)[1][0]
+
+        ''' copying part from super().initalise_ '''
+        # self.single_box_in_dataset = False ; needed to allow the inherited methods deal with other DOFs
+        self.b0_constant = np2tf_(np.array(b0).astype(np.float32))
+        self.supercell_Volume = det_3x3_(self.b0_constant, keepdims=True)
+        self.ladJ_unit_box_forward = - tf.math.log(self.supercell_Volume)*(self.n_mol-1.0)
+        self.b0_inv_constant  = np2tf_(np.linalg.inv(b0).astype(np.float32))
+        # self.h0_constant = box_forward_(self.b0_constant[tf.newaxis,...])[0][0] # dont need in this self.VERSION
+        sO = np.einsum('...i,ij->...j', rO, self.b0_inv_constant.numpy())
+        # sO : (m, n_mol, 3)
+
+        ''' copying part from SingleComponent_map_rb.initalise_ in pgm_tb.py '''
+        sO_flat = reshape_to_flat_np_(sO,  n_molecules=self.n_mol, n_atoms_in_molecule=1)
+        self.FA = self.WF
+        # NotWhitenFlow already initialised as self.WF during super().initalise_
+        sO_flat = self.FA._forward_np(sO_flat)
+
+        sO_flat = np.mod(sO_flat, 1.0)
+        # sO_flat \in [0,1)
+
+        self.ranges_sO = np2tf_(np.ones(3*(self.n_mol-1)))      # 1
+        self.centres_sO = np2tf_(np.ones(3*(self.n_mol-1))*0.5) # 0.5
+
+        sO_flat = scale_shift_x_general_(np2tf_(sO_flat),
+                                         physical_ranges_x = self.ranges_sO, 
+                                         physical_centres_x = self.centres_sO,
+                                         model_range = 2.0*PI, model_centre = 0.0,
+                                         forward = True)[0].numpy()
+        # sO_flat \in [-PI,PI)
+
+        self.Focused_Positions = FocusedTorsions(sO_flat, axis=[0], focused=self.focused)
+        # catch shearing/liquid : periodic if a marignal samples more than 0.8*2*PI/(2*PI) of the interval
+        assert self.Focused_Positions.mask_periodic.max() < 0.5, '! at least 1 molecule may have tanslated > 80% along the box; data may be non-ergodic. If this is cased by sym.py data augmenetation, please check that method worked as indeded.'
+        # need self.Focused_Positions.mask_periodic.max()==0.0 because assumed in the model later
+
+        self.whiten_setting = whiten_setting
+        print(f'whiten_setting {whiten_setting} \n')
+        if self.whiten_setting == 0: 
+            self.white_ = self.white_setting_0_
+        else:
+            xO = self.Focused_Positions(np2tf_(sO_flat), forward=True)[0].numpy()
+            # sO_flat \in [-1,1]
+            self.WF_keepdims = WhitenFlow(xO, removedims=0)
+            xO = self.WF_keepdims._forward_np(xO) # (m, 3*n_mol-3) -> (m, 3*n_mol-3)
+            self.ranges_xO, self.centres_xO = get_ranges_centres_(xO, axis=[0])
+            self.white_ = self.white_setting_1_
+
+    def white_setting_0_(self, xO, forward=True):
+        return xO, 0.0
+
+    def white_setting_1_(self, xO, forward=True):
+        # xO \in [-1,1] # (m, (n_mol-1)*3)
+        ladj = 0.0
+        if forward:
+            xO, ladJ_whiten = self.WF_keepdims.forward(xO)
+            ladj += ladJ_whiten
+            # xO \in [-?,?] # (m, (n_mol-1)*3)
+
+            xO, ladJ_scale_xO = scale_shift_x_(xO, 
+                                               physical_ranges_x = self.ranges_xO, 
+                                               physical_centres_x = self.centres_xO, 
+                                               forward = True)
+            ladj += ladJ_scale_xO
+            # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+            return xO, ladj
+        else:
+            xO, ladJ_scale_xO = scale_shift_x_(xO, 
+                                               physical_ranges_x = self.ranges_xO, 
+                                               physical_centres_x = self.centres_xO, 
+                                               forward = False)
+            ladj += ladJ_scale_xO
+            # xO \in [-?,?] # (m, (n_mol-1)*3)
+
+            xO, ladJ_whiten = self.WF_keepdims.inverse(xO)
+            ladj += ladJ_whiten
+            # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+            return xO, ladj
+
+    def forward_(self, r):
+        variables, ladJ = super().forward_(r)
+        rO , X = variables
+
+        sO = tf.einsum('...i,ij->...j', rO, self.b0_inv_constant)
+        # sO_flat \in [0,1) # (m, n_mol, 3)
+        ladJ += self.ladJ_unit_box_forward
+
+        sO_flat = reshape_to_flat_tf_(sO, n_molecules=self.n_mol, n_atoms_in_molecule=1)
+        # sO_flat \in [0,1) # (m, n_mol*3)
+        sO_flat = self.FA.forward(sO_flat)[0]
+        # sO_flat \in [0,1) # (m, (n_mol-1)*3)
+        sO_flat = tf.math.floormod(sO_flat, 1.0) 
+        # sO_flat \in [0,1) # (m, (n_mol-1)*3)
+
+        sO_flat, ladJ_scale_sO = scale_shift_x_general_(sO_flat,
+                                                        physical_ranges_x = self.ranges_sO, 
+                                                        physical_centres_x = self.centres_sO,
+                                                        model_range = 2.0*PI, model_centre = 0.0,
+                                                        forward = True)
+        ladJ += ladJ_scale_sO
+        # sO_flat \in [-PI,PI) # (m, (n_mol-1)*3)
+
+        xO, ladJ_scale_positions = self.Focused_Positions(sO_flat, forward=True)
+        ladJ += ladJ_scale_positions
+        # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+        xO, ladJ_white = self.white_(xO, forward=True)
+        ladJ += ladJ_white
+        # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+        return [xO, X], ladJ
+
+    def inverse_(self, variables):
+
+        ladJ = 0.0
+        xO, X = variables
+        # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+        xO, ladJ_white = self.white_(xO, forward=False)
+        ladJ += ladJ_white
+        # xO \in [-1,1] # (m, (n_mol-1)*3)
+
+        sO_flat, ladJ_scale_positions = self.Focused_Positions(xO, forward=False)
+        ladJ += ladJ_scale_positions
+        # sO_flat \in [-PI,PI) # (m, (n_mol-1)*3)
+
+        sO_flat, ladJ_scale_sO = scale_shift_x_general_(sO_flat,
+                                                        physical_ranges_x = self.ranges_sO, 
+                                                        physical_centres_x = self.centres_sO,
+                                                        model_range = 2.0*PI, model_centre = 0.0,
+                                                        forward = False)
+        ladJ += ladJ_scale_sO
+        # sO_flat \in [0,1) # (m, (n_mol-1)*3)
+
+        sO_flat = tf.math.floormod(sO_flat, 1.0) 
+        # sO_flat \in [0,1) # (m, (n_mol-1)*3)
+
+        sO_flat = self.FA.inverse(sO_flat)[0]
+        # sO_flat \in [0,1) # (m, n_mol*3)
+
+        sO = reshape_to_atoms_tf_(sO_flat, n_molecules=self.n_mol, n_atoms_in_molecule=1)
+        # sO \in [0,1) # (m, n_mol, 3)
+
+        rO = tf.einsum('...i,ij->...j', sO, self.b0_constant)
+        ladJ -= self.ladJ_unit_box_forward
+        # rO physical (in box) # (m, n_mol, 3)
+
+        r, ladJ_X = super().inverse_([rO, X])
+        ladJ += ladJ_X
+
+        return r, ladJ
+
+    # everything else same as super()
+
 
 
 
