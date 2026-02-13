@@ -670,8 +670,11 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
             ic_maps = [ic_maps]
         else: pass
         for ic_map in ic_maps:
-            if hasattr(ic_map, 'single_box_in_dataset'): assert ic_map.single_box_in_dataset == True
-            else: ic_map.single_box_in_dataset = True
+            if hasattr(ic_map, 'single_box_in_dataset'):
+                if ic_map.single_box_in_dataset: assert isinstance(ic_map, SingleComponent_map)
+                else: assert isinstance(ic_map, SingleComponent_map_r)
+                # both are NVT, just rO atoms processed differently
+            else: print("!! ic_map instance does not have attribute 'single_box_in_dataset'")
         
         self.ic_maps = ic_maps
         self.n_mol = int(self.ic_maps[0].n_mol)
@@ -1302,6 +1305,7 @@ class PGMcrys_v2(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
 """
 
 ####################################################################################################
+
 
 
 
