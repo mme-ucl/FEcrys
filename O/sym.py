@@ -687,7 +687,6 @@ class PermuteUnitcell_SingleComponent:
             _r = np.einsum('...i,ij->...j', np.mod(s, 1.0), b)
             return _r
 
-
         r = np.array(r)
         
         r = self.put_in_box_m_(r[None], box[None])[0]
@@ -716,6 +715,7 @@ class PermuteUnitcell_SingleComponent:
         r = self.put_in_box_m_(r[None], box[None])[0]
 
         return r
+
 
 
 
