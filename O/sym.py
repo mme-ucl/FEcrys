@@ -35,36 +35,14 @@ def test_cluster_symmetric_torsion_(symmetry_order=3, m=200, flattness=0.5):
 class DatasetSymmetryReduction:
     '''
 
-    Chemically identical atoms can be swapped. 
-    The functional form of the forcefield over the atoms that can be swapped is the same.
-    (i.e., atoms that can be swapped have the same charge, LJ params, and bonded environment)
+    Chemically identical atoms can be swapped, but the current version of PGM does not understand this.
+    We can swap them in the training data to help ergodicity.
+    This .py file provides a few methods to force ergodic sampling of some of the symmetry orbits,
+    even if this was not explicitly sampled in the finite MD trajectories.
 
-    When to use:
-        can't use  : if rare even not symmetry-related (cannot use in the absence of symmetry)
-        not needed : symmetry-related rate events do not affect (ergodicity in) distributions that are invariant to the symmetry
-        use when   : when evaluating data on potentials / distributions that are not symmetry-aware
-            this includes conventional PGM (current), and ECM (lambda < 1) states (unless lambda 0 distribution ideal gas)
-
-    current methods: methyl, trimethyl
-    TODO: add more methods if needed
-
-    lookup_indices:
-
-        (option 1)
-        depends on initial permutation
-        depending on the crystal unitcell, there are currently four choices 0,1,2,3 per molecule
-        can add more in self.LOOKUPS if needed, check plots to adjust.
-        Current default is [0,3] which works for one of the cases here with 4 molecules in unitcell
-
-        (option 1) : entropic correction when lookup_indices chosen to reduce all symmetry-related states to one state:
-            FE_ergodic = FE_sym_randomised = [ FE_sym_reduced - (# methyl + # trimethyl) * ln(3) ] ; lattice FE (kT)
-            [from the point of view of current PGM: 3**(# methyl + # trimethyl) number of FE basins reduced to 1,
-             this significantly reduces the demand on a symmetry-unaware model]
-             
-        (option 2) 
-        An unsupervised mode is simply setting lookup_indices = [-1] which will randomise 
-        the rotations such that all states are sampled uniformly. This gives E_sym_randomised.
-        (option 2) : no entropic correction needed. Fixes the ergodicity problem but does not make PGM training easier.
+    More methods are expected to be added over time covering different use-cases.
+    
+    This .py file can be deleted as soon as a fully symmetry-aware PGM (based on atom types) is added (future work).
 
     '''
     
@@ -715,6 +693,7 @@ class PermuteUnitcell_SingleComponent:
         r = self.put_in_box_m_(r[None], box[None])[0]
 
         return r
+
 
 
 
