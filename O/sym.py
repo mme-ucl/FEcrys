@@ -101,6 +101,7 @@ class DatasetSymmetryReduction:
 
             self.sc = SingleComponent.initialise_from_save_(self.path_dataset)
             r = self.sc.xyz
+            b = self.sc.boxes
             n_mol = self.sc.n_mol
             n_atoms_mol = self.sc.n_atoms_mol
             PDB_single_mol = str(self.sc._single_mol_pdb_file_.absolute())
@@ -108,6 +109,7 @@ class DatasetSymmetryReduction:
 
         # r : (m, N, 3)
         self.r_init = np.array(r)
+        self.b      = np.array(b)
         self.restart_()
         self.n_mol = n_mol
         self.n_atoms_mol = n_atoms_mol
@@ -155,7 +157,8 @@ class DatasetSymmetryReduction:
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
     def set_ABCD_(self, ind_root_atom, option:int=None):
-        self.ic_map.set_ABCD_(ind_root_atom=ind_root_atom, option=option)
+        self.ind_rO = ind_root_atom
+        self.ic_map.set_ABCD_(ind_root_atom=self.ind_rO, option=option)
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
@@ -492,7 +495,228 @@ class DatasetSymmetryReduction:
             else: pass
         plt.tight_layout()
 
-    ## ## ## ## 
+
+    ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+    ## reshuffle unit cells by global translation under PBCs and re-indexing:
+
+    def sort_unitcells_(self,
+                         n_mol_unitcell,
+                         n_images_search = 1,
+                         ):
+        ''' 
+        Experimental method to improve ergodicity of finite MD data, from a point of view of a simple, 
+        non-permutationally invariant (symmetry unaware) model. This method only applicable in supercell 
+        data where there are more than one unit cell building blocks. 
+        Symmetry augmentation : randomisation, such that each region of space inside a supercell 
+        becomes effectively sampled by more than one crystallographically equivalent molecule.  
+        Each molecule inside a unit cell building block is considered crystallographically unique. 
+        Therefore, whole unit cells are reshuffled, rather than individual molecules.
+        The output dataset (self.r) will always have the same energy as the input (self.r_init), 
+        which is true for any method in this .py file, but the output from this method should still 
+        be treated carefully as explained blow. This aspect matters form the point of view of a native 
+        model (for accurate entropy differences between states; purpose of this .py file).        
+        '''
+        self.sort_unitcells_obj = PermuteUnitcell_SingleComponent(
+                        n_atoms_mol = self.n_atoms_mol,
+                        n_mol = self.n_mol,
+                        n_mol_unitcell = n_mol_unitcell,
+
+                        ind_rO = self.ind_rO,
+                        n_images_search = n_images_search,
+        )#(r=self.r, b=self.b)
+        self.r = self.sort_unitcells_obj(r=self.r, b=self.b)
+        print('About sort_unitcells_: if this worked *correcly, this data is only comptible with:')
+        print('SingleComponent_map_r or SingleComponent_map_rb.')
+        print('This is because whole molecules are jumping across PBCs (expected output).')
+        print('*correctly = the whole molecules are not jumping in any other way.')
+        print('Can now run check_sorted_unitcells_() to *check.')
+
+    def check_sorted_unitcells_(self, batch_size = 10000):
+        ''' check that sort_unitcells_ worked correctly '''
+        r_ori = self.sort_unitcells_obj.put_in_box_m_(np.array(self.r_init), self.b)
+
+        m = self.r.shape[0]
+        rO_ori = []
+        rO_aug = []
+        n_batches = m // batch_size + (1 if m % batch_size else 0)
+        for i in range(n_batches):
+            r_batch_ori = reshape_to_molecules_np_(r_ori[i*batch_size:(i+1)*batch_size],
+                                                   self.n_mol, self.n_atoms_mol)
+            # (frames, molecule, atoms, 3)
+            rO_ori.append(r_batch_ori[...,self.ind_rO,:])
+            ##
+            r_batch_aug = reshape_to_molecules_np_(self.r[i*batch_size:(i+1)*batch_size],
+                                               self.n_mol, self.n_atoms_mol)
+            # (frames, molecule, atoms, 3)
+            rO_aug.append(r_batch_aug[...,self.ind_rO,:])
+        rO_ori = np.concatenate(rO_ori, axis=0) # (m, n_mol, 3)
+        rO_aug = np.concatenate(rO_aug, axis=0) # (m, n_mol, 3)
+        b_inv = np.linalg.inv(self.b)
+        sO_ori = np.einsum('omi,oij->omj', rO_ori, b_inv)*PI*2.0 - PI
+        sO_aug = np.einsum('omi,oij->omj', rO_aug, b_inv)*PI*2.0 - PI
+
+        av_sO_ori = average_torsion_np_(sO_ori, axis=0,  keepdims=True, pooling_method_=np.median)
+        av_sO_aug = average_torsion_np_(sO_aug, axis=0,  keepdims=True, pooling_method_=np.median)
+
+        sO_ori_centred = tf.math.floormod(sO_ori - av_sO_ori + PI, 2.0*PI) / (PI*2.0) # -> [0,1)
+        sO_aug_centred = tf.math.floormod(sO_aug - av_sO_aug + PI, 2.0*PI) / (PI*2.0) # -> [0,1)
+
+        # can now compare if minim and maxima are consistent
+        self.ranges_ori = np.max(sO_ori_centred, axis=0) - np.min(sO_ori_centred, axis=0) # (n_mol, 3)
+        self.ranges_aug = np.max(sO_aug_centred, axis=0) - np.min(sO_aug_centred, axis=0) # (n_mol, 3)
+
+        print('All rO atoms in reduced supercell box [0,1) were aligned to check ranges:')
+        print(f'original  : max range rO = {self.ranges_ori.max().round(3)} (should be < 0.5)')
+        print(f'augmented : max range rO = {self.ranges_aug.max().round(3)} (should be < 0.5)')
+        print('the above two numbers should be similar if the method worked correctly.')
+        print('Further details can be seen in self.ranges_ori vs. self.ranges_aug')
+
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+
+class PermuteUnitcell_SingleComponent:
+    def put_in_box_m_(self, r, b):
+        # r : (m,N,3)
+        # b : (m,3,3)
+        ''' adapted from SingleComponent_map_rb.remove_COM_from_data_ in O/NN/pgm_rb.py '''
+        r = reshape_to_molecules_np_(r, n_atoms_in_molecule=self.n_atoms_mol, n_molecules=self.n_mol)
+        rO = r[...,self.ind_rO:self.ind_rO+1,:]
+        rO_shifted = rO - rO[:,:1]
+        s = np.einsum('omni,oij->omnj', rO_shifted, np.linalg.inv(b))
+        s = np.mod(s, 1.0)
+        rO_shifted = np.einsum('omni,oij->omnj', s, b)
+        r = np.array(r-rO+rO_shifted)
+        r = reshape_to_atoms_np_(r, n_atoms_in_molecule=self.n_atoms_mol, n_molecules=self.n_mol)
+        return r
+    
+    '''
+    def sq_distances_from_ref_ortho_1_( self,
+                                        r,        # (N,3)
+                                        r_ref,    # (N,3)
+                                        box,      # (3,3)
+                                        ):
+        box_inv = np.linalg.inv(box)
+        s     = np.einsum('...i,ij->...j', r    , box_inv)
+        s_ref = np.einsum('...i,ij->...j', r_ref, box_inv)
+        sv = s[:, None] - s_ref[None, :]
+        v = np.einsum('...i,ij->...j', sv - np.round(sv), box)
+        d_sq = (v*v).sum(-1)
+        return d_sq
+    '''
+
+    def sq_distances_from_ref_general_1_(   self,
+                                            r,      # (N,3)
+                                            r_ref,  # (N,3)
+                                            b,      # (N,3)
+                                            ):
+        ''' adapted from vectors_between_atoms_ in O/MM/mm_helper.py'''
+        r = np.array(r) # (N,3)
+        b = np.array(b)[np.newaxis,...] # (1,3,3)
+    
+        r_to_v_ = lambda rA, rB : np.expand_dims(rB,axis=-3) - np.expand_dims(rA,axis=-2) # (1,N,3) - (N,1,3)
+        grid = np.arange(-self.n_images_search, self.n_images_search+1).astype(np.float32)
+        
+        rs = [r]
+        for sign_a in grid:
+            for sign_b in grid:
+                for sign_c in grid:
+                    if any((sign_a,sign_b,sign_c)):
+                        rs.append(r + sign_a*b[:,0] + sign_b*b[:,1] + sign_c*b[:,2])
+                    else:
+                        pass
+    
+        len_rs = len(rs) # 27 (if n_images_search=1)
+
+        vs = np.stack([r_to_v_(r_ref, rs[i]) for i in range(len_rs)],axis=0) # (27,N,N,3)
+        ds_sq = (vs*vs).sum(-1)
+        #ds = np.linalg.norm(vs, axis=-1)                                    # (27,N,N)
+        d_sq = np.min(ds_sq, axis=0)                                         # (N,N)
+        return d_sq
+
+    def __init__(self, 
+                 n_atoms_mol,
+                 n_mol,
+                 n_mol_unitcell,
+
+                 ind_rO,
+                 n_images_search = 1,
+                 ):
+        self.n_atoms_mol = n_atoms_mol
+        self.n_mol = n_mol
+        self.n_mol_unitcell = n_mol_unitcell
+
+        ## ## 
+        self.N = n_mol * n_atoms_mol
+        self.n_atoms_unitcell = n_mol_unitcell * n_atoms_mol
+        self.n_unitcells = self.N // self.n_atoms_unitcell
+        ## ## 
+        if self.n_unitcells == 1:
+            print('\n !! This method will do nothing when the supercell contains only one unit cell. \n')
+        else:
+            print(f'\n  There are {self.n_unitcells} unit cells in the supercell. \n ')
+
+        self.ind_rO = ind_rO
+
+        self.n_images_search = n_images_search
+        self.sq_distances_from_ref_1_ = self.sq_distances_from_ref_general_1_
+   
+        ## ## ## ## 
+
+    def __call__(self, 
+                    r, # (m,N,3)
+                    b, # (m,3,3)
+                    ):
+        if self.n_unitcells > 1:
+            output = []
+            m = len(r)
+            assert len(b) == m
+            for i in range(m):
+                # print in case disordered supercells (linear_sum_assignment could be slow)
+                print(f'randomising unit cell permutations in frame {i+1} / {m}', end='\r')
+                output.append(self.permute_unitcells_single_frame_(r[i], b[i]))
+            # test that the output worked in sym.py
+            return np.array(output)
+        else: 
+            return r
+
+    def permute_unitcells_single_frame_(self,
+                                        r,   # (N,3)
+                                        box, # (3,3)
+                                    ):
+        def wrap_(r, b):
+            s = np.einsum('...i,ij->...j', r, np.linalg.inv(b))
+            _r = np.einsum('...i,ij->...j', np.mod(s, 1.0), b)
+            return _r
+
+
+        r = np.array(r)
+        
+        r = self.put_in_box_m_(r[None], box[None])[0]
+        rc = r.reshape([self.n_unitcells, self.n_atoms_unitcell, 3])
+        
+        ## ## ## ## 
+
+        rO = rc[:,self.ind_rO:self.ind_rO+1]              # (n_unitcells, 1, 3)
+
+        idx_random_unitcell = np.random.randint(0, high=self.n_unitcells, size=1, dtype=int)[0]
+        v = rO[idx_random_unitcell:idx_random_unitcell+1] # (1,1,3)
+        _rO = wrap_(rO - v, box)                          # (n_unitcells,1,3)
+        
+        rc = rc - rO + _rO
+
+        # the main step (permutation or unit cell blocks of atoms):
+        d = self.sq_distances_from_ref_1_(_rO[:,0], rO[:,0], box) # (n_unitcells, n_unitcells)
+        p = sp.optimize.linear_sum_assignment(d)[1]               # (n_unitcells, )
+        # plt.matshow(d)
+        # print(p)
+        rc = np.take(rc, p, axis=0)
+
+        ## ## ## ## 
+        
+        r = rc.reshape([self.n_unitcells*self.n_atoms_unitcell, 3])
+        r = self.put_in_box_m_(r[None], box[None])[0]
+
+        return r
+
 
 
 
