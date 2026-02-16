@@ -166,6 +166,11 @@ def update_CustomNonbondedForce_(_force, _lam, deepcopy=True):
 
         for i in range(force.getNumParticles()):
             old_params = force.getParticleParameters(i)
+            ''' 
+                Note for later:
+                these eps vs. sigma may be wrong way round but this is fine at lam 0 or 1,
+                may be sub-optimal in between however.
+            '''
             epsilon_i, sigma_i = old_params
             new_epsilon_i = epsilon_i*_lam
             new_params = [new_epsilon_i, sigma_i]
