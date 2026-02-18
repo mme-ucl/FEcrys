@@ -644,6 +644,17 @@ class MM_system_helper:
             info = 'frame: '+str(self.n_frames_saved)+' T sampled:'+str(self.temperature.mean().round(3))+' T expected:'+str(self.T)+verbose_info
             print(info, end='\r')
 
+    def run_simulation_w_(self, n_saves, stride_save_frame:int=100, verbose_info : str = ''):
+        ''' w : wrapped ; for NVT in the presence of shearing (at higher T) or alchemical '''
+        self.stride_save_frame = stride_save_frame
+        for i in range(n_saves):
+            self.simulation.step(stride_save_frame)
+            state = self.simulation.context.getState(getPositions=True, enforcePeriodicBox=True)
+            self.simulation.context.setPositions(state.getPositions())
+            self.save_frame_()
+            info = 'frame: '+str(self.n_frames_saved)+' T sampled:'+str(self.temperature.mean().round(3))+' T expected:'+str(self.T)+verbose_info
+            print(info, end='\r')
+
     @property
     def xyz(self,):
         if len(self._xyz) > 0: return np.array(self._xyz)
