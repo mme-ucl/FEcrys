@@ -1,8 +1,9 @@
-<img width="1114" height="1068" alt="TOC_v1" src="https://github.com/user-attachments/assets/f0e55d04-9974-485b-9afd-853934083d47" />
-
 # FECrys
 
 The code in this repository implements stat-mech+ML methods for the efficient calculation of free energies of isolated molecules and crystalline solids using [probabilistic generative modelling](https://www.science.org/doi/10.1126/science.aaw1147) and ideas derived from [targeted free energy perturbation](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.65.046122). 
+
+
+<img width="371" height="356" alt="TOC_v1" src="https://github.com/user-attachments/assets/f0e55d04-9974-485b-9afd-853934083d47" />
 
 
 If you find this repository uesful please consider citing: 
