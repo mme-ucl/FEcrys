@@ -1,0 +1,70 @@
+# FECrys conda environment configuration
+# Created: February 2026
+# Usage: conda env create -f environment.yml
+# 
+# This environment includes all dependencies for FECrys:
+# - Molecular dynamics (OpenMM, OpenFF, mdtraj, parmed)
+# - Deep learning (TensorFlow 2.14+, TensorFlow Probability)
+# - Scientific computing (numpy, scipy, matplotlib)
+# - Utilities (pymbar, mdanalysis, rdkit)
+
+name: fecrys
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python and core packages
+  - python=3.10
+  - pip
+  - setuptools>=65.0
+  
+  # Numerical and scientific computing
+  - numpy::numpy>=1.24,<2.0
+  - scipy>=1.10
+  - matplotlib>=3.7
+  - pandas>=2.0
+  
+  # Jupyter / IPython for notebooks
+  - ipython>=8.0
+  - jupyter>=1.0
+  - jupyterlab>=4.0
+  
+  # Chemistry and molecular structure
+  - rdkit>=2023.09
+  - mdtraj>=1.9.7
+  - parmed>=4.1
+  - pymbar>=4.0
+  - mdanalysis>=2.5
+  
+  # Molecular modeling (OpenMM ecosystem)
+  - openmm>=8.1
+  - openmmtools>=0.25
+  - openff-toolkit>=0.15
+  - openmmforcefields>=0.12
+  
+  # GPU Support (CUDA 12.x)
+  # Note: Adjust CUDA version to match your installed NVIDIA driver
+  # Common versions: 11.8, 12.1, 12.4
+  - cudatoolkit=12.1
+  - cudnn>=8.8
+  
+  # Utilities
+  - pint>=0.23
+  - pyyaml>=6.0
+  - git
+  - h5py>=3.8
+  
+  # Linear algebra optimization
+  - openblas=0.3
+  
+  # Build tools
+  - cython>=0.29
+
+pip:
+  # Deep learning framework
+  - tensorflow>=2.14
+  - tensorflow-probability>=0.23
+  
+  # Protocol buffers compatibility
+  - protobuf>=3.20

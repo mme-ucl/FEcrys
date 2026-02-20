@@ -1,0 +1,43 @@
+# FECrys Python Package Dependencies
+# Created: February 2026
+# 
+# This file lists all pip-installable dependencies for FECrys
+# For best results, use with conda for non-Python dependencies
+# 
+# Usage:
+#   pip install -r requirements.txt
+#
+# Recommended: Use environment.yml instead for full reproducibility
+#   conda env create -f environment.yml
+
+# Core scientific computing
+numpy>=1.24,<2.0
+scipy>=1.10
+matplotlib>=3.7
+pandas>=2.0
+
+# Deep Learning
+tensorflow>=2.14
+tensorflow-probability>=0.23
+protobuf>=3.20
+
+# Jupyter
+ipython>=8.0
+jupyter>=1.0
+jupyterlab>=4.0
+
+# Chemistry and molecular modeling (conda-recommended but pip-available)
+rdkit>=2023.09
+mdtraj>=1.9.7
+parmed>=4.1
+pymbar>=4.0
+mdanalysis>=2.5
+
+# Utilities
+pint>=0.23
+pyyaml>=6.0
+h5py>=3.8
+
+# Build/development
+setuptools>=65.0
+cython>=0.29
