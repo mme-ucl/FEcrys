@@ -515,6 +515,7 @@ class NN_interface_sc_multimap(NN_interface_helper):
                  running_in_notebook : bool = False,
                  training : bool = True,
                  model_class = PGMcrys_v1,
+                 identity_init = False,
                  ic_map_class = SingleComponent_map,
                  ):
         super().__init__()
@@ -525,6 +526,7 @@ class NN_interface_sc_multimap(NN_interface_helper):
         self.running_in_notebook = running_in_notebook 
         self.training = training
         self.model_class = model_class
+        self.identity_init = identity_init
         self.ic_map_class = ic_map_class
         ##
         self.n_crystals = len(self.paths_datasets)
@@ -588,15 +590,19 @@ class NN_interface_sc_multimap(NN_interface_helper):
                   n_layers = 4,
                   DIM_connection = 10,
                   n_att_heads = 4,
+                  identity_init = None,
                   initialise = True, # for debugging in eager mode
                   test_inverse = True,
                   ):
+        if identity_init is None:
+            identity_init = self.identity_init
         self.model = self.model_class(
                                     ic_maps = [nn.ic_map for nn in self.nns],
                                     n_layers = n_layers,
                                     optimiser_LR_decay = [learning_rate, 0.0],
                                     DIM_connection = DIM_connection,
                                     n_att_heads = n_att_heads,
+                                    identity_init = identity_init,
                                     initialise = initialise,
                                     )
         self.model.print_model_size()
