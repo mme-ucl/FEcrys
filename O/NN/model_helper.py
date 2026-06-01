@@ -37,7 +37,14 @@ class _BoundMethodRef:
 
 
 _ALLOWED_CALLABLE_CLASSES = (WhitenFlow, NotWhitenFlow)
-_ALLOWED_BOUND_METHODS = ("wrap_to_01_", "no_wrap_")
+_ALLOWED_BOUND_METHODS = (
+    "wrap_to_01_",
+    "no_wrap_",
+    "sample_quaternion_patch_v1_",
+    "sample_quaternion_patch_v2_",
+    "white_setting_0_",
+    "white_setting_1_",
+)
 
 class model_helper:
     def __init__(self,):
@@ -87,7 +94,7 @@ class model_helper:
                 return {'__kind__': 'bound_method_ref', 'name': method_name}
             raise TypeError(f'cannot serialize bound method {method_name}')
 
-        if callable(x):
+        if callable(x) and (inspect.isfunction(x) or inspect.isbuiltin(x)):
             raise TypeError(f'cannot serialize callable object of type {type(x)}')
 
         # For custom classes used in init_args (for example ic_maps), serialize full state.
@@ -105,6 +112,9 @@ class model_helper:
                 'class': x.__class__.__name__,
                 'state': state,
             }
+
+        if callable(x):
+            raise TypeError(f'cannot serialize callable object of type {type(x)}')
 
         # Fallback for unusual immutable/extension types that pickle already supports.
         return {'__kind__': 'raw_pickle_object', 'value': x}
@@ -171,6 +181,12 @@ class model_helper:
                     obj.wrap_to_01_or_no_wrap_ = obj.wrap_to_01_
                 elif getattr(obj, 'COM_remover', None) == WhitenFlow:
                     obj.wrap_to_01_or_no_wrap_ = obj.no_wrap_
+
+        if isinstance(obj, FocusedHemisphere) and not hasattr(obj, 'sample_quaternion_patch_'):
+            if getattr(obj, 'focused', False):
+                obj.sample_quaternion_patch_ = obj.sample_quaternion_patch_v2_
+            else:
+                obj.sample_quaternion_patch_ = lambda m: hemisphere_(sample_q_([m, obj.n_mol]))
         return obj
 
     def initialise_weights_(self,):
