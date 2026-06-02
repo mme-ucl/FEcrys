@@ -17,6 +17,10 @@
 from ..util_np import *
 from ..plotting import *
 from .util_tf import *
+import os
+import shutil
+import importlib
+import inspect
 
 ## ## ## ##
 
@@ -25,6 +29,22 @@ def no_nans_(grads:list):
     if tf.reduce_sum([tf.reduce_sum(1.0 - tf.cast(tf.math.is_finite(x),dtype=tf.float32)) for x in _grads]) > 0.0:
         return False
     else: return True
+
+
+class _BoundMethodRef:
+    def __init__(self, name: str):
+        self.name = name
+
+
+_ALLOWED_CALLABLE_CLASSES = (WhitenFlow, NotWhitenFlow)
+_ALLOWED_BOUND_METHODS = (
+    "wrap_to_01_",
+    "no_wrap_",
+    "sample_quaternion_patch_v1_",
+    "sample_quaternion_patch_v2_",
+    "white_setting_0_",
+    "white_setting_1_",
+)
 
 class model_helper:
     def __init__(self,):
@@ -37,6 +57,137 @@ class model_helper:
         inverse_     : z   -> xyz, ladJ ; zyz : list, ladJ : tensor which shape (m,1)
         
         """
+
+    @staticmethod
+    def _serialize_obj_(x):
+        """
+        GitHub Copilot written
+        """
+        # Convert nested structures to pickle-safe payload without direct TF object pickling.
+        if x is None or isinstance(x, (bool, int, float, str)):
+            return x
+
+        if isinstance(x, np.ndarray):
+            return {'__kind__': 'ndarray', 'value': x}
+
+        if isinstance(x, np.generic):
+            return x.item()
+
+        if tf.is_tensor(x) or isinstance(x, tf.Variable):
+            return {'__kind__': 'tf_tensor', 'value': np.array(x.numpy())}
+
+        if isinstance(x, list):
+            return [model_helper._serialize_obj_(v) for v in x]
+
+        if isinstance(x, tuple):
+            return {'__kind__': 'tuple', 'value': [model_helper._serialize_obj_(v) for v in x]}
+
+        if isinstance(x, dict):
+            return {k: model_helper._serialize_obj_(v) for k, v in x.items()}
+
+        if isinstance(x, type) and x in _ALLOWED_CALLABLE_CLASSES:
+            return {'__kind__': 'callable_ref', 'module': x.__module__, 'name': x.__name__}
+
+        if inspect.ismethod(x):
+            method_name = x.__name__
+            if method_name in _ALLOWED_BOUND_METHODS:
+                return {'__kind__': 'bound_method_ref', 'name': method_name}
+            raise TypeError(f'cannot serialize bound method {method_name}')
+
+        if callable(x) and (inspect.isfunction(x) or inspect.isbuiltin(x)):
+            raise TypeError(f'cannot serialize callable object of type {type(x)}')
+
+        # For custom classes used in init_args (for example ic_maps), serialize full state.
+        if hasattr(x, '__dict__'):
+            state = {}
+            for k, v in x.__dict__.items():
+                try:
+                    state[k] = model_helper._serialize_obj_(v)
+                except TypeError:
+                    # Skip runtime/cache fields that are not needed to reconstruct persisted state.
+                    continue
+            return {
+                '__kind__': 'python_object',
+                'module': x.__class__.__module__,
+                'class': x.__class__.__name__,
+                'state': state,
+            }
+
+        if callable(x):
+            raise TypeError(f'cannot serialize callable object of type {type(x)}')
+
+        # Fallback for unusual immutable/extension types that pickle already supports.
+        return {'__kind__': 'raw_pickle_object', 'value': x}
+
+    @staticmethod
+    def _deserialize_obj_(x):
+        """
+        GitHub Copilot written
+        """
+        if isinstance(x, list):
+            return [model_helper._deserialize_obj_(v) for v in x]
+
+        if not isinstance(x, dict) or '__kind__' not in x:
+            if isinstance(x, dict):
+                return {k: model_helper._deserialize_obj_(v) for k, v in x.items()}
+            return x
+
+        kind = x['__kind__']
+
+        if kind == 'ndarray':
+            return np.array(x['value'])
+
+        if kind == 'tf_tensor':
+            return np2tf_(np.array(x['value']))
+
+        if kind == 'tuple':
+            return tuple(model_helper._deserialize_obj_(v) for v in x['value'])
+
+        if kind == 'callable_ref':
+            module = importlib.import_module(x['module'])
+            obj = getattr(module, x['name'])
+            if obj not in _ALLOWED_CALLABLE_CLASSES:
+                raise ValueError(f"unsupported callable reference: {x['module']}.{x['name']}")
+            return obj
+
+        if kind == 'bound_method_ref':
+            return _BoundMethodRef(x['name'])
+
+        if kind == 'python_object':
+            module = importlib.import_module(x['module'])
+            cls = getattr(module, x['class'])
+            obj = cls.__new__(cls)
+            obj.__dict__.update({k: model_helper._deserialize_obj_(v) for k, v in x['state'].items()})
+            model_helper._restore_bound_methods_(obj)
+            return obj
+
+        if kind == 'raw_pickle_object':
+            return x['value']
+
+        raise ValueError(f'unknown serialized object kind: {kind}')
+
+    @staticmethod
+    def _restore_bound_methods_(obj):
+        for key, value in list(obj.__dict__.items()):
+            if isinstance(value, _BoundMethodRef):
+                if hasattr(obj, value.name):
+                    obj.__dict__[key] = getattr(obj, value.name)
+                else:
+                    raise AttributeError(f'missing method {value.name} on {type(obj)}')
+
+        if not hasattr(obj, 'wrap_to_01_or_no_wrap_'):
+            if hasattr(obj, 'wrap_to_01_') and hasattr(obj, 'no_wrap_'):
+                if getattr(obj, 'COM_remover', None) == NotWhitenFlow:
+                    obj.wrap_to_01_or_no_wrap_ = obj.wrap_to_01_
+                elif getattr(obj, 'COM_remover', None) == WhitenFlow:
+                    obj.wrap_to_01_or_no_wrap_ = obj.no_wrap_
+
+        if isinstance(obj, FocusedHemisphere) and not hasattr(obj, 'sample_quaternion_patch_'):
+            if getattr(obj, 'focused', False):
+                obj.sample_quaternion_patch_ = obj.sample_quaternion_patch_v2_
+            else:
+                obj.sample_quaternion_patch_ = lambda m: hemisphere_(sample_q_([m, obj.n_mol]))
+        return obj
 
     def initialise_weights_(self,):
         # pass one sample through the model to initialise the sizes of all the trainable weight arrays
@@ -140,9 +291,41 @@ class model_helper:
         print('[To see dimensionalities of the trainable weights print(list(self.shapes_trainable_weights)).] ')
 
     def save_model(self, path_and_name : str):
+        """
+        Modified with GitHub Copilot for TF 2.19
+        """
         # saves initialisation variables for the model, and the model's weights
         # this includes a instance of ic_map (first initialisation argument)
-        save_pickle_([self.init_args, self.trainable_variables], path_and_name)
+        # Save as single file with sanitized init args + numpy weights (compatible with TF 2.18).
+
+        if os.path.exists(path_and_name):  # Overwrite pre-existing models
+            if os.path.isfile(path_and_name): os.remove(path_and_name)
+            else: shutil.rmtree(path_and_name)  # For overwriting directories
+
+        safe_init_args = model_helper._serialize_obj_(self.init_args)
+        ws_numpy = [np.array(v.numpy()) for v in self.trainable_variables]
+        payload = {
+            'format': 'FECRYS_MODEL_SINGLE_FILE_V2',
+            'init_args': safe_init_args,
+            'weights': ws_numpy,
+        }
+        save_pickle_(payload, path_and_name, verbose=False)
+        print('saved', path_and_name)
+
+    @staticmethod
+    def _is_new_model_artifact_(path_and_name : str):
+        """
+        Written with GitHub Copilot for TF 2.19
+        """
+        # v2: single-file payload
+        if os.path.isfile(path_and_name):
+            try:
+                payload = load_pickle_(path_and_name)
+                is_model_artifact = (isinstance(payload, dict) and (payload.get('format') == 'FECRYS_MODEL_SINGLE_FILE_V2'))
+            except Exception:
+                return False
+            return is_model_artifact
+        return False
 
     @staticmethod
     def _load_model_(path_and_name : str, class_of_the_model):
@@ -150,7 +333,24 @@ class model_helper:
         @staticmethod
         def load_model(path_and_name : str):
             return class_of_the_model.load_model_(path_and_name, class_of_the_model)
+
+        Modified with GitHub Copilot for TF 2.19
         '''
+        if os.path.isfile(path_and_name):
+            payload = load_pickle_(path_and_name)
+            if isinstance(payload, dict) and (payload['format'] == 'FECRYS_MODEL_SINGLE_FILE_V2'):
+                init_args = model_helper._deserialize_obj_(payload['init_args'])
+                ws = payload['weights']
+                model = (lambda f, args : f(**args))(class_of_the_model, init_args)
+
+                if len(model.trainable_variables) != len(ws):
+                    raise ValueError('number of saved tensors does not match model trainable variables')
+
+                for i in range(len(ws)):
+                    model.trainable_variables[i].assign(ws[i])
+                return model
+
+        # Legacy format: single pickle file [init_args, trainable_variables]
         init_args, ws = load_pickle_(path_and_name)
         model = (lambda f, args : f(**args))(class_of_the_model, init_args)
         for i in range(len(ws)):

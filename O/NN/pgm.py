@@ -35,6 +35,7 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
                  n_hidden_main = 2,
                  n_hidden_connection = 1,
                  hidden_activation = tf.nn.leaky_relu,
+                 identity_init = False,
                  ##
                  use_tfp = False,
                  n_bins = 5,
@@ -76,6 +77,7 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
                                         kwargs_for_given_half_layer_class = {'n_hidden' : n_hidden_main,
                                                                              'dims_hidden' : None,
                                                                              'hidden_activation': self.hidden_activation,
+                                                                             'identity_init': identity_init,
                                                                             },
                                         )
 
@@ -656,6 +658,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                  optimiser_LR_decay = [0.001,0.0],
                  DIM_connection = 10,
                  n_att_heads = 4,
+                 identity_init = False,
                  initialise = True, # for debugging in eager mode
                  ):
         super().__init__()
@@ -663,7 +666,8 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                             'n_layers' : n_layers,
                             'optimiser_LR_decay' : optimiser_LR_decay,
                             'DIM_connection' : DIM_connection,
-                            'n_att_heads' : n_att_heads}
+                            'n_att_heads' : n_att_heads,
+                            'identity_init' : identity_init}
         
         ####
         if str(type(ic_maps)) not in ["<class 'list'>","<class 'tensorflow.python.training.tracking.data_structures.ListWrapper'>"]: 
@@ -714,6 +718,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
         self.optimiser_LR_decay = optimiser_LR_decay
         self.DIM_connection = DIM_connection
         self.n_att_heads = n_att_heads
+        self.identity_init = identity_init
 
         ##
         self.DIM_P2C_connection = self.DIM_connection  
@@ -735,6 +740,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                             n_hidden_main = n_hidden_main,
                             n_hidden_connection = n_hidden_connection,
                             hidden_activation = hidden_activation,
+                            identity_init = self.identity_init,
                             use_tfp = False,
                             n_bins = n_bins,
                             min_bin_width = 0.001,
@@ -748,6 +754,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                                                 'n_hidden' : 2,
                                                 'dims_hidden' : None,
                                                 'hidden_activation' : hidden_activation,
+                                                'identity_init' : self.identity_init,
                                                 }
         else:
             half_layer_class = SPLINE_COUPLING_HALF_LAYER_AT
@@ -760,6 +767,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                                                 'hidden_activation' : hidden_activation,
                                                 'one_hot_kqv' : [True]*3,
                                                 'n_hidden_decode' : 1,
+                                                'identity_init' : self.identity_init,
                                                 #'new' : False,
                                                 }
 

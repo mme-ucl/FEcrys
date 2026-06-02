@@ -23,10 +23,17 @@ class MLP(tf.keras.layers.Layer):
                  dims_hidden         : list,
                  hidden_activation   = tf.nn.silu,
                  outputs_activations : list = None,
+                 output_kernel_initializer = 'glorot_uniform',
+                 output_bias_initializer   = 'zeros',
 
                  **kwargs):
         super().__init__(**kwargs)
         ''' Multilayer Perceptron (MLP)
+
+        output_kernel_initializer : initializer for the kernel of the output Dense layer(s).
+            Can be a single value (applied to all output layers) or a list (one per output layer).
+        output_bias_initializer : initializer for the bias of the output Dense layer(s).
+            Can be a single value (applied to all output layers) or a list (one per output layer).
         '''
         n_hidden_layers = len(dims_hidden)
         n_output_layers = len(dims_outputs)
@@ -34,8 +41,17 @@ class MLP(tf.keras.layers.Layer):
         if outputs_activations is None: outputs_activations = ['linear']*n_output_layers
         else: assert len(outputs_activations) == n_output_layers
 
+        if not isinstance(output_kernel_initializer, list):
+            output_kernel_initializer = [output_kernel_initializer] * n_output_layers
+        if not isinstance(output_bias_initializer, list):
+            output_bias_initializer = [output_bias_initializer] * n_output_layers
+
         self.hidden_layers = [tf.keras.layers.Dense(dims_hidden[i], activation = hidden_activation) for i in range(n_hidden_layers)]
-        self.output_layers = [tf.keras.layers.Dense(dims_outputs[j], activation = outputs_activations[j]) for j  in range(n_output_layers)]
+        self.output_layers = [tf.keras.layers.Dense(dims_outputs[j],
+                                                    activation = outputs_activations[j],
+                                                    kernel_initializer = output_kernel_initializer[j],
+                                                    bias_initializer   = output_bias_initializer[j],
+                                                   ) for j in range(n_output_layers)]
 
     def call(self,
              x,
@@ -308,6 +324,61 @@ class SPLINE_COUPLING_helper:
             self.cos_sin_ = cos_sin_1_
         else:
             self.cos_sin_ = lambda x : cos_sin_(x, nk=self.nk_for_periodic_encoding)
+
+    def _identity_output_bias_initializer_(self):
+        '''Compute output-layer bias initializer(s) so that, when combined with a zero-valued
+        output kernel, the spline parameters produce the identity transformation.
+
+        For a rational quadratic spline to be the identity:
+          - width (w) and height (h) parameters equal zero -> softmax gives uniform bins ->
+            the x-grid and y-grid are identical, so every knot lies on the diagonal y = x.
+          - slope (s) parameters must produce a slope of 1.0 everywhere:
+                normalize_knot_slopes_(s_init) == 1.0
+                => s_init = log( exp(1 - min_slope) - 1 )
+          - shift parameters for periodic splines equal zero -> no horizontal shift.
+
+        Returns a single initializer when dims_MLP_outputs contains one non-zero entry,
+        or a list of two initializers [bias_P, bias_O] when both entries are non-zero.
+        '''
+        min_slope = self.knot_slope_range[0]
+        # Solve normalize_knot_slopes_(s_init) == 1.0:
+        #   softplus_with_a_softcap_(s_init) + min_slope == 1.0
+        #   For s_init <= 9.0 (default cap): log(1 + exp(s_init)) == 1.0 - min_slope
+        #   => s_init = log(exp(1 - min_slope) - 1)
+        s_init = float(np.log(np.exp(1.0 - min_slope) - 1.0))
+
+        nP = self.n_flowing_Periodic
+        nO = self.n_flowing_Ordinary
+        n_bins   = self.n_bins
+        n_slopes = self.n_slopes
+
+        biases = []
+
+        if nP > 0:
+            # pP output structure per half: [w (nP*n_bins), h (nP*n_bins), shifts (nP), s (nP*n_slopes)]
+            half_P = [0.0]*(nP*n_bins) + [0.0]*(nP*n_bins) + [0.0]*nP + [s_init]*(nP*n_slopes)
+            bias_P = np.array(half_P + half_P, dtype=np.float32)  # two halves concatenated
+            biases.append(tf.constant_initializer(bias_P))
+
+        if nO > 0:
+            # pO output structure: [w (nO*n_bins), h (nO*n_bins), s (nO*n_slopes)]
+            bias_O = np.array([0.0]*(2*nO*n_bins) + [s_init]*(nO*n_slopes), dtype=np.float32)
+            biases.append(tf.constant_initializer(bias_O))
+
+        if len(biases) == 1:
+            return biases[0]
+        return biases
+
+    def _get_output_initializers_(self, identity_init):
+        '''Return (output_kernel_initializer, output_bias_initializer) for the output MLP layer(s).
+
+        When identity_init is True, the kernel is zeroed and the bias is set so that the
+        untrained spline produces the identity transformation.
+        When identity_init is False, the standard Glorot-uniform kernel and zero bias are used.
+        '''
+        if identity_init:
+            return 'zeros', self._identity_output_bias_initializer_()
+        return 'glorot_uniform', 'zeros'
         
     def transform_(self, x, forward : bool, dont_mask=False):
         '''
@@ -460,6 +531,8 @@ class SPLINE_COUPLING_HALF_LAYER(tf.keras.layers.Layer,
                  n_hidden = 2,
                  hidden_activation = tf.nn.silu,
                  ##
+                 identity_init = False,
+                 ##
                  name = None,
                 ):
         super().__init__()
@@ -492,12 +565,16 @@ class SPLINE_COUPLING_HALF_LAYER(tf.keras.layers.Layer,
             self.dims_hidden = [sum(self.dims_MLP_outputs)] * self.n_hidden
         else: pass
 
+        output_kernel_initializer, output_bias_initializer = self._get_output_initializers_(identity_init)
+
         if 0 in self.dims_MLP_outputs:
             self._MLP_ = MLP(
                             dims_outputs = [sum(self.dims_MLP_outputs)],
                             outputs_activations = None,
                             dims_hidden = self.dims_hidden,
                             hidden_activation = self.hidden_activation,
+                            output_kernel_initializer = output_kernel_initializer,
+                            output_bias_initializer   = output_bias_initializer,
                             name = self.custom_name,
                             )
             if np.where(np.array(self.dims_MLP_outputs)==0)[0][0] == 0:
@@ -510,6 +587,8 @@ class SPLINE_COUPLING_HALF_LAYER(tf.keras.layers.Layer,
                             outputs_activations = None,
                             dims_hidden = self.dims_hidden,
                             hidden_activation = self.hidden_activation,
+                            output_kernel_initializer = output_kernel_initializer,
+                            output_bias_initializer   = output_bias_initializer,
                             name = self.custom_name,
                             )
 
@@ -540,6 +619,8 @@ class SPLINE_COUPLING_HALF_LAYER_AT(tf.keras.layers.Layer,
                  n_hidden_decode = 2,
                  add_residual = False,
                  ##
+                 identity_init = False,
+                 ##
                  #new = False,
 
                  name = None,
@@ -566,6 +647,7 @@ class SPLINE_COUPLING_HALF_LAYER_AT(tf.keras.layers.Layer,
         self.one_hot_kqv= one_hot_kqv
 
         self.add_residual = add_residual
+        self.identity_init = identity_init
 
         self.set_MLPs_default_()
 
@@ -588,12 +670,16 @@ class SPLINE_COUPLING_HALF_LAYER_AT(tf.keras.layers.Layer,
                 \psi_conditioning = AT_MLP(x_conditioning) + x_conditioning  # add_residual True
         
         '''
+        output_kernel_initializer, output_bias_initializer = self._get_output_initializers_(self.identity_init)
+
         if 0 in self.dims_MLP_outputs:
             self._MLP1_ = MLP(
                         dims_outputs = [sum(self.dims_MLP_outputs)],
                         outputs_activations = None,
                         dims_hidden =  [sum(self.dims_MLP_outputs)] * self.n_hidden_decode,
                         hidden_activation = self.hidden_activation,
+                        output_kernel_initializer = output_kernel_initializer,
+                        output_bias_initializer   = output_bias_initializer,
                         name = self.custom_name,
                         )
             if np.where(np.array(self.dims_MLP_outputs)==0)[0][0] == 0:
@@ -606,6 +692,8 @@ class SPLINE_COUPLING_HALF_LAYER_AT(tf.keras.layers.Layer,
                         outputs_activations = None,
                         dims_hidden =  [sum(self.dims_MLP_outputs)] * self.n_hidden_decode,
                         hidden_activation = self.hidden_activation,
+                        output_kernel_initializer = output_kernel_initializer,
+                        output_bias_initializer   = output_bias_initializer,
                         name = self.custom_name,
                         )
 
