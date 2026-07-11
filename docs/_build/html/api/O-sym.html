@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.sym &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.util_np" href="O-util_np.html" />
+    <link rel="prev" title="O.plotting" href="O-plotting.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-plotting.html" title="previous chapter">O.plotting</a></li>
+      <li>Next: <a href="O-util_np.html" title="next chapter">O.util_np</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-sym">
+<span id="api-o-sym"></span><h1>O.sym<a class="headerlink" href="#o-sym" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Symmetry-based relabelling and augmentation of molecular trajectories.
+
+The routines permute chemically equivalent atom indices or crystallographically
+equivalent unit-cell blocks without changing the represented physical state.
+They are preprocessing tools for models that are not intrinsically invariant
+to these permutations. Coordinate values are generally preserved or translated
+by periodic lattice vectors; atom ordering is what changes.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="cluster-symmetric-torsion-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cluster_symmetric_torsion_</span></code> (function)<a class="headerlink" href="#cluster-symmetric-torsion-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L16">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cluster_symmetric_torsion_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">symmetry_order</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Assign periodic angles to symmetry-equivalent angular sectors.
+
+Parameters
+----------
+x : array-like
+    Angles in radians; flattened before classification.
+symmetry_order : int, default=1
+    Number of equally spaced sectors across ``[-pi, pi)``.
+offset : float, default=pi
+    Phase controlling the sector boundaries.
+
+Returns
+-------
+numpy.ndarray
+    Integer sector labels from zero to ``symmetry_order - 1``.
+</pre></div>
+</div>
+</section>
+<section id="test-cluster-symmetric-torsion-function">
+<h3><code class="docutils literal notranslate"><span class="pre">test_cluster_symmetric_torsion_</span></code> (function)<a class="headerlink" href="#test-cluster-symmetric-torsion-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L45">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_cluster_symmetric_torsion_</span><span class="p">(</span><span class="n">symmetry_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">flattness</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>test_cluster_symmetric_torsion_(symmetry_order=10, m=1000, flattness=0.2)
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-class">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction</span></code> (class)<a class="headerlink" href="#datasetsymmetryreduction-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L60">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DatasetSymmetryReduction</span><span class="p">(</span><span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Chemically identical atoms can be swapped, but the current version of PGM does not understand this.
+We can swap them in the training data to help ergodicity.
+This .py file provides a few methods to force ergodic sampling of some of the symmetry orbits,
+even if this was not explicitly sampled in the finite MD trajectories.
+
+More methods are expected to be added over time covering different use-cases.
+
+This .py file can be deleted as soon as a fully symmetry-aware PGM (based on atom types) is added (future work).
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-save-sym-reduced-dataset-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.save_sym_reduced_dataset_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-save-sym-reduced-dataset-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L74">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_sym_reduced_dataset_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_sym_reduced&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Before saving the processed dataset, can check_energy_() to confirm that energy did not change.
+Configurations before (self.r_init) and after (self.r) the reduction should have exactly the same energy.
+[Allowing a slight noise if comparing to energies saved during trajectory; because of numerical precision]
+This is because only the atomic indices are swapped in this processing step (coordinates are not changed).
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-check-energy-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.check_energy_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-check-energy-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L89">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_energy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Re-evaluate processed frames and report maximum energy deviation.
+
+At most the first ``m`` frames are checked. The new reduced energies
+are stored as ``u_sym`` and compared against the original simulation
+energies, which should agree up to numerical precision.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.__init__</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L99">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load or directly configure a trajectory for symmetry reduction.
+
+Supplying ``path_dataset`` reconstructs ``SingleComponent`` metadata,
+coordinates, boxes, molecule counts, and the single-molecule topology.
+For direct construction, ``r``, ``n_mol``, ``n_atoms_mol``, and
+``PDB_single_mol`` must be supplied; current code also expects boxes to
+be available through the dataset path. The working coordinates ``r``
+are a copy of immutable baseline ``r_init``.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-restart-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.restart_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-restart-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L171">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">restart_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reset working coordinates to the original trajectory copy.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-set-abcd-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.set_ABCD_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-set-abcd-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L178">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ABCD_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Define internal-coordinate references and the molecular anchor atom.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-cluster-symmetric-torsion-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.cluster_symmetric_torsion_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-cluster-symmetric-torsion-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L185">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cluster_symmetric_torsion_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">symmetry_order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return all cyclic permutations of torsion-sector assignments.
+
+``phi`` must contain one value per frame. The result has shape
+``(n_frames, symmetry_order)`` and each row is a permutation of sector
+labels used to canonicalise equivalent atoms.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-prepare-sort-methyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction._prepare_sort_methyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-prepare-sort-methyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L199">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_prepare_sort_methyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Find methyl groups and cache their three hydrogen torsion rows.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-sort-methyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction._sort_methyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-sort-methyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L215">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_sort_methyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_methyl</span><span class="p">,</span> <span class="n">ind_mol</span><span class="p">,</span> <span class="n">lookup_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Relabel one methyl group&#39;s hydrogens across all frames.
+
+``lookup_index`` selects one of four deterministic canonicalisation
+tables. A negative value applies a random cyclic rotation per frame.
+Coordinates in ``self.r`` are mutated in place.
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.sort_methyl_</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L257">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sort_methyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookup_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">offsets</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Canonicalise every detected methyl group in every molecule.
+
+Lookup patterns may be shared by all methyl groups or supplied per
+group; offsets are radians and follow the same grouping. The operation
+only permutes equivalent hydrogen coordinates in ``self.r``.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-plot-methyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.plot_methyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-plot-methyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L282">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_methyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes_off</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot three hydrogen-torsion distributions for each methyl group.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-prepare-sort-trimethyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction._prepare_sort_trimethyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-prepare-sort-trimethyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L314">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_prepare_sort_trimethyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Find tert-butyl-like trimethyl groups and cache atom partitions.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-sort-trimethyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction._sort_trimethyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-sort-trimethyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L352">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_sort_trimethyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_trimethyl</span><span class="p">,</span> <span class="n">ind_mol</span><span class="p">,</span> <span class="n">lookup_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Relabel three methyl branches of one trimethyl group.
+
+Each branch carbon and its three attached hydrogens move together.
+Deterministic lookup tables are used for non-negative ``lookup_index``;
+a negative index chooses a random cyclic branch rotation per frame.
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.sort_trimethyl_</span></code> (method)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L416">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sort_trimethyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lookup_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Canonicalise all detected trimethyl branch permutations in place.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-plot-trimethyl-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.plot_trimethyl_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-plot-trimethyl-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L428">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_trimethyl_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_off</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot branch-torsion distributions for detected trimethyl groups.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-plot-torsion-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.plot_torsion_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-plot-torsion-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L459">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_torsion_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_of_atom</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">axes_off</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># plot_mol_larger_(self.sc.mol) ; to see atoms
+# self.ic_map.ABCD_IC           ; to see all indices
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-sort-n2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.sort_n2_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-sort-n2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L489">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sort_n2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_AB</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">lookup_indices</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Relabel a user-selected pair of symmetry-equivalent atoms.
+
+The two atoms must share the same B-C-D internal-coordinate references.
+``lookup_indices`` selects identity/swap canonicalisation per molecule;
+``-1`` randomises the pair independently in each frame.
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction._sort_n2_</span></code> (method)<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L506">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_sort_n2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_A</span><span class="p">,</span> <span class="n">inds_B</span><span class="p">,</span> <span class="n">ind_mol</span><span class="p">,</span> <span class="n">lookup_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply one two-atom relabelling rule to a single molecule.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-plot-n2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.plot_n2_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-plot-n2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L531">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_n2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_AB</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">axes_off</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot torsion distributions for a selected equivalent-atom pair.
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-sort-unitcells-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.sort_unitcells_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-sort-unitcells-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L559">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sort_unitcells_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="p">,</span> <span class="n">n_images_search</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Experimental method to improve ergodicity of finite MD data, from a point of view of a simple,
+non-permutationally invariant (symmetry unaware) model. This method only applicable in supercell
+data where there are more than one unit cell building blocks.
+Symmetry augmentation : randomisation, such that each region of space inside a supercell
+becomes effectively sampled by more than one crystallographically equivalent molecule.
+Each molecule inside a unit cell building block is considered crystallographically unique.
+Therefore, whole unit cells are reshuffled, rather than individual molecules.
+The output dataset (self.r) will always have the same energy as the input (self.r_init),
+which is true for any method in this .py file, but the output from this method should still
+be treated carefully as explained blow. This aspect matters form the point of view of a native
+model (for accurate entropy differences between states; purpose of this .py file).
+</pre></div>
+</div>
+</section>
+<section id="datasetsymmetryreduction-check-sorted-unitcells-method">
+<h3><code class="docutils literal notranslate"><span class="pre">DatasetSymmetryReduction.check_sorted_unitcells_</span></code> (method)<a class="headerlink" href="#datasetsymmetryreduction-check-sorted-unitcells-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L591">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_sorted_unitcells_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>check that sort_unitcells_ worked correctly
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-class">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent</span></code> (class)<a class="headerlink" href="#permuteunitcell-singlecomponent-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L633">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PermuteUnitcell_SingleComponent</span><span class="p">(</span><span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="p">,</span> <span class="n">ind_rO</span><span class="p">,</span> <span class="n">n_images_search</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Randomly translate and relabel equivalent unit-cell blocks.
+
+This augmentation targets single-component supercells containing repeated
+crystallographic unit cells. A random unit-cell origin is chosen per frame,
+and translated blocks are assigned back to reference sites using a minimum
+distance linear assignment. Whole molecules remain intact.
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-put-in-box-m-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.put_in_box_m_</span></code> (method)<a class="headerlink" href="#permuteunitcell-singlecomponent-put-in-box-m-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L642">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">put_in_box_m_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>adapted from SingleComponent_map_rb.remove_COM_from_data_ in O/NN/pgm_rb.py
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-sq-distances-from-ref-general-1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.sq_distances_from_ref_general_1_</span></code> (method)<a class="headerlink" href="#permuteunitcell-singlecomponent-sq-distances-from-ref-general-1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L671">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sq_distances_from_ref_general_1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">r_ref</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>adapted from vectors_between_atoms_ in O/MM/mm_helper.py
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.__init__</span></code> (method)<a class="headerlink" href="#permuteunitcell-singlecomponent-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L700">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="p">,</span> <span class="n">ind_rO</span><span class="p">,</span> <span class="n">n_images_search</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure unit-cell dimensions and periodic image search.
+
+``n_mol_unitcell`` is the number of molecules per crystallographic unit
+cell and must divide ``n_mol``. ``ind_rO`` is the within-molecule anchor
+atom. ``n_images_search`` controls the lattice-image cube used for
+general-cell minimum distances.
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.__call__</span></code> (method)<a class="headerlink" href="#permuteunitcell-singlecomponent-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L736">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Augment every trajectory frame and return a new coordinate array.
+
+``r`` and ``b`` must contain the same number of frames. Coordinates
+have shape ``(m, N, 3)`` and boxes ``(m, 3, 3)``. When only one unit
+cell is present, the original ``r`` object is returned unchanged.
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-permute-unitcells-single-frame-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.permute_unitcells_single_frame_</span></code> (method)<a class="headerlink" href="#permuteunitcell-singlecomponent-permute-unitcells-single-frame-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L759">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">permute_unitcells_single_frame_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Randomly translate and reassign unit-cell blocks in one frame.
+
+The returned ``(N, 3)`` array is wrapped relative to molecular anchor
+atoms. Translation by lattice vectors and block relabelling preserve
+the periodic physical configuration.
+</pre></div>
+</div>
+</section>
+<section id="permuteunitcell-singlecomponent-permute-unitcells-single-frame-wrap-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">PermuteUnitcell_SingleComponent.permute_unitcells_single_frame_.wrap_</span></code> (nested helper)<a class="headerlink" href="#permuteunitcell-singlecomponent-permute-unitcells-single-frame-wrap-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/sym.py#L769">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Wrap Cartesian points into the primary cell of ``b``.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-sym.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

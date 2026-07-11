@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.util_np &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building the documentation" href="../contributing-docs.html" />
+    <link rel="prev" title="O.sym" href="O-sym.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-sym.html" title="previous chapter">O.sym</a></li>
+      <li>Next: <a href="../contributing-docs.html" title="next chapter">Building the documentation</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-util-np">
+<span id="api-o-util-np"></span><h1>O.util_np<a class="headerlink" href="#o-util-np" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>General NumPy utilities used throughout FECrys.
+
+The module contains array-shape conversions, molecular-geometry calculations,
+trajectory processing, serialization helpers, and small numerical routines.
+Unless stated otherwise, coordinate arrays use a final Cartesian axis of
+length three and preserve any leading batch dimensions.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="inject-methods-from-another-class-function">
+<h3><code class="docutils literal notranslate"><span class="pre">inject_methods_from_another_class_</span></code> (function)<a class="headerlink" href="#inject-methods-from-another-class-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L33">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inject_methods_from_another_class_</span><span class="p">(</span><span class="n">target_instance</span><span class="p">,</span> <span class="n">source_class</span><span class="p">,</span> <span class="n">include_properties</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Attach methods from a class to one existing object.
+
+Parameters
+----------
+target_instance : object
+    Object that will receive the methods. The object&#39;s class is not
+    otherwise changed.
+source_class : type
+    Class whose public callables are bound to ``target_instance``.
+include_properties : bool, default=False
+    If true, also copy property and descriptor objects to the target&#39;s
+    class. This affects every instance of the target class.
+
+Notes
+-----
+Names beginning with ``__`` are ignored. Existing attributes with the same
+names are overwritten. The operation mutates ``target_instance`` in place
+and returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="save-pickle-function">
+<h3><code class="docutils literal notranslate"><span class="pre">save_pickle_</span></code> (function)<a class="headerlink" href="#save-pickle-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L69">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_pickle_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serialize a Python object to a pickle file.
+
+Parameters
+----------
+x : object
+    Object to serialize.
+name : str or path-like
+    Destination filename. Parent directories must already exist.
+verbose : bool, default=True
+    Print the destination after a successful write.
+
+Notes
+-----
+The destination is overwritten. Pickle files must only be loaded from
+trusted sources because unpickling can execute arbitrary code.
+</pre></div>
+</div>
+</section>
+<section id="load-pickle-function">
+<h3><code class="docutils literal notranslate"><span class="pre">load_pickle_</span></code> (function)<a class="headerlink" href="#load-pickle-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L90">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_pickle_</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Deserialize and return an object from a trusted pickle file.
+
+Parameters
+----------
+name : str or path-like
+    Pickle file to read.
+
+Returns
+-------
+object
+    The object stored in ``name``.
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-molecules-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_molecules_np_</span></code> (function)<a class="headerlink" href="#reshape-to-molecules-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L107">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_molecules_np_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>View batched coordinates as separate molecules.
+
+Parameters
+----------
+r : numpy.ndarray
+    Coordinates with the number of frames on axis 0 and a compatible
+    total number of Cartesian values in the remaining axes.
+n_molecules : int
+    Number of molecules per frame.
+n_atoms_in_molecule : int
+    Number of atoms in each molecule.
+
+Returns
+-------
+numpy.ndarray
+    Reshaped coordinates with shape ``(n_frames, n_molecules,
+    n_atoms_in_molecule, 3)``. No coordinate values are changed.
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-atoms-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_atoms_np_</span></code> (function)<a class="headerlink" href="#reshape-to-atoms-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L129">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_atoms_np_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>View batched coordinates as one atom array per frame.
+
+Returns an array of shape ``(n_frames, n_molecules *
+n_atoms_in_molecule, 3)`` without changing coordinate values. The input
+must contain exactly the required number of elements.
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-flat-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_flat_np_</span></code> (function)<a class="headerlink" href="#reshape-to-flat-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L139">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_flat_np_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Flatten all molecular Cartesian coordinates within each frame.
+
+Returns an array of shape ``(n_frames, n_molecules *
+n_atoms_in_molecule * 3)``. The operation only changes the view/shape of
+the data.
+</pre></div>
+</div>
+</section>
+<section id="cumulative-average-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cumulative_average_</span></code> (function)<a class="headerlink" href="#cumulative-average-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L151">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cumulative_average_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the running arithmetic mean of an array along ``axis``.
+
+With ``axis=None`` the input is flattened, following ``numpy.cumsum``.
+The output has the same shape as the cumulative sum and entry *i* is the
+mean up to and including entry *i*.
+</pre></div>
+</div>
+</section>
+<section id="sta-array-function">
+<h3><code class="docutils literal notranslate"><span class="pre">sta_array_</span></code> (function)<a class="headerlink" href="#sta-array-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L161">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sta_array_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Min-max scale an array to the interval [0, 1].
+
+A constant input has zero range and therefore produces NaNs through NumPy
+division; callers should handle that case explicitly when it is possible.
+</pre></div>
+</div>
+</section>
+<section id="half-way-function">
+<h3><code class="docutils literal notranslate"><span class="pre">half_way_</span></code> (function)<a class="headerlink" href="#half-way-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L171">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">half_way_</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the midpoint of two scalar values, independent of their order.
+</pre></div>
+</div>
+</section>
+<section id="take-random-function">
+<h3><code class="docutils literal notranslate"><span class="pre">take_random_</span></code> (function)<a class="headerlink" href="#take-random-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L177">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">take_random_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample rows uniformly without replacement from the first axis.
+
+Parameters
+----------
+x : numpy.ndarray
+    Values to sample; axis 0 identifies observations.
+m : int, default=20000
+    Maximum number of observations to return.
+
+Returns
+-------
+numpy.ndarray
+    ``min(m, len(x))`` randomly ordered observations. The global NumPy
+    random state controls reproducibility.
+</pre></div>
+</div>
+</section>
+<section id="find-split-indices-function">
+<h3><code class="docutils literal notranslate"><span class="pre">find_split_indices_</span></code> (function)<a class="headerlink" href="#find-split-indices-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L195">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">find_split_indices_</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">split_where</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Find a random train/validation split with balanced mean energies.
+
+Parameters
+----------
+u : array-like, shape (n_samples, ...)
+    Potential energies sampled during molecular dynamics. The mean is
+    computed over all supplied values.
+split_where : int
+    Number of samples assigned to the training prefix.
+tol : float, default=1e-5
+    Maximum absolute difference allowed between each subset mean and the
+    mean of the complete dataset.
+verbose : bool, default=True
+    Report whether a suitable permutation was found.
+
+Returns
+-------
+numpy.ndarray or None
+    A permutation of sample indices, or ``None`` if none of 1,000 random
+    attempts meets the tolerance. Apply the same permutation to every
+    aligned array; the first ``split_where`` entries form the training set.
+</pre></div>
+</div>
+</section>
+<section id="joint-grid-from-marginal-grids-function">
+<h3><code class="docutils literal notranslate"><span class="pre">joint_grid_from_marginal_grids_</span></code> (function)<a class="headerlink" href="#joint-grid-from-marginal-grids-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L233">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">joint_grid_from_marginal_grids_</span><span class="p">(</span><span class="o">*</span><span class="n">marginal_grids</span><span class="p">,</span> <span class="n">flatten_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct the Cartesian product of one-dimensional marginal grids.
+
+Parameters
+----------
+*marginal_grids : array-like
+    One one-dimensional coordinate grid per dimension.
+flatten_output : bool, default=True
+    Return a point table when true; retain the tensor grid when false.
+
+Returns
+-------
+numpy.ndarray
+    Shape ``(prod(n_bins), n_dimensions)`` when flattened, otherwise
+    ``(n_dimensions, *n_bins)``.
+
+Notes
+-----
+This is a convenience alternative to ``numpy.meshgrid``. The implementation
+currently supports at most the number of dimensions encoded by its einsum
+labels.
+</pre></div>
+</div>
+</section>
+<section id="tidy-crystal-xyz-function">
+<h3><code class="docutils literal notranslate"><span class="pre">tidy_crystal_xyz_</span></code> (function)<a class="headerlink" href="#tidy-crystal-xyz-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L283">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tidy_crystal_xyz_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">ind_rO</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove periodic jumps from a single-component crystal trajectory.
+
+Parameters
+----------
+r : numpy.ndarray, shape (n_frames, n_atoms, 3) or (n_atoms, 3)
+    Cartesian coordinates. Each molecule must already be whole.
+b : numpy.ndarray, shape (n_frames, 3, 3) or (3, 3)
+    Periodic box vectors stored by row. A single box is broadcast across
+    frames.
+n_atoms_mol : int
+    Number of atoms in each molecule; all molecules must have this size.
+ind_rO : int
+    Within-molecule index of a slowly moving reference atom used to track
+    each molecule through the periodic boundaries.
+batch_size : int, default=1000
+    Number of frames processed together during initial wrapping.
+
+Returns
+-------
+numpy.ndarray, shape (n_frames, n_atoms, 3)
+    Coordinates with molecular reference atoms unwrapped continuously and
+    their global mean position removed. Molecular packing—and therefore
+    periodic potential energy—should be unchanged.
+
+Notes
+-----
+The method assumes a stable crystal and may be unreliable for very small
+or unstable cells. Unwrap broken molecules before calling this function.
+</pre></div>
+</div>
+</section>
+<section id="tidy-crystal-xyz-check-shape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tidy_crystal_xyz_.check_shape_</span></code> (method)<a class="headerlink" href="#tidy-crystal-xyz-check-shape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L313">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_shape_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert coordinates to an array with an explicit frame axis.
+</pre></div>
+</div>
+</section>
+<section id="tidy-crystal-xyz-wrap-points-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tidy_crystal_xyz_.wrap_points_</span></code> (method)<a class="headerlink" href="#tidy-crystal-xyz-wrap-points-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L328">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_points_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Wrap Cartesian points into their corresponding periodic boxes.
+</pre></div>
+</div>
+</section>
+<section id="tidy-crystal-xyz-dot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tidy_crystal_xyz_.dot_</span></code> (method)<a class="headerlink" href="#tidy-crystal-xyz-dot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L358">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dot_</span><span class="p">(</span><span class="n">Ri</span><span class="p">,</span> <span class="n">mat</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply one 3-by-3 matrix to the final axis of each point.
+</pre></div>
+</div>
+</section>
+<section id="get-torsion-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_torsion_np_</span></code> (function)<a class="headerlink" href="#get-torsion-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L383">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_torsion_np_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">inds_4_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate signed dihedral angles for four indexed atoms.
+
+Parameters
+----------
+r : numpy.ndarray, shape (..., n_atoms, 3)
+    Cartesian coordinates.
+inds_4_atoms : sequence of four int
+    Atom indices ``(A, B, C, D)`` defining the A-B-C-D torsion.
+
+Returns
+-------
+numpy.ndarray, shape (..., 1)
+    Signed angles in radians in the interval ``[-pi, pi]``.
+
+Notes
+-----
+Vector norms are clipped below at ``1e-8`` for numerical stability. The
+formulation is adapted from the bgflow project.
+</pre></div>
+</div>
+</section>
+<section id="get-angle-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_angle_np_</span></code> (function)<a class="headerlink" href="#get-angle-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L443">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_angle_np_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">inds_3_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate bond angles for three indexed atoms.
+
+``inds_3_atoms`` defines A-B-C, with B as the vertex. Returns radians with
+shape ``(..., 1)``; values are clipped away from exactly 0 and pi for
+numerical stability.
+</pre></div>
+</div>
+</section>
+<section id="get-distance-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_distance_np_</span></code> (function)<a class="headerlink" href="#get-distance-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L475">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_distance_np_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">inds_2_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate Euclidean distances between two indexed atoms.
+
+Parameters
+----------
+R : numpy.ndarray, shape (..., n_atoms, 3)
+    Cartesian coordinates in any consistent length unit.
+inds_2_atoms : sequence of two int
+    Indices of the atom pair.
+
+Returns
+-------
+numpy.ndarray, shape (..., 1)
+    Pair distances in the input coordinate unit, clipped below at ``1e-8``.
+</pre></div>
+</div>
+</section>
+<section id="color-text-function">
+<h3><code class="docutils literal notranslate"><span class="pre">color_text_</span></code> (function)<a class="headerlink" href="#color-text-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L506">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">color_text_</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="s1">&#39;_R&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Wrap text in ANSI terminal formatting codes.
+
+``p`` selects a colour by its initial (for example ``&#39;r&#39;`` for red), an
+uppercase selector requests bold text, and an underscore requests
+underlining. The returned string includes a final reset code.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-class">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D</span></code> (class)<a class="headerlink" href="#testconverged-1d-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L528">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TestConverged_1D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Heuristic convergence diagnostic for a one-dimensional time series.
+
+The diagnostic compares the cumulative mean with its own cumulative mean,
+normalises the discrepancy by a running variance, and declares convergence
+when the final scaled error is no greater than ``tol``. It is a visual and
+exploratory heuristic, not a statistical hypothesis test.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D.__init__</span></code> (method)<a class="headerlink" href="#testconverged-1d-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L537">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate the convergence trace for ``x``.
+
+Parameters
+----------
+x : array-like
+    Scalar observations in time order; the input is flattened.
+tol : float, default=0.2
+    Maximum final diagnostic value considered converged.
+verbose : bool, default=True
+    Print the final convergence decision.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D.__call__</span></code> (method)<a class="headerlink" href="#testconverged-1d-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L572">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return whether the final diagnostic value meets the tolerance.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-where-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D.where</span></code> (method)<a class="headerlink" href="#testconverged-1d-where-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L577">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Indices at which the diagnostic is no greater than ``tol``.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-recommend-cut-from-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D.recommend_cut_from</span></code> (method)<a class="headerlink" href="#testconverged-1d-recommend-cut-from-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L582">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">recommend_cut_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate and return an index after which the series is converged.
+</pre></div>
+</div>
+</section>
+<section id="testconverged-1d-show-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TestConverged_1D.show_</span></code> (method)<a class="headerlink" href="#testconverged-1d-show-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L591">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">show_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">centre</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot observations and their cumulative mean.
+
+Parameters control the y-axis half-width, centring about the final
+mean, visibility of raw observations, and plot colour. The plot is
+drawn on Matplotlib&#39;s current axes and the method returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="k-to-c-function">
+<h3><code class="docutils literal notranslate"><span class="pre">K_to_C_</span></code> (function)<a class="headerlink" href="#k-to-c-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L617">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">K_to_C_</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert an absolute temperature from kelvin to degrees Celsius.
+</pre></div>
+</div>
+</section>
+<section id="c-to-k-function">
+<h3><code class="docutils literal notranslate"><span class="pre">C_to_K_</span></code> (function)<a class="headerlink" href="#c-to-k-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L621">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">C_to_K_</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert a temperature from degrees Celsius to kelvin.
+</pre></div>
+</div>
+</section>
+<section id="adam-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">ADAM_np_</span></code> (function)<a class="headerlink" href="#adam-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/util_np.py#L627">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ADAM_np_</span><span class="p">(</span><span class="n">grad_</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">constraint_</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="n">max_itter</span><span class="o">=</span><span class="mf">1e+20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">],</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Minimise an objective using gradients and an Adam-like update.
+
+Parameters
+----------
+grad_ : callable
+    Function mapping the current parameter array to an equally shaped
+    gradient array.
+x0 : numpy.ndarray
+    Initial parameters. Updates preserve this shape.
+constraint_ : callable, optional
+    Projection or transformation applied after every update.
+max_itter : int or float, default=1e20
+    Maximum number of updates (the historical spelling is retained).
+alpha : float, default=0.005
+    Step-size multiplier.
+betas : sequence of two float, default=(0.7, 0.999)
+    Exponential decay factors for first and second gradient moments.
+tol : float, default=1e-4
+    Stop when the largest absolute gradient component is at most this
+    value.
+
+Returns
+-------
+x : numpy.ndarray
+    Final constrained parameter values.
+n_iterations : float
+    Number of updates performed.
+
+Notes
+-----
+Unlike canonical Adam, this implementation does not apply bias correction
+to the moment estimates. No objective value or convergence flag is
+returned.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-util_np.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

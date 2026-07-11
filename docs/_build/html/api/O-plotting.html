@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.plotting &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.sym" href="O-sym.html" />
+    <link rel="prev" title="O.interface" href="O-interface.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-interface.html" title="previous chapter">O.interface</a></li>
+      <li>Next: <a href="O-sym.html" title="next chapter">O.sym</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-plotting">
+<span id="api-o-plotting"></span><h1>O.plotting<a class="headerlink" href="#o-plotting" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plotting and visualisation helpers for FECrys analyses.
+
+Most functions draw on Matplotlib&#39;s current figure or create and display a new
+figure. Coordinate inputs follow the FECrys convention of storing Cartesian
+components on the final axis. Histogram-based information measures are
+numerical estimates whose values depend on binning and coordinate units.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="plot-mol-larger-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_mol_larger_</span></code> (function)<a class="headerlink" href="#plot-mol-larger-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L16">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_mol_larger_</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Display a large 2D depiction of an RDKit molecule in a notebook.
+
+The first conformer is removed from ``mol`` before drawing, so this
+function mutates the supplied molecule. The generated image is 800 by 800
+pixels and is displayed through IPython.
+</pre></div>
+</div>
+</section>
+<section id="plot-1d-histogram-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_1D_histogram_</span></code> (function)<a class="headerlink" href="#plot-1d-histogram-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L29">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_1D_histogram_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kwargs_for_histogram</span><span class="o">=</span><span class="p">{},</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_max_y</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_xy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate and plot a one-dimensional histogram at bin centres.
+
+Parameters
+----------
+x : array-like
+    Observations passed to ``numpy.histogram``.
+bins, range, density
+    Histogram configuration with NumPy semantics.
+kwargs_for_histogram : dict, optional
+    Additional arguments for ``numpy.histogram``.
+ax : matplotlib.axes.Axes, optional
+    Axes on which to draw; the current pyplot axes are used by default.
+return_max_y, return_xy : bool, default=False
+    Select whether to return the maximum finite height, the bin centres
+    and heights, or both.
+mask_0 : bool, default=False
+    Replace zero-height bins with NaN so lines do not connect across them.
+**kwargs
+    Styling arguments forwarded to ``Axes.plot``.
+
+Returns
+-------
+None, float, list, or tuple
+    Return type depends on ``return_max_y`` and ``return_xy``. The plotted
+    x values are bin centres, not bin edges.
+</pre></div>
+</div>
+</section>
+<section id="interpolate-colors-function">
+<h3><code class="docutils literal notranslate"><span class="pre">interpolate_colors_</span></code> (function)<a class="headerlink" href="#interpolate-colors-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L76">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">interpolate_colors_</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">c0</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Linearly interpolate ``m`` RGBA colours between two endpoints.
+
+``c0`` and ``c1`` are four-component red, green, blue, and alpha values,
+normally in [0, 1]. The returned array has shape ``(m, 4)`` and can be
+passed to Matplotlib&#39;s ``colors`` or ``c`` arguments.
+</pre></div>
+</div>
+</section>
+<section id="plot-2d-histogram-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_2D_histogram_</span></code> (function)<a class="headerlink" href="#plot-2d-histogram-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L90">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_2D_histogram_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid_transform_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scatter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot a density-normalised two-dimensional histogram.
+
+``x`` and ``y`` are flattened into paired observations. ``bins`` may be a
+scalar or a two-element list and ``range`` follows ``numpy.histogramdd``.
+An optional ``grid_transform_`` maps the two bin-centre grids before
+plotting. By default the density is drawn as contours; with ``scatter`` it
+is encoded as point colour. If ``ax`` is supplied, the Matplotlib artist is
+returned; otherwise the function draws through pyplot and returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="plot-2d-histogram-matshow-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_2D_histogram_matshow_</span></code> (function)<a class="headerlink" href="#plot-2d-histogram-matshow-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L127">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_2D_histogram_matshow_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Display a 2D probability-density histogram as an index-space matrix.
+
+Unlike :func:`plot_2D_histogram_`, this helper does not construct physical
+coordinate axes. Additional keyword arguments are forwarded to
+``matplotlib.pyplot.matshow``.
+</pre></div>
+</div>
+</section>
+<section id="plot-points-3d-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_points_3D_</span></code> (function)<a class="headerlink" href="#plot-points-3d-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L143">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_points_3D_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">show_axes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">view_elev_azim</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">],</span> <span class="n">axes_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create and display a three-dimensional scatter plot.
+
+Parameters
+----------
+X : numpy.ndarray, shape (n_points, 3)
+    Cartesian point coordinates.
+show_axes, show_colorbar : bool
+    Control axes and colour-bar visibility.
+figsize : tuple
+    Matplotlib figure size.
+autoscale : bool
+    Retained for API compatibility; currently not used by this function.
+view_elev_azim : sequence of two numbers
+    View adjustment. The current implementation uses its first value for
+    both elevation and azimuth.
+axes_labels : sequence of str
+    Labels for x, y, and z.
+**kwargs
+    Styling and colour data forwarded to ``Axes.scatter``.
+
+Notes
+-----
+A dotted bounding cube centred at zero is drawn using the largest value in
+``X``. The figure is shown immediately and is not returned.
+</pre></div>
+</div>
+</section>
+<section id="plot-points-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_points_</span></code> (function)<a class="headerlink" href="#plot-points-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L200">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_points_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">show_axes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">autoscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create and display a two- or three-dimensional scatter plot.
+
+``X`` must have shape ``(n_points, n_dimensions)`` with two or at least
+three columns. The first three columns are plotted. Figure visibility,
+labels, colour bar, and scatter styling are controlled by the remaining
+arguments. The figure is shown immediately and is not returned.
+</pre></div>
+</div>
+</section>
+<section id="save-coordiantes-as-pdb-function">
+<h3><code class="docutils literal notranslate"><span class="pre">save_coordiantes_as_pdb_</span></code> (function)<a class="headerlink" href="#save-coordiantes-as-pdb-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L235">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_coordiantes_as_pdb_</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">la</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">box_line</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Write flattened coordinate frames to a minimal PDB trajectory.
+
+Parameters
+----------
+coordinates : array-like, shape (n_frames, n_atoms * 3)
+    Cartesian coordinates, rounded to two decimal places before writing.
+name : str or path-like
+    Output path without the ``.pdb`` suffix.
+la : array-like, shape (n_frames, n_atoms), optional
+    Per-atom values written to the occupancy and B-factor-like fields.
+    Zeros are used when omitted.
+verbose : bool, default=False
+    Report every frame as it is written.
+box_line : str, optional
+    Line inserted before the atoms in every frame, for example a CRYST1
+    record.
+
+Notes
+-----
+The historical function-name spelling is retained for compatibility. The
+file is overwritten, all atoms are labelled as carbon, and each frame ends
+with ``END``. This lightweight writer is intended for visualisation.
+</pre></div>
+</div>
+</section>
+<section id="s-1d-function">
+<h3><code class="docutils literal notranslate"><span class="pre">S_1D_</span></code> (function)<a class="headerlink" href="#s-1d-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L307">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">S_1D_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate one-dimensional differential entropy from a histogram.
+
+Returns ``(entropy, bin_width)`` using the density estimate
+``-sum(p * log(p)) * bin_width``. The result depends on the binning and the
+physical units of ``x``.
+</pre></div>
+</div>
+</section>
+<section id="s-2d-function">
+<h3><code class="docutils literal notranslate"><span class="pre">S_2D_</span></code> (function)<a class="headerlink" href="#s-2d-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L318">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">S_2D_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate joint differential entropy for two variables by histogramming.
+
+The returned scalar uses density-normalised bins and includes the bin-area
+factor. ``x`` and ``y`` are flattened before pairing.
+</pre></div>
+</div>
+</section>
+<section id="mi-2d-function">
+<h3><code class="docutils literal notranslate"><span class="pre">MI_2D_</span></code> (function)<a class="headerlink" href="#mi-2d-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L329">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">MI_2D_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate normalised mutual information between two scalar variables.
+
+The joint histogram is converted to probabilities. The mutual-information
+numerator is divided by the joint entropy expression used internally, so
+the result is a normalised score rather than mutual information in nats.
+</pre></div>
+</div>
+</section>
+<section id="plot-vector-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_vector_</span></code> (function)<a class="headerlink" href="#plot-vector-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L355">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_vector_</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Draw one or more two-dimensional vectors from a common origin.
+
+``v`` is an iterable of 2D displacement vectors and ``r0`` is expected to
+contain the origin as its first element. Lines are drawn on ``ax`` or on
+the current pyplot axes. This legacy helper returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="plot-cell-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_cell_</span></code> (function)<a class="headerlink" href="#plot-cell-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L370">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_cell_</span><span class="p">(</span><span class="n">_traj</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">pad_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot three orthogonal projections of the first trajectory frame.
+
+This legacy water-specific visualisation assumes three atoms per molecule.
+It draws the unit-cell edges, displays the figure immediately, and returns
+``None``. New code should prefer a general molecular viewer.
+</pre></div>
+</div>
+</section>
+<section id="plot-oh1h2-samples-2d-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_OH1H2_samples_2D_</span></code> (function)<a class="headerlink" href="#plot-oh1h2-samples-2d-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L408">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_OH1H2_samples_2D_</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pad_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">checking_disorder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">centre</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot orthogonal O/H projections for water-like coordinate samples.
+
+The first three atoms of each molecule are interpreted as O, H1, and H2.
+Samples may be centred on the mean oxygen position. When
+``checking_disorder`` is true, additional plots separate H1 and H2 to help
+diagnose label disorder. This is a legacy diagnostic that displays plots
+and returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="simple-smoothing-matrix-function">
+<h3><code class="docutils literal notranslate"><span class="pre">simple_smoothing_matrix_</span></code> (function)<a class="headerlink" href="#simple-smoothing-matrix-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L495">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simple_smoothing_matrix_</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct a non-periodic Gaussian resampling matrix.
+
+Parameters ``N`` and ``S`` are the input and output grid sizes. ``c``
+controls kernel width: larger values produce narrower, more local weights.
+Returns an ``(S, N)`` matrix whose rows sum to one.
+</pre></div>
+</div>
+</section>
+<section id="simple-smoother-function">
+<h3><code class="docutils literal notranslate"><span class="pre">simple_smoother_</span></code> (function)<a class="headerlink" href="#simple-smoother-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L510">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simple_smoother_</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Gaussian-smooth and optionally resample an array along every axis.
+
+``S`` may be ``None`` to preserve shape, an integer applied to all axes, or
+one output size per axis. ``c`` controls locality; values approaching zero
+approach broad averaging. The implementation supports at most thirteen
+dimensions and is intended for visualisation rather than inference.
+</pre></div>
+</div>
+</section>
+<section id="plot-as-ascii-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_as_ascii_</span></code> (function)<a class="headerlink" href="#plot-as-ascii-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L544">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_as_ascii_</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">900</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Render the current Matplotlib figure as a binary ASCII image.
+
+The figure is first saved as ``checking_plot.png`` in the current working
+directory, converted to greyscale, resampled to ``size`` and printed using
+``#`` and spaces. ``c`` adjusts resampling sharpness. The temporary PNG is
+not removed and any existing file with that name is overwritten.
+</pre></div>
+</div>
+</section>
+<section id="plot-2d-histograms-of-box-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_2D_histograms_of_box_</span></code> (function)<a class="headerlink" href="#plot-2d-histograms-of-box-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/plotting.py#L574">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_2D_histograms_of_box_</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">aligment_square</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scatter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">move_it_left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compare atomic-position densities on the three faces of a unit cell.
+
+Parameters
+----------
+b : array-like, shape (3, 3)
+    Supercell vectors stored by row.
+r0, r1 : array-like, shape (n_samples, n_atoms, 3)
+    Coordinate ensembles shown in the left and right panels. If ``r1`` is
+    omitted, ``r0`` is shown in both.
+bins, levels : int
+    Histogram resolution and contour count.
+m : int, optional
+    Maximum number of frames used from each ensemble.
+scatter : bool, default=False
+    Draw density-coloured grid points instead of contours.
+aligment_square : int or bool, default=0
+    Add a third reference panel when truthy. The misspelling is retained
+    for API compatibility.
+cmap, dpi, s, move_it_left
+    Plot styling and layout controls.
+
+Notes
+-----
+Coordinates are converted to wrapped fractional positions before their
+face projections are transformed back to Cartesian display coordinates.
+The function prints the sample count, shows the figure, and returns
+``None``.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-plotting.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

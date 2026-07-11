@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Building the documentation &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fd8b8fc0" />
+    <script src="_static/documentation_options.js?v=249f3023"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="O.util_np" href="api/O-util_np.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building the documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#docstring-conventions">Docstring conventions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="api/O-util_np.html" title="previous chapter">O.util_np</a></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="building-the-documentation">
+<h1>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Link to this heading">¶</a></h1>
+<p>Activate the <code class="docutils literal notranslate"><span class="pre">fecrys</span></code> Conda environment and run the following command from
+the repository root:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python -m sphinx -W --keep-going -b html docs docs/_build/html</span>
+</pre></div>
+</div>
+<p>The generated website starts at <code class="docutils literal notranslate"><span class="pre">docs/_build/html/index.html</span></code>.  API pages are
+regenerated from the source docstrings whenever Sphinx starts, so no FECrys
+module is imported during the build.</p>
+<p>To regenerate only the reStructuredText API pages while editing docstrings:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python docs/generate_api.py</span>
+</pre></div>
+</div>
+<section id="docstring-conventions">
+<h2>Docstring conventions<a class="headerlink" href="#docstring-conventions" title="Link to this heading">¶</a></h2>
+<p>Use concise NumPy-style docstrings.  Explain the scientific meaning of inputs
+and outputs, include units and array shapes where known, and distinguish
+whole-crystal quantities from per-molecule quantities.  A function should be
+understandable from its docstring without reading its implementation first.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/contributing-docs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

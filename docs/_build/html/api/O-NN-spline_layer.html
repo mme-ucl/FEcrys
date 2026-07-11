@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.spline_layer &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.util_tf" href="O-NN-util_tf.html" />
+    <link rel="prev" title="O.NN.rqs" href="O-NN-rqs.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-rqs.html" title="previous chapter">O.NN.rqs</a></li>
+      <li>Next: <a href="O-NN-util_tf.html" title="next chapter">O.NN.util_tf</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-spline-layer">
+<span id="api-o-nn-spline-layer"></span><h1>O.NN.spline_layer<a class="headerlink" href="#o-nn-spline-layer" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Keras layers for spline-based normalising-flow couplings.
+
+Conditioner networks generate rational-quadratic spline parameters for
+periodic and ordinary variables. Half layers transform one mask partition;
+full coupling layers compose complementary half layers so every non-auxiliary
+variable can be transformed. Forward and inverse methods return the transformed
+tensor and a per-sample summed log-absolute Jacobian determinant.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="mlp-class">
+<h3><code class="docutils literal notranslate"><span class="pre">MLP</span></code> (class)<a class="headerlink" href="#mlp-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L18">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MLP</span><span class="p">(</span><span class="n">dims_outputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">dims_hidden</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">outputs_activations</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_kernel_initializer</span><span class="o">=</span><span class="s1">&#39;glorot_uniform&#39;</span><span class="p">,</span> <span class="n">output_bias_initializer</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dense multilayer perceptron with one or more output heads.
+
+The layer always returns a list—one tensor for every requested output
+dimension—even when there is only one output head.
+</pre></div>
+</div>
+</section>
+<section id="mlp-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MLP.__init__</span></code> (method)<a class="headerlink" href="#mlp-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L25">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dims_outputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">dims_hidden</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">outputs_activations</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_kernel_initializer</span><span class="o">=</span><span class="s1">&#39;glorot_uniform&#39;</span><span class="p">,</span> <span class="n">output_bias_initializer</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct shared hidden layers and independent dense output heads.
+
+``dims_hidden`` and ``dims_outputs`` specify layer widths. Output
+activations and kernel/bias initializers may be single values applied
+to every head or one value per head.
+</pre></div>
+</div>
+</section>
+<section id="mlp-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MLP.call</span></code> (method)<a class="headerlink" href="#mlp-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L67">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input:   x : (..., d) ; d = dimensionality of input
+Outputs: ys : list of outputs with shapes (m, dims_outputs[i]) for every output layer i.
+</pre></div>
+</div>
+</section>
+<section id="get-pos-encoding-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_pos_encoding_</span></code> (function)<a class="headerlink" href="#get-pos-encoding-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L83">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_pos_encoding_</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">dim_embedding</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return sinusoidal position features for one molecule index.
+
+The output contains ``dim_embedding`` sine values followed by the same
+number of cosine values, with frequencies scaled geometrically by ``C``.
+</pre></div>
+</div>
+</section>
+<section id="at-mlp-class">
+<h3><code class="docutils literal notranslate"><span class="pre">AT_MLP</span></code> (class)<a class="headerlink" href="#at-mlp-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L94">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AT_MLP</span><span class="p">(</span><span class="n">n_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_hidden_kqv</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">one_hot_kqv</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;AT_MLP&#39;</span><span class="p">,</span> <span class="n">mask_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>self-attention block
+</pre></div>
+</div>
+</section>
+<section id="at-mlp-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">AT_MLP.__init__</span></code> (method)<a class="headerlink" href="#at-mlp-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L98">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_hidden_kqv</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">one_hot_kqv</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;AT_MLP&#39;</span><span class="p">,</span> <span class="n">mask_self</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct multi-head key, query, and value conditioner networks.
+
+Inputs are expected as ``(batch, n_mol, input_dim)``. ``one_hot_kqv``
+controls addition of sinusoidal molecule-index features to each of the
+key/query/value networks. ``mask_self`` removes diagonal attention for
+multi-molecule systems.
+</pre></div>
+</div>
+</section>
+<section id="at-mlp-one-hot-extend-method">
+<h3><code class="docutils literal notranslate"><span class="pre">AT_MLP.one_hot_extend_</span></code> (method)<a class="headerlink" href="#at-mlp-one-hot-extend-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L174">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">one_hot_extend_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Append the fixed position encoding to each molecule&#39;s features.
+</pre></div>
+</div>
+</section>
+<section id="at-mlp-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">AT_MLP.call</span></code> (method)<a class="headerlink" href="#at-mlp-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L178">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">flow_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply positive normalised attention across molecules.
+
+Parameters
+----------
+x : tensorflow.Tensor, shape (batch, n_mol, input_dim)
+    Per-molecule input features.
+flow_mask : tensor, shape (n_mol,), optional
+    Multiplicative mask for participating molecules.
+
+Returns
+-------
+tensorflow.Tensor, shape (batch, n_mol, output_dim)
+    Multi-head values summed over source molecules and heads.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper</span></code> (class)<a class="headerlink" href="#spline-coupling-helper-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L219">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SPLINE_COUPLING_helper</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Shared masking and transformation logic for spline half layers.
+
+Subclasses call :meth:`init_` and provide ``MLP_``, a conditioner mapping
+the conditioning variables to periodic and ordinary spline parameters.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.__init__</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L226">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create an unconfigured helper; subclasses must call :meth:`init_`.
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.init_</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L229">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">init_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">periodic_mask</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">flow_mask</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_tfp</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">nk_for_periodic_encoding</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Inputs:
+periodic_mask  : (n_variables,)
+    1 if variable is periodic,
+    0 otherwise.
+cond_mask      : (n_variables,) ; conditioning mask
+    1 if variable should be transformed,
+    0 if variable should help condition transformations of the former.
+flow_mask      : (1, n_mol, n_variables) ; default is None (no masking)
+    1.0 if variable should be transformed,
+    0.0 if variable should be kept constant.
+        This is mostly useful if the variables that should not be transformed
+        are different depending on the axis that is between the last axis,
+        and the batch axis (i.e., first axis) of the input.
+            NB: the computations of the splines are still done on the 0.0 variables, but
+            these variables are returned back to original, with 0.0 set for log volume change.
+            This is why this mask is flaot, as it is actually multipled to the variables.
+use_tfp        : whether to the use tensorflow_probability version of rational quadratic spline (both are in rqs.py)
+n_bins         : number of bins for each spline (a &#39;bins&#39; is an area between two neighboring knots)
+min_bin_width  : mimimum vertical/horizontal distance between any pair of neighboring knots
+knot_slope_range : minimum and maximum slopes allowed at any knot
+nk_for_periodic_encoding : number of orthogonal sines and cosines for encoding each periodic marginal variable
+    Such encoding used before forwarding any periodic variable into a DNN (DNN can only deal with Euclidean variables)
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-init-cos-sin-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.init_.cos_sin_</span></code> (nested helper)<a class="headerlink" href="#spline-coupling-helper-init-cos-sin-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L360">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cos_sin_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nk</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encode scaled periodic values with ``nk`` Fourier harmonics.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-init-cos-sin-1-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.init_.cos_sin_1_</span></code> (nested helper)<a class="headerlink" href="#spline-coupling-helper-init-cos-sin-1-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L369">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cos_sin_1_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encode scaled periodic values with one cosine/sine pair.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-identity-output-bias-initializer-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper._identity_output_bias_initializer_</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-identity-output-bias-initializer-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L379">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_identity_output_bias_initializer_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compute output-layer bias initializer(s) so that, when combined with a zero-valued
+output kernel, the spline parameters produce the identity transformation.
+
+For a rational quadratic spline to be the identity:
+  - width (w) and height (h) parameters equal zero -&gt; softmax gives uniform bins -&gt;
+    the x-grid and y-grid are identical, so every knot lies on the diagonal y = x.
+  - slope (s) parameters must produce a slope of 1.0 everywhere:
+        normalize_knot_slopes_(s_init) == 1.0
+        =&gt; s_init = log( exp(1 - min_slope) - 1 )
+  - shift parameters for periodic splines equal zero -&gt; no horizontal shift.
+
+Returns a single initializer when dims_MLP_outputs contains one non-zero entry,
+or a list of two initializers [bias_P, bias_O] when both entries are non-zero.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-get-output-initializers-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper._get_output_initializers_</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-get-output-initializers-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L423">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_output_initializers_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identity_init</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return (output_kernel_initializer, output_bias_initializer) for the output MLP layer(s).
+
+When identity_init is True, the kernel is zeroed and the bias is set so that the
+untrained spline produces the identity transformation.
+When identity_init is False, the standard Glorot-uniform kernel and zero bias are used.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-transform-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.transform_</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-transform-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L434">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">transform_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">forward</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">dont_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Inputs:
+    x         : (m, n_mol, n_variables) input variables
+                  ; where n_mol &gt;= 1 (i.e., cannot have a missing axis for molecules)
+    forward   : if True transfromation is in the forward direction, False for inverse
+    dont_mask : if True, self.flow_mask is ignored as if it was None (default)
+Outputs:
+    y         : (m, n_mol, n_variables) transformed variables
+    ladJ      : (m, 1) elementwise sum_{i,j} log(dy[...,i,j]/dx[...,i,j])
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.forward_</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L551">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dont_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Transform ``x`` forward and return values plus summed log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-helper-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_helper.inverse_</span></code> (method)<a class="headerlink" href="#spline-coupling-helper-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L555">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dont_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert the half-layer and return values plus inverse log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-half-layer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_HALF_LAYER</span></code> (class)<a class="headerlink" href="#spline-coupling-half-layer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L559">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SPLINE_COUPLING_HALF_LAYER</span><span class="p">(</span><span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">dims_hidden</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_hidden</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SPLINE_COUPLING_helper with standard DNN used for parametrising the splines
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-half-layer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_HALF_LAYER.__init__</span></code> (method)<a class="headerlink" href="#spline-coupling-half-layer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L575">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">dims_hidden</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_hidden</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build a half coupling layer with a standard dense conditioner.
+
+``periodic_mask`` identifies circular variables and ``cond_mask`` uses
+one for transformed variables and zero for conditioner inputs.
+``identity_init`` zeroes the final kernels and chooses biases that make
+the initial splines identities. Hidden widths default to the total
+spline-parameter output size.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-half-layer-at-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_HALF_LAYER_AT</span></code> (class)<a class="headerlink" href="#spline-coupling-half-layer-at-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L656">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SPLINE_COUPLING_HALF_LAYER_AT</span><span class="p">(</span><span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">flow_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_mol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_heads</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_hidden_kqv</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">one_hot_kqv</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_hidden_decode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">add_residual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>SPLINE_COUPLING_helper with AT_MLP involved for parametrising the splines
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-half-layer-at-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_HALF_LAYER_AT.__init__</span></code> (method)<a class="headerlink" href="#spline-coupling-half-layer-at-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L664">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">flow_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_mol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_heads</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_hidden_kqv</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">,</span> <span class="n">one_hot_kqv</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">n_hidden_decode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">add_residual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build a spline half layer with inter-molecular self-attention.
+
+``flow_mask`` can freeze selected molecule/variable entries. Attention
+is used only when ``n_mol &gt; 1``; otherwise the decoder receives the
+conditioning variables directly. ``add_residual`` chooses addition or
+concatenation of attention features before decoding spline parameters.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-half-layer-at-set-mlps-default-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_HALF_LAYER_AT.set_MLPs_default_</span></code> (method)<a class="headerlink" href="#spline-coupling-half-layer-at-set-mlps-default-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L725">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_MLPs_default_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Anything that works is allowed in this part of the model.
+Finding a combinatoon that works better is always useful.
+
+The settings that were used so far, are:
+
+    y_flowing = splines(x_flowing, params = MLP( \psi_conditioning )
+
+    Since the output dimensionality of the MLP is very high (spline params are many),
+    if does not matter too much if:
+        \psi_conditioning = [AT_MLP(x_conditioning), x_conditioning] # add_residual False
+    OR;
+        \psi_conditioning = AT_MLP(x_conditioning) + x_conditioning  # add_residual True
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-layer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_LAYER</span></code> (class)<a class="headerlink" href="#spline-coupling-layer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L788">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SPLINE_COUPLING_LAYER</span><span class="p">(</span><span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">half_layer_class</span><span class="o">=</span><span class="n">SPLINE_COUPLING_HALF_LAYER</span><span class="p">,</span> <span class="n">kwargs_for_given_half_layer_class</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;n_hidden&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;dims_hidden&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;hidden_activation&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>General coupling layer wrapper, where can choose half layer type (half_layer_class arg).
+
+There are currenty two options for the half_layer_class:
+    - SPLINE_COUPLING_HALF_LAYER
+    - SPLINE_COUPLING_HALF_LAYER_AT
+
+kwargs_for_given_half_layer_class:
+    dictionary of settings that are relevant to the chosen half_layer_class
+
+Template examples for choosing half_layer_class and kwargs_for_given_half_layer_class:
+
+&quot;&quot;&quot; standard coupling layer:
+half_layer_class = SPLINE_COUPLING_HALF_LAYER,
+kwargs_for_given_half_layer_class = {
+                                    &#39;n_hidden&#39; : 2,
+                                    &#39;dims_hidden&#39;:None,
+                                    &#39;hidden_activation&#39;:tf.nn.silu,
+                                    }
+&quot;&quot;&quot;
+
+&quot;&quot;&quot; coupling layer involving self-attention:
+half_layer_class = SPLINE_COUPLING_HALF_LAYER_AT,
+kwargs_for_given_half_layer_class = {
+                                    &#39;flow_mask&#39; : None,
+                                    &#39;n_mol&#39; : 1,
+                                    &#39;n_heads&#39; : 2,
+                                    &#39;embedding_dim&#39; : 20,
+                                    &#39;n_hidden_kqv&#39; : [1,1,1],
+                                    &#39;hidden_activation&#39; : tf.nn.silu,
+                                    &#39;one_hot_kqv&#39; : [False]*3,
+                                    &#39;n_hidden_decode&#39; : 2,
+                                    }
+&quot;&quot;&quot;
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-layer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_LAYER.__init__</span></code> (method)<a class="headerlink" href="#spline-coupling-layer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L825">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">periodic_mask</span><span class="p">,</span> <span class="n">cond_mask</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">half_layer_class</span><span class="o">=</span><span class="n">SPLINE_COUPLING_HALF_LAYER</span><span class="p">,</span> <span class="n">kwargs_for_given_half_layer_class</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;n_hidden&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;dims_hidden&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;hidden_activation&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">silu</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compose complementary spline half layers into one bijection.
+
+``cond_mask`` values mean: 1 transforms in layer A, 0 transforms in
+layer B, and 2 remains auxiliary/conditioning-only in both. The chosen
+``half_layer_class`` receives shared spline settings plus
+``kwargs_for_given_half_layer_class``.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-layer-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_LAYER.forward</span></code> (method)<a class="headerlink" href="#spline-coupling-layer-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L894">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dont_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply half layers A then B and sum their log-Jacobians.
+</pre></div>
+</div>
+</section>
+<section id="spline-coupling-layer-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SPLINE_COUPLING_LAYER.inverse</span></code> (method)<a class="headerlink" href="#spline-coupling-layer-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/spline_layer.py#L901">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dont_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert half layers in reverse order and sum inverse log-Jacobians.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-spline_layer.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

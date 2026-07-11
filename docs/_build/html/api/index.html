@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API reference &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.Tx" href="O-MM-Tx.html" />
+    <link rel="prev" title="Figure 1 architecture map" href="../architecture.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../architecture.html" title="previous chapter">Figure 1 architecture map</a></li>
+      <li>Next: <a href="O-MM-Tx.html" title="next chapter">O.MM.Tx</a></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="api-reference">
+<h1>API reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<p>These pages are generated directly from the active Python syntax tree.
+This avoids importing optional simulation and machine-learning stacks
+during a documentation-only build.</p>
+<p><strong>Coverage:</strong> 623 of 863 active classes and functions have docstrings; 240 are marked as pending.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l1"><a class="reference internal" href="O-interface.html">O.interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-plotting.html">O.plotting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-sym.html">O.sym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="O-util_np.html">O.util_np</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html#classes-and-functions">Classes and functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

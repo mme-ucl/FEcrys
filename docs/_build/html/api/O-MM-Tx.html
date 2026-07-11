@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.Tx &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.bias" href="O-MM-bias.html" />
+    <link rel="prev" title="API reference" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">API reference</a></li>
+      <li>Next: <a href="O-MM-bias.html" title="next chapter">O.MM.bias</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-tx">
+<span id="api-o-mm-tx"></span><h1>O.MM.Tx<a class="headerlink" href="#o-mm-tx" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Propagate polymorph free energies across temperature with NPT MBAR data.
+
+The active implementation loads temperature-replica trajectories for one
+polymorph, constructs reduced enthalpies at every sampled temperature, and uses
+MBAR to interpolate Gibbs free energy and enthalpy.  Two ``g_of_T`` instances
+can subsequently be compared to locate a polymorph transition temperature.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="singlecomponent-lite-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_lite</span></code> (class)<a class="headerlink" href="#singlecomponent-lite-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L14">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleComponent_lite</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">check_energies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Read only the trajectory fields needed for temperature reweighting.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-lite-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_lite.__init__</span></code> (method)<a class="headerlink" href="#singlecomponent-lite-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L17">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">check_energies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a saved NPT dataset without retaining a full simulation object.
+
+Parameters
+----------
+name : str
+    Path or pickle prefix of the saved simulation dataset.
+check_energies : bool, optional
+    Reconstruct the molecular system and compare the first 50 stored
+    reduced energies with fresh evaluations.
+</pre></div>
+</div>
+</section>
+<section id="all-lower-triangular-function">
+<h3><code class="docutils literal notranslate"><span class="pre">all_lower_triangular_</span></code> (function)<a class="headerlink" href="#all-lower-triangular-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L55">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">all_lower_triangular_</span><span class="p">(</span><span class="n">boxes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return whether one or more box matrices are lower triangular.
+
+Parameters
+----------
+boxes : array_like
+    One ``(3, 3)`` box or a batch with box axes in the final two dimensions.
+
+Returns
+-------
+bool
+    True when every strictly upper-triangular component is below ``1e-5``.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-class">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T</span></code> (class)<a class="headerlink" href="#g-of-t-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L73">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">g_of_T</span><span class="p">(</span><span class="n">Tref</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">Tref_FE</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tref_SE</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tref_box</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">paths_datasets_NPT</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">check_energies</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f2g_correction_params</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bins&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Interpolate one polymorph&#39;s Gibbs free energy over temperature.
+
+The reference free energy anchors the absolute curve.  NPT trajectories at
+several temperatures provide the reduced enthalpy matrix used by MBAR.
+Reported crystal quantities are dimensionless in units of ``kT`` unless a
+method explicitly divides them by ``n_mol`` to give lattice values.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-tref-g-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.set_Tref_g_</span></code> (method)<a class="headerlink" href="#g-of-t-set-tref-g-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L85">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_Tref_g_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tref_FE</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bins</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert a reference Helmholtz free energy to Gibbs free energy.
+
+Parameters
+----------
+Tref_FE : float, optional
+    Replacement whole-crystal Helmholtz free energy at ``Tref``, in
+    reduced units.
+version : int, optional
+    Box-density model: ``0`` omits the density term, ``1`` models volume,
+    ``2`` models the diagonal box elements, and ``3`` additionally models
+    the lower off-diagonal elements.
+bins : int, optional
+    Number of bins in each one-dimensional density histogram.
+
+Notes
+-----
+The correction is ``beta * P * V_ref + log p(box_ref)``.  It is stored in
+``Tref_f_to_g_correction`` and added to ``Tref_FE`` to form ``Tref_g``.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-tref-g-log-histogram-1d-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.set_Tref_g_.log_histogram_1D_</span></code> (nested helper)<a class="headerlink" href="#g-of-t-set-tref-g-log-histogram-1d-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L117">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">log_histogram_1D_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate log density at ``x`` from a one-dimensional histogram.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-tref-g-log-1d-model-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.set_Tref_g_.log_1D_model_</span></code> (nested helper)<a class="headerlink" href="#g-of-t-set-tref-g-log-1d-model-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L127">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">log_1D_model_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the configured histogram density model.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.__init__</span></code> (method)<a class="headerlink" href="#g-of-t-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L157">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tref</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">Tref_FE</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tref_SE</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Tref_box</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">paths_datasets_NPT</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[],</span> <span class="n">check_energies</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f2g_correction_params</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bins&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>This whole class deals with only one polymorph. To get Tx, need at least two instances.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-init-gr-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.__init__.gR_</span></code> (nested helper)<a class="headerlink" href="#g-of-t-init-gr-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L203">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gR_</span><span class="p">(</span><span class="n">_bool</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choose the status colour associated with a convergence flag.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-enthalpies-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.set_enthalpies_</span></code> (method)<a class="headerlink" href="#g-of-t-set-enthalpies-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L235">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_enthalpies_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Assemble sampled and cross-temperature reduced enthalpies.
+
+``evaluations[(Ti, Tj)]`` is the reduced enthalpy evaluated at target
+temperature ``Ti`` on configurations sampled at ``Tj``.  The separate
+``evaluations_parts`` dictionaries retain potential, pressure-volume,
+and anisotropic-box Jacobian contributions.  Sampled kinetic energies
+are also prepared for optional heat-capacity estimates.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-average-sampled-enthalpy-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.average_sampled_enthalpy_</span></code> (method)<a class="headerlink" href="#g-of-t-average-sampled-enthalpy-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L320">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">average_sampled_enthalpy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the mean reduced enthalpy at a sampled temperature.
+
+Parameters
+----------
+T : float
+    Sampled temperature in kelvin.
+m : int, optional
+    Use only the final ``m`` observations.  ``None`` uses all data.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-maximum-batch-size-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.maximum_batch_size</span></code> (method)<a class="headerlink" href="#g-of-t-maximum-batch-size-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L335">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">maximum_batch_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int: Smallest available trajectory length across temperatures.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-ani-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.ANI</span></code> (method)<a class="headerlink" href="#g-of-t-ani-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L343">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ANI</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Filename marker used for anisotropic-box calculations.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-save-mbar-instance-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.save_mbar_instance_</span></code> (method)<a class="headerlink" href="#g-of-t-save-mbar-instance-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L348">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_mbar_instance_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save the MBAR estimator and free-energy-difference result.
+
+Parameters
+----------
+m : int
+    Number of observations used per temperature state.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-load-mbar-instance-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.load_mbar_instance_</span></code> (method)<a class="headerlink" href="#g-of-t-load-mbar-instance-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L359">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_mbar_instance_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a previously saved sequential-subset MBAR calculation.
+
+Parameters
+----------
+m : int
+    Per-state sample count encoded in the filename.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-save-mbar-instance-shuffled-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.save_mbar_instance_shuffled_</span></code> (method)<a class="headerlink" href="#g-of-t-save-mbar-instance-shuffled-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L370">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_mbar_instance_shuffled_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save a representative-subset MBAR calculation and its indices.
+
+Parameters
+----------
+m : int
+    Number of representative observations selected per state.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-load-mbar-instance-shuffled-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.load_mbar_instance_shuffled_</span></code> (method)<a class="headerlink" href="#g-of-t-load-mbar-instance-shuffled-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L381">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_mbar_instance_shuffled_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load representative-subset MBAR state and selection indices.
+
+Parameters
+----------
+m : int
+    Per-state sample count encoded in the filename.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-get-inds-select-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.get_inds_select_</span></code> (method)<a class="headerlink" href="#g-of-t-get-inds-select-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L395">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_inds_select_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uii</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Select an energy-representative subset of trajectory indices.
+
+Parameters
+----------
+uii : array_like
+    Reduced enthalpies evaluated and sampled at the same temperature.
+m : int
+    Required number of indices.
+
+Returns
+-------
+numpy.ndarray
+    The first ``m`` indices of a split accepted by
+    :func:`find_split_indices_`, or every available index when ``m`` is
+    the maximum batch size.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-evaluations-subsample-selection-indices-shuffled-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T._set_evaluations_subsample_selection_indices_SHUFFLED_</span></code> (method)<a class="headerlink" href="#g-of-t-set-evaluations-subsample-selection-indices-shuffled-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L424">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_evaluations_subsample_selection_indices_SHUFFLED_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choose a representative ``m``-sample subset for every temperature.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-evaluations-subsample-selection-indices-basic-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T._set_evaluations_subsample_selection_indices_basic_</span></code> (method)<a class="headerlink" href="#g-of-t-set-evaluations-subsample-selection-indices-basic-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L431">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_evaluations_subsample_selection_indices_basic_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choose the final ``m`` trajectory observations at every temperature.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-set-evaluations-subsampled-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.set_evaluations_subsampled_</span></code> (method)<a class="headerlink" href="#g-of-t-set-evaluations-subsampled-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L440">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_evaluations_subsampled_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply each source state&#39;s selected indices to all target evaluations.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-compute-mbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.compute_MBAR_</span></code> (method)<a class="headerlink" href="#g-of-t-compute-mbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L451">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">compute_MBAR_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_representative_subsets</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit or restore the multitemperature MBAR estimator.
+
+Parameters
+----------
+m : int, optional
+    Observations per temperature.  If omitted, all observations up to
+    the shortest trajectory length are used.
+rerun : bool, optional
+    Fit MBAR even when a matching saved estimator exists.
+save : bool, optional
+    Persist newly fitted MBAR state.
+use_representative_subsets : bool, optional
+    Select distribution-matched observations across each full trajectory;
+    otherwise use its final ``m`` observations.
+
+Notes
+-----
+``Q[i]`` concatenates the reduced enthalpy at target temperature ``i``
+over samples from every source temperature.  ``Ns`` records the number
+of samples contributed by each source state.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-finalise-patch-related-to-ladj-should-not-be-rescaled-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.finalise_patch_related_to_ladJ_should_not_be_rescaled_</span></code> (method)<a class="headerlink" href="#g-of-t-finalise-patch-related-to-ladj-should-not-be-rescaled-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L555">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">finalise_patch_related_to_ladJ_should_not_be_rescaled_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prepare anisotropic box-Jacobian terms that must not scale with beta.
+
+The selected Jacobian data are concatenated into ``not_Q`` so
+:meth:`g_` and :meth:`av_u_` can rescale energetic terms with temperature
+while leaving the dimensionless measure correction unchanged.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-mbar-sample-size-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.mbar_sample_size</span></code> (method)<a class="headerlink" href="#g-of-t-mbar-sample-size-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L575">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mbar_sample_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int: Number of samples assigned to each MBAR temperature state.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-n-energy-evalautions-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.n_energy_evalautions</span></code> (method)<a class="headerlink" href="#g-of-t-n-energy-evalautions-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L580">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">n_energy_evalautions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int: Number of off-diagonal cross-temperature energy evaluations.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-mbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T._mbar</span></code> (method)<a class="headerlink" href="#g-of-t-mbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L587">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_mbar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pymbar.MBAR: Deep copy of the fitted estimator for isolated queries.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-g-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.g_</span></code> (method)<a class="headerlink" href="#g-of-t-g-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L594">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">g_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Interpolate absolute whole-crystal Gibbs free energy at ``T``.
+
+Parameters
+----------
+T : float
+    Target temperature in kelvin.
+
+Returns
+-------
+FE : float
+    Gibbs free energy in reduced whole-crystal units.
+SE : float
+    Corresponding propagated standard error.
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.g</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L627">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">g</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>g_{crys}(T \in self.Ts) : discrete gibbs FE estimates as a function of temperature
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-av-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.av_u_</span></code> (method)<a class="headerlink" href="#g-of-t-av-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L636">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">av_u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Interpolate the mean whole-crystal reduced enthalpy at ``T``.
+
+Parameters
+----------
+T : float
+    Target temperature in kelvin.
+
+Returns
+-------
+float
+    MBAR expectation of enthalpy at the target temperature.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-test-average-enthalpy-interpolator-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T._test_average_enthalpy_interpolator_</span></code> (method)<a class="headerlink" href="#g-of-t-test-average-enthalpy-interpolator-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L686">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_test_average_enthalpy_interpolator_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Measure interpolation error at the sampled temperatures.
+
+Parameters
+----------
+m : int, optional
+    Number of final observations used in each direct sampled mean.
+
+Returns
+-------
+float
+    Maximum absolute difference per molecule between MBAR-interpolated
+    and directly sampled reduced enthalpy.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-curve-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.curve_</span></code> (method)<a class="headerlink" href="#g-of-t-curve-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L708">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">curve_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tmin</span><span class="p">,</span> <span class="n">Tmax</span><span class="p">,</span> <span class="n">Tstride</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate a per-molecule thermodynamic curve on a temperature grid.
+
+Parameters
+----------
+Tmin, Tmax : float
+    Inclusive endpoints of the temperature grid in kelvin.
+Tstride : int, optional
+    Number of evenly spaced grid points, despite the historical name.
+what : {&#39;g&#39;, &#39;u&#39;, &#39;s&#39;}, optional
+    Quantity to evaluate: Gibbs free energy, mean enthalpy, or the
+    entropy-like difference ``u - g``.
+
+Returns
+-------
+values : numpy.ndarray
+    Selected thermodynamic quantity divided by ``n_mol``.
+errors : numpy.ndarray
+    Standard errors divided by ``n_mol``; enthalpy errors are set to zero.
+temperatures : numpy.ndarray
+    Evaluation grid in kelvin.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-path-res-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.path_RES</span></code> (method)<a class="headerlink" href="#g-of-t-path-res-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L765">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">path_RES</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Default prefix for the final temperature-dependent result.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-load-res-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.load_RES_</span></code> (method)<a class="headerlink" href="#g-of-t-load-res-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L770">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_RES_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_RES</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a final result, accounting for representative subsampling.
+
+Parameters
+----------
+name_RES : str
+    Base result filename or pickle prefix.
+
+Returns
+-------
+dict
+    Saved reference metadata and continuous/discrete curves.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-save-res-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.save_RES_</span></code> (method)<a class="headerlink" href="#g-of-t-save-res-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L787">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_RES_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_RES</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save ``RES`` with the appropriate subsampling filename marker.
+
+Parameters
+----------
+name_RES : str
+    Base result filename or pickle prefix.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-get-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.get_result_</span></code> (method)<a class="headerlink" href="#g-of-t-get-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L799">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">Tstride</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load or construct the complete temperature-dependent result bundle.
+
+Parameters
+----------
+Tmin, Tmax : float, optional
+    Bounds of the continuous temperature grid in kelvin.
+Tstride : int, optional
+    Number of points in that grid.
+save : bool, optional
+    Persist a newly constructed result.
+
+Notes
+-----
+``RES`` contains reference free-energy metadata, smooth per-molecule
+Gibbs/enthalpy curves, and discrete values at sampled temperatures with
+convergence flags.
+</pre></div>
+</div>
+</section>
+<section id="g-of-t-cp-method">
+<h3><code class="docutils literal notranslate"><span class="pre">g_of_T.cP_</span></code> (method)<a class="headerlink" href="#g-of-t-cp-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L878">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cP_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">Tstride</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">include_KE</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate constant-pressure heat capacity from a linear energy fit.
+
+Parameters
+----------
+Tmin, Tmax : float, optional
+    Bounds of the fine plotting grid in kelvin.
+Tstride : int, optional
+    Number of points in the fine grid.
+include_KE : bool, optional
+    Fit total energy when true; otherwise fit configurational enthalpy.
+
+Returns
+-------
+sampled : list
+    Sampled temperatures and per-molecule energies in kJ/mol.
+fitted : list
+    Fine temperature grid and fitted energies.
+cP : float
+    Linear slope in kJ mol\ :sup:`-1` K\ :sup:`-1` molecule\ :sup:`-1`.
+</pre></div>
+</div>
+</section>
+<section id="linefit-class">
+<h3><code class="docutils literal notranslate"><span class="pre">LineFit</span></code> (class)<a class="headerlink" href="#linefit-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L1875">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LineFit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Multivariate least-squares line with explicit centring.
+</pre></div>
+</div>
+</section>
+<section id="linefit-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LineFit.__init__</span></code> (method)<a class="headerlink" href="#linefit-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L1878">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit a linear map from rows of ``X`` to rows of ``Y``.
+
+Parameters
+----------
+X : numpy.ndarray
+    Input matrix shaped ``(samples, input_dimensions)``.
+Y : numpy.ndarray
+    Target matrix shaped ``(samples, output_dimensions)``.
+</pre></div>
+</div>
+</section>
+<section id="linefit-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LineFit.__call__</span></code> (method)<a class="headerlink" href="#linefit-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/Tx.py#L1897">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Predict centred linear responses for input rows ``X``.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-Tx.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

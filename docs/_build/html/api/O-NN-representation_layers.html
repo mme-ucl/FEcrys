@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.representation_layers &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.rqs" href="O-NN-rqs.html" />
+    <link rel="prev" title="O.NN.pgm_rb" href="O-NN-pgm_rb.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-pgm_rb.html" title="previous chapter">O.NN.pgm_rb</a></li>
+      <li>Next: <a href="O-NN-rqs.html" title="next chapter">O.NN.rqs</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-representation-layers">
+<span id="api-o-nn-representation-layers"></span><h1>O.NN.representation_layers<a class="headerlink" href="#o-nn-representation-layers" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invertible coordinate representations for molecular flow models.
+
+The maps separate molecular translation, rotation, and internal coordinates;
+scale them to model domains; and track log-absolute Jacobian determinants.
+Coordinate tensors use ``(batch, molecule, atom, xyz)`` when molecule and atom
+axes are explicit. The current implementation targets single-component systems
+and molecules with more than three atoms unless a specialised class says
+otherwise.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="sc-helper-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper</span></code> (class)<a class="headerlink" href="#sc-helper-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L22">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SC_helper</span><span class="p">(</span><span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>This is longer than needed, mostly as a placholder method for other work.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.__init__</span></code> (method)<a class="headerlink" href="#sc-helper-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L26">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a single-molecule topology and derive atom metadata.
+
+The PDB must contain explicit hydrogens. RDKit atom indices, masses,
+heavy/hydrogen masks, adjacency, and atom degrees are cached for later
+coordinate construction.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-set-abcd-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.set_ABCD_</span></code> (method)<a class="headerlink" href="#sc-helper-set-abcd-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L52">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ABCD_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for a given molecule these inputs are chosen by the user:
+Inputs:
+    ind_root_atom : int
+        index of atom in the molecule to be treated as the centre of the Cartesian block
+    option        : int
+        Specifies the other two atoms of the Cartesian block.
+            the handy method ZMatrix (from wutobias/r2z) will generate a physical Zmatrix (self.ABCD)
+            As any Zmatrix, this matrix starts with 3 atoms that are different from the rest.
+            While the ind_root_atom is chosen above, the other two atoms need to be also chosen.
+            Try different integeres 0,1,2,3,... for the option, until the option you prefer is printer.
+            After trying, each time the text is printed below to explain what happened.
+            When what happened looks good on self.mol image (atoms on the image are labeled with the indices),
+            remember the option that was made for later work with this molecule.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-get-r-shape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.get_r_shape_</span></code> (method)<a class="headerlink" href="#sc-helper-get-r-shape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L130">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_r_shape_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Infer a supported coordinate layout and molecule count.
+
+Returns ``(shape_name, n_mol)`` where the name is ``single_frame``,
+``flat``, ``atoms``, or ``molecules``. Shapes must be compatible with
+``n_atoms_mol`` and three Cartesian components.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-r-reshape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.r_reshape_</span></code> (method)<a class="headerlink" href="#sc-helper-r-reshape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L158">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">r_reshape_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">shape_out</span><span class="o">=</span><span class="s1">&#39;molecules&#39;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert coordinates between flat, atom, and molecule layouts.
+
+``numpy`` selects NumPy or TensorFlow reshape helpers. Coordinate order
+and values are unchanged; a single-frame input receives a batch axis.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-b-reshape-m-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.b_reshape_m_</span></code> (method)<a class="headerlink" href="#sc-helper-b-reshape-m-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L192">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">b_reshape_m_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Broadcast or validate periodic boxes for ``m`` coordinate frames.
+
+A vector-like box representation is stacked, while a single ``(3, 3)``
+box with an explicit leading axis is repeated for NVT data. NumPy or
+TensorFlow output is selected by ``numpy``.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-wrap-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.wrap_</span></code> (method)<a class="headerlink" href="#sc-helper-wrap-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L225">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">b_inv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numpy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Wrap each molecule&#39;s atoms independently into the primary cell.
+
+Coordinates are transformed to fractional space, reduced modulo one,
+and transformed back. Returns ``(wrapped_coordinates, [b, b_inv])``;
+the input layout is preserved unless ``output_shape`` is requested.
+This does not preserve whole molecules across boundaries.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-unwrap-molecules-np-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.unwrap_molecules_np_</span></code> (method)<a class="headerlink" href="#sc-helper-unwrap-molecules-np-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L256">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unwrap_molecules_np_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct whole molecules using the Z-matrix bond tree.
+
+Starting from the root atom, each atom is placed in the nearest
+periodic image of its already reconstructed reference atom. Output
+layout defaults to the input layout.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-no-jump-molecules-np-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.no_jump_molecules_np_</span></code> (method)<a class="headerlink" href="#sc-helper-no-jump-molecules-np-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L293">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">no_jump_molecules_np_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove whole-molecule jumps from a trajectory using the anchor atom.
+</pre></div>
+</div>
+</section>
+<section id="sc-helper-unwrap-np-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SC_helper.unwrap_np_</span></code> (method)<a class="headerlink" href="#sc-helper-unwrap-np-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L301">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unwrap_np_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">output_shape</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Make molecules whole, then remove their frame-to-frame PBC jumps.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map</span></code> (class)<a class="headerlink" href="#singlecomponent-map-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L321">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleComponent_map</span><span class="p">(</span><span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!! : molecule must have &gt;3 atoms to use this M_{IC} layer
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.__init__</span></code> (method)<a class="headerlink" href="#singlecomponent-map-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L323">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create an uninitialised crystal coordinate map for one molecule type.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-remove-com-from-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.remove_COM_from_data_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-remove-com-from-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L330">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_COM_from_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Subtract the mean molecular-anchor position from every frame.
+
+This translation removal ignores periodic boundaries and returns atom
+layout ``(batch, N, 3)`` as float32.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map._forward_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L351">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert Cartesian molecules into internal and rigid-body variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map._inverse_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L358">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_IC</span><span class="p">,</span> <span class="n">X_CB</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct atom-layout Cartesian coordinates and map Jacobians.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-first-times-crystal-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map._first_times_crystal_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-first-times-crystal-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L367">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_first_times_crystal_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Infer and cache crystal molecule, atom, and degree-of-freedom counts.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-forward-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map._forward_init_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-forward-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L382">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_init_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Transform an initialisation dataset in batches using eager tensors.
+
+Returns internal coordinates, rigid-body components, and their two
+Jacobian terms as NumPy arrays.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-reshape-to-unitcells-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.reshape_to_unitcells_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-reshape-to-unitcells-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L425">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_unitcells_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">combined_unitcells_with_batch_axis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">numpy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Split or merge the supercell molecule axis into unit-cell blocks.
+
+When ``combined_unitcells_with_batch_axis`` is true, the unit-cell axis
+is folded into the batch; otherwise it remains explicit. ``forward``
+selects splitting versus reconstruction.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-initalise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.initalise_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-initalise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L456">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initalise_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_dataset</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="n">NotWhitenFlow</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">assert_no_jumping_molecules</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit coordinate scalings and base-space metadata from a trajectory.
+
+Parameters define the Cartesian dataset, fixed box or per-frame boxes,
+batching, molecules per crystallographic unit cell, translation-removal
+transform, and whether focused marginal scaling is used. The historical
+method spelling is retained. This method mutates the map and returns
+``None``.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-set-periodic-mask-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.set_periodic_mask_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-set-periodic-mask-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L550">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_periodic_mask_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Assemble the per-molecule periodic-variable mask in model order.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-flexible-torsions-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.flexible_torsions</span></code> (method)<a class="headerlink" href="#singlecomponent-map-flexible-torsions-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L561">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">flexible_torsions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Internal-coordinate rows classified as fully periodic torsions.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-current-masks-periodic-torsions-and-phi-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.current_masks_periodic_torsions_and_Phi</span></code> (method)<a class="headerlink" href="#singlecomponent-map-current-masks-periodic-torsions-and-phi-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L573">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">current_masks_periodic_torsions_and_Phi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for match_topology_ when different instances of this obj are used for the same set of coupling layers (multimap)
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-match-topology-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.match_topology_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-match-topology-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L581">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">match_topology_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for the multimap functionality, when different instances of this obj are used for the same set of coupling layers
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-ln-base-c-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.ln_base_C_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-ln-base-c-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L594">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_base_C_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the constant log density for conformation/rotation base variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-ln-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.ln_base_P_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-ln-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L599">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the constant log density for translational base variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-ln-base-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.ln_base_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-ln-base-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L604">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_base_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the sum of positional and conformational base log densities.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-sample-base-c-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.sample_base_C_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-sample-base-c-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L608">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_C_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample ``m`` conformation/rotation vectors uniformly on [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-sample-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.sample_base_P_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-sample-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L613">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample ``m`` translation vectors uniformly on [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-sample-base-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.sample_base_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-sample-base-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L618">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample positional and conformation/rotation base variables.
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.forward_</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L625">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map Cartesian crystal coordinates to scaled flow variables.
+
+Returns ``[xO, X]`` and a ``(batch, 1)``-compatible log-Jacobian.
+``xO`` contains translation variables (or raw anchors for variable-box
+data); ``X`` contains bonds, angles, torsions, and rotations.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-sample-nvt-h-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.sample_nvt_h_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-sample-nvt-h-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L725">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_nvt_h_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Repeat the fixed NVT box representation ``m`` times.
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.inverse_</span></code> (method)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L730">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_in</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct Cartesian coordinates from translation/internal variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-xo-reshape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.xO_reshape_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-xo-reshape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L796">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">xO_reshape_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Insert or remove the dummy fixed translation used by PGMcrys v2.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-flow-mask-xo-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.flow_mask_xO</span></code> (method)<a class="headerlink" href="#singlecomponent-map-flow-mask-xo-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L817">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">flow_mask_xO</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Translation flow mask with the dummy first molecule fixed to zero.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-flow-mask-x-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map.flow_mask_X</span></code> (method)<a class="headerlink" href="#singlecomponent-map-flow-mask-x-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L827">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">flow_mask_X</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>All-ones mask for molecular internal and rotational variables.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map</span></code> (class)<a class="headerlink" href="#singlemolecule-map-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L836">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleMolecule_map</span><span class="p">(</span><span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!! : molecule must have &gt;3 atoms to use this M_{IC} layer
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.__init__</span></code> (method)<a class="headerlink" href="#singlemolecule-map-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L838">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create a coordinate map specialised to one isolated molecule.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map._forward_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L847">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Extract internal coordinates and rotation-free three-atom geometry.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map._inverse_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L854">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_IC</span><span class="p">,</span> <span class="n">X_CB</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct an isolated molecule from internal and anchor geometry.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-forward-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map._forward_init_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-forward-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L863">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_init_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Batch-transform an isolated-molecule dataset for scaler fitting.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-initalise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.initalise_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-initalise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L898">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initalise_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_dataset</span><span class="p">,</span> <span class="n">b0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit isolated-molecule bond, angle, and torsion transformations.
+
+Box, unit-cell, and translation-removal arguments are accepted only for
+API compatibility and are unused. The dataset must contain exactly one
+molecule per frame.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-set-periodic-mask-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.set_periodic_mask_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-set-periodic-mask-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L961">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_periodic_mask_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Assemble periodic flags for isolated-molecule internal variables.
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-current-masks-periodic-torsions-and-phi-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.current_masks_periodic_torsions_and_Phi</span></code> (method)<a class="headerlink" href="#singlemolecule-map-current-masks-periodic-torsions-and-phi-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L973">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">current_masks_periodic_torsions_and_Phi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for match_topology_ when different instances of this obj are used for the same set of coupling layers (multimap)
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-match-topology-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.match_topology_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-match-topology-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L981">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">match_topology_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for the multimap functionality, when different instances of this obj are used for the same set of coupling layers
+</pre></div>
+</div>
+</section>
+<section id="singlemolecule-map-sample-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.sample_base_P_</span></code> (method)<a class="headerlink" href="#singlemolecule-map-sample-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L996">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return ``None`` because isolated-molecule translations are removed.
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.forward_</span></code> (method)<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1003">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map isolated Cartesian coordinates to scaled internal variables.
+
+Returns ``[None, X]`` plus the complete coordinate/scaling log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleMolecule_map.inverse_</span></code> (method)<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1069">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_in</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct isolated Cartesian coordinates from ``[None, X]``.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r</span></code> (class)<a class="headerlink" href="#singlecomponent-map-r-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1118">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleComponent_map_r</span><span class="p">(</span><span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>rO atoms
+
+a small udpate for the NVT model (PGMcrys_v1) to allow jumping whole molecules in the fixed periodic box
+
+SingleComponent_map parent class here still deals with all other atoms (not rO), as in original NVT version
+
+rO steps here are mostly copied from the more general case of the NPT model (seperate in pgm_rb.py)
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.__init__</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1133">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create an NVT map that permits whole molecules to cross boundaries.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-initalise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.initalise_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-initalise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1147">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initalise_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_dataset</span><span class="p">,</span> <span class="n">b0</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="s1">&#39;blank&#39;</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="s1">&#39;blank&#39;</span><span class="p">,</span> <span class="n">whiten_setting</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit an NVT periodic-position representation and inherited internals.
+
+``b0`` is treated as one fixed box; if a box trajectory is supplied,
+only its first box is used. Translation invariance removes one molecular
+anchor. ``whiten_setting=1`` additionally whitens the remaining scaled
+fractional positions.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-white-setting-0-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.white_setting_0_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-white-setting-0-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1230">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">white_setting_0_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xO</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Identity positional whitening with zero log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-white-setting-1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.white_setting_1_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-white-setting-1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1234">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">white_setting_1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xO</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply or invert fitted positional whitening and range scaling.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.forward_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1265">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map NVT coordinates to periodic translations and internal variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-r-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_r.inverse_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-r-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/representation_layers.py#L1299">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert periodic translations and internals into NVT coordinates.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-representation_layers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

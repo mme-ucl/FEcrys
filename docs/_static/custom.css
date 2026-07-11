@@ -1,0 +1,19 @@
+.architecture-map {
+  width: 100%;
+  min-height: 980px;
+  border: 0;
+}
+
+div.body {
+  max-width: 1000px;
+}
+
+div.body pre {
+  overflow-x: auto;
+}
+
+@media (max-width: 700px) {
+  .architecture-map {
+    min-height: 1250px;
+  }
+}

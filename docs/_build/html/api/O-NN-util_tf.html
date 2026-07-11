@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.util_tf &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O" href="O.html" />
+    <link rel="prev" title="O.NN.spline_layer" href="O-NN-spline_layer.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-spline_layer.html" title="previous chapter">O.NN.spline_layer</a></li>
+      <li>Next: <a href="O.html" title="next chapter">O</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-util-tf">
+<span id="api-o-nn-util-tf"></span><h1>O.NN.util_tf<a class="headerlink" href="#o-nn-util-tf" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>TensorFlow numerical and coordinate-transformation utilities.
+
+This module supplies whitening, range scaling, focused bond/angle/torsion and
+rotation maps, molecular internal-coordinate transformations, quaternion
+geometry, and box representations. Transformation functions return values and
+log-absolute Jacobian determinants in the direction requested. Unless stated
+otherwise, tensors use float32 and Cartesian components occupy the final axis.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="np2tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">np2tf_</span></code> (function)<a class="headerlink" href="#np2tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L21">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">np2tf_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert an array-like value to the configured TensorFlow float dtype.
+</pre></div>
+</div>
+</section>
+<section id="tf2np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">tf2np_</span></code> (function)<a class="headerlink" href="#tf2np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L26">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tf2np_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return a TensorFlow eager tensor as a NumPy array.
+</pre></div>
+</div>
+</section>
+<section id="clip-positive-function">
+<h3><code class="docutils literal notranslate"><span class="pre">clip_positive_</span></code> (function)<a class="headerlink" href="#clip-positive-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L37">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">clip_positive_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Clip tensor values to the positive numerical-stability interval.
+</pre></div>
+</div>
+</section>
+<section id="norm-function">
+<h3><code class="docutils literal notranslate"><span class="pre">norm_</span></code> (function)<a class="headerlink" href="#norm-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L42">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">norm_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Euclidean norm along the final axis, retaining that axis.
+</pre></div>
+</div>
+</section>
+<section id="unit-function">
+<h3><code class="docutils literal notranslate"><span class="pre">unit_</span></code> (function)<a class="headerlink" href="#unit-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L47">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unit_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Normalise vectors along the final axis without zero-norm protection.
+</pre></div>
+</div>
+</section>
+<section id="norm-clipped-function">
+<h3><code class="docutils literal notranslate"><span class="pre">norm_clipped_</span></code> (function)<a class="headerlink" href="#norm-clipped-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L52">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">norm_clipped_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Final-axis Euclidean norm clipped below for numerical stability.
+</pre></div>
+</div>
+</section>
+<section id="unit-clipped-function">
+<h3><code class="docutils literal notranslate"><span class="pre">unit_clipped_</span></code> (function)<a class="headerlink" href="#unit-clipped-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L57">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unit_clipped_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Normalise final-axis vectors using a positive clipped norm.
+</pre></div>
+</div>
+</section>
+<section id="det-3x3-function">
+<h3><code class="docutils literal notranslate"><span class="pre">det_3x3_</span></code> (function)<a class="headerlink" href="#det-3x3-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L61">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">det_3x3_</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compute determinants of tensors shaped ``(..., 3, 3)``.
+</pre></div>
+</div>
+</section>
+<section id="make-com-removal-matrix-function">
+<h3><code class="docutils literal notranslate"><span class="pre">make_COM_removal_matrix_</span></code> (function)<a class="headerlink" href="#make-com-removal-matrix-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L66">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_COM_removal_matrix_</span><span class="p">(</span><span class="n">n_particles</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Output:
+M : (n_particles*dim, n_particles*dim) matrix
+    (n_particles - 1)*dim eigenvalues are ones, and dim eigenvalues are zeros.
+    using the top (n_particles - 1)*dim eigenvectors removes COM from data
+    similarly to whitening, but is volume preserving.
+</pre></div>
+</div>
+</section>
+<section id="pca-function">
+<h3><code class="docutils literal notranslate"><span class="pre">PCA_</span></code> (function)<a class="headerlink" href="#pca-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L88">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">PCA_</span><span class="p">(</span><span class="n">X0</span><span class="p">,</span> <span class="n">removedims</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotropic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">not_whiten</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://github.com/noegroup/bgflow
+</pre></div>
+</div>
+</section>
+<section id="notwhitenflow-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NotWhitenFlow</span></code> (class)<a class="headerlink" href="#notwhitenflow-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L127">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NotWhitenFlow</span><span class="p">(</span><span class="n">r_flat</span><span class="p">,</span> <span class="n">removedims</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">whiten_anyway</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove global translation by fixing the first particle at the origin.
+
+The map reduces ``3*n_mol`` coordinates to ``3*(n_mol-1)``. It is volume
+preserving in this reduced representation; optional ``whiten_anyway`` then
+fits a conventional zero-dimension-removal whitening transform.
+</pre></div>
+</div>
+</section>
+<section id="notwhitenflow-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NotWhitenFlow.__init__</span></code> (method)<a class="headerlink" href="#notwhitenflow-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L135">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_flat</span><span class="p">,</span> <span class="n">removedims</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">whiten_anyway</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Infer particle count and optionally fit a secondary whitening map.
+</pre></div>
+</div>
+</section>
+<section id="notwhitenflow-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NotWhitenFlow.forward</span></code> (method)<a class="headerlink" href="#notwhitenflow-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L151">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Subtract the first particle, drop it, and return the reduced array.
+</pre></div>
+</div>
+</section>
+<section id="notwhitenflow-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NotWhitenFlow.inverse</span></code> (method)<a class="headerlink" href="#notwhitenflow-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L165">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore a zero first particle and expand to the original dimension.
+</pre></div>
+</div>
+</section>
+<section id="notwhitenflow-forward-np-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NotWhitenFlow._forward_np</span></code> (method)<a class="headerlink" href="#notwhitenflow-forward-np-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L178">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_np</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NumPy implementation of the translation-removing forward map.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-class">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow</span></code> (class)<a class="headerlink" href="#whitenflow-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L191">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">WhitenFlow</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">removedims</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotropic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://github.com/noegroup/bgflow
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow.__init__</span></code> (method)<a class="headerlink" href="#whitenflow-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L193">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">removedims</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">diagonal</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isotropic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit PCA mean, whitening, and inverse matrices to ``r``.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-whiten-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow._whiten</span></code> (method)<a class="headerlink" href="#whitenflow-whiten-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L213">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_whiten</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply mean removal/PCA whitening and return its constant log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-blacken-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow._blacken</span></code> (method)<a class="headerlink" href="#whitenflow-blacken-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L219">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_blacken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply inverse whitening and return its constant log-Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow.forward</span></code> (method)<a class="headerlink" href="#whitenflow-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L225">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Whiten a tensor batch.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow.inverse</span></code> (method)<a class="headerlink" href="#whitenflow-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L230">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct a tensor batch from whitened coordinates.
+</pre></div>
+</div>
+</section>
+<section id="whitenflow-forward-np-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WhitenFlow._forward_np</span></code> (method)<a class="headerlink" href="#whitenflow-forward-np-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L235">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_np</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>NumPy forward whitening without returning the Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="pad-ranges-function">
+<h3><code class="docutils literal notranslate"><span class="pre">pad_ranges_</span></code> (function)<a class="headerlink" href="#pad-ranges-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L240">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pad_ranges_</span><span class="p">(</span><span class="n">Min</span><span class="p">,</span> <span class="n">Max</span><span class="p">,</span> <span class="n">factor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return symmetric padding needed to enlarge a range by ``factor``.
+</pre></div>
+</div>
+</section>
+<section id="get-ranges-centres-min-max-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_ranges_centres_MIN_MAX_</span></code> (function)<a class="headerlink" href="#get-ranges-centres-min-max-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L246">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_ranges_centres_MIN_MAX_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">percentage_pad</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">range_limits</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate marginal ranges and centres from extrema.
+
+Optional limits are asserted to contain the observed data. Returns float32
+tensors whose reduced axes follow ``keepdims``.
+</pre></div>
+</div>
+</section>
+<section id="get-ranges-centres-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_ranges_centres_</span></code> (function)<a class="headerlink" href="#get-ranges-centres-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L307">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_ranges_centres_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">range_limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return data ranges and midpoints using the current min/max estimator.
+</pre></div>
+</div>
+</section>
+<section id="scale-shift-x-function">
+<h3><code class="docutils literal notranslate"><span class="pre">scale_shift_x_</span></code> (function)<a class="headerlink" href="#scale-shift-x-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L312">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scale_shift_x_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">physical_ranges_x</span><span class="p">,</span> <span class="n">physical_centres_x</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map each final-axis marginal between its physical range and [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="scale-shift-x-general-function">
+<h3><code class="docutils literal notranslate"><span class="pre">scale_shift_x_general_</span></code> (function)<a class="headerlink" href="#scale-shift-x-general-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L339">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scale_shift_x_general_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">physical_ranges_x</span><span class="p">,</span> <span class="n">physical_centres_x</span><span class="p">,</span> <span class="n">model_range</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">model_centre</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map marginals between fitted physical ranges and a chosen model interval.
+</pre></div>
+</div>
+</section>
+<section id="scale-shift-individual-x-function">
+<h3><code class="docutils literal notranslate"><span class="pre">scale_shift_individual_x_</span></code> (function)<a class="headerlink" href="#scale-shift-individual-x-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L368">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">scale_shift_individual_x_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">physical_ranges_x</span><span class="p">,</span> <span class="n">physical_centres_x</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Vectorised per-entry scaling to/from [-1, 1] with batch Jacobians.
+</pre></div>
+</div>
+</section>
+<section id="focusedbonds-class">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedBonds</span></code> (class)<a class="headerlink" href="#focusedbonds-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L409">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FocusedBonds</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Affine map focusing observed bond lengths into [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="focusedbonds-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedBonds.__init__</span></code> (method)<a class="headerlink" href="#focusedbonds-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L412">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit marginal ranges within the physical 0.05–0.22 nm limits.
+</pre></div>
+</div>
+</section>
+<section id="focusedbonds-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedBonds.forward_</span></code> (method)<a class="headerlink" href="#focusedbonds-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L450">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scale physical bond lengths to model coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedbonds-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedBonds.inverse_</span></code> (method)<a class="headerlink" href="#focusedbonds-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L453">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore physical bond lengths from model coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedbonds-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedBonds.__call__</span></code> (method)<a class="headerlink" href="#focusedbonds-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L456">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dispatch to the forward or inverse bond transform.
+</pre></div>
+</div>
+</section>
+<section id="focusedangles-class">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedAngles</span></code> (class)<a class="headerlink" href="#focusedangles-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L461">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FocusedAngles</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">range_limits</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">PI</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Affine map focusing observed angles into [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="focusedangles-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedAngles.__init__</span></code> (method)<a class="headerlink" href="#focusedangles-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L464">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">range_limits</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">PI</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit marginal ranges inside the supplied angular limits in radians.
+</pre></div>
+</div>
+</section>
+<section id="focusedangles-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedAngles.forward_</span></code> (method)<a class="headerlink" href="#focusedangles-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L502">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scale physical angles to model coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedangles-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedAngles.inverse_</span></code> (method)<a class="headerlink" href="#focusedangles-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L505">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore physical angles from model coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedangles-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedAngles.__call__</span></code> (method)<a class="headerlink" href="#focusedangles-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L508">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dispatch to the forward or inverse angle transform.
+</pre></div>
+</div>
+</section>
+<section id="average-torsion-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">average_torsion_np_</span></code> (function)<a class="headerlink" href="#average-torsion-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L517">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">average_torsion_np_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pooling_method_</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compute a circular mean/median-like torsion centre in radians.
+</pre></div>
+</div>
+</section>
+<section id="centre-torsion-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">centre_torsion_tf_</span></code> (function)<a class="headerlink" href="#centre-torsion-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L527">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">centre_torsion_tf_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_mean</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Shift periodic angles by a centre while wrapping to [-pi, pi).
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-class">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions</span></code> (class)<a class="headerlink" href="#focusedtorsions-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L534">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FocusedTorsions</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask_periodic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Centre and scale torsions while preserving fully periodic marginals.
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions.__init__</span></code> (method)<a class="headerlink" href="#focusedtorsions-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L537">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mask_periodic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit circular centres/ranges and infer or accept periodic flags.
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-set-ranges-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions.set_ranges_</span></code> (method)<a class="headerlink" href="#focusedtorsions-set-ranges-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L574">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ranges_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_periodic</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply shared periodic flags and update ranges/secondary centres.
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions.forward_</span></code> (method)<a class="headerlink" href="#focusedtorsions-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L598">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Centre torsions and scale them to model coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions.inverse_</span></code> (method)<a class="headerlink" href="#focusedtorsions-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L604">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Undo torsion scaling and circular centring.
+</pre></div>
+</div>
+</section>
+<section id="focusedtorsions-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedTorsions.__call__</span></code> (method)<a class="headerlink" href="#focusedtorsions-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L610">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dispatch to the forward or inverse torsion transform.
+</pre></div>
+</div>
+</section>
+<section id="merge-periodic-masks-function">
+<h3><code class="docutils literal notranslate"><span class="pre">merge_periodic_masks_</span></code> (function)<a class="headerlink" href="#merge-periodic-masks-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L615">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">merge_periodic_masks_</span><span class="p">(</span><span class="n">list_periodic_masks</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>inputs arrays with integer elements 0 and 1 only
+</pre></div>
+</div>
+</section>
+<section id="static-rotations-layer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">Static_Rotations_Layer</span></code> (class)<a class="headerlink" href="#static-rotations-layer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L749">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Static_Rotations_Layer</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choose fixed quaternion rotations that avoid hemisphere singularities.
+</pre></div>
+</div>
+</section>
+<section id="static-rotations-layer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">Static_Rotations_Layer.__init__</span></code> (method)<a class="headerlink" href="#static-rotations-layer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L752">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Select grid rotations for each molecule or restore known indices.
+</pre></div>
+</div>
+</section>
+<section id="static-rotations-layer-find-best-method">
+<h3><code class="docutils literal notranslate"><span class="pre">Static_Rotations_Layer.find_best_</span></code> (method)<a class="headerlink" href="#static-rotations-layer-find-best-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L770">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">find_best_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Grid-search rotations minimising hemisphere-coordinate pathologies.
+</pre></div>
+</div>
+</section>
+<section id="static-rotations-layer-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">Static_Rotations_Layer.forward_</span></code> (method)<a class="headerlink" href="#static-rotations-layer-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L817">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply the selected per-molecule quaternion rotations.
+</pre></div>
+</div>
+</section>
+<section id="static-rotations-layer-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">Static_Rotations_Layer.inverse_</span></code> (method)<a class="headerlink" href="#static-rotations-layer-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L822">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply transposed selected rotations to recover original quaternions.
+</pre></div>
+</div>
+</section>
+<section id="sample-phi-in-limits-function">
+<h3><code class="docutils literal notranslate"><span class="pre">sample_phi_in_limits_</span></code> (function)<a class="headerlink" href="#sample-phi-in-limits-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L827">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_phi_in_limits_</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">F</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample ``m`` uniform azimuths independently between bounds ``E`` and ``F``.
+</pre></div>
+</div>
+</section>
+<section id="sample-theta1-in-limits-function">
+<h3><code class="docutils literal notranslate"><span class="pre">sample_theta1_in_limits_</span></code> (function)<a class="headerlink" href="#sample-theta1-in-limits-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L836">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_theta1_in_limits_</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample polar angles with the correct sine surface-area density.
+</pre></div>
+</div>
+</section>
+<section id="sample-theta0-fastest-function">
+<h3><code class="docutils literal notranslate"><span class="pre">sample_theta0_fastest_</span></code> (function)<a class="headerlink" href="#sample-theta0-fastest-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L846">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_theta0_fastest_</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample first hyperspherical angles with their ``sin(theta)^2`` density.
+
+A fixed rational-quadratic approximation inverts the analytic cumulative
+map. Returns samples shaped ``(m, n_mol)`` and an optional approximation
+error diagnostic.
+</pre></div>
+</div>
+</section>
+<section id="sample-theta0-fastest-rqs-here-method">
+<h3><code class="docutils literal notranslate"><span class="pre">sample_theta0_fastest_.rqs_here_</span></code> (method)<a class="headerlink" href="#sample-theta0-fastest-rqs-here-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L854">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rqs_here_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">PI</span><span class="p">],</span> <span class="n">forward</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the fixed spline used to invert the theta0 cumulative map.
+</pre></div>
+</div>
+</section>
+<section id="identity-shift-class">
+<h3><code class="docutils literal notranslate"><span class="pre">identity_shift</span></code> (class)<a class="headerlink" href="#identity-shift-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L939">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">identity_shift</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Identity rotation strategy used when rotations are configured externally.
+</pre></div>
+</div>
+</section>
+<section id="identity-shift-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">identity_shift.__init__</span></code> (method)<a class="headerlink" href="#identity-shift-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L942">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create a stateless identity transform.
+</pre></div>
+</div>
+</section>
+<section id="identity-shift-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">identity_shift.forward_</span></code> (method)<a class="headerlink" href="#identity-shift-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L945">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return ``x`` unchanged.
+</pre></div>
+</div>
+</section>
+<section id="identity-shift-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">identity_shift.inverse_</span></code> (method)<a class="headerlink" href="#identity-shift-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L948">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return ``x`` unchanged.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-class">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere</span></code> (class)<a class="headerlink" href="#focusedhemisphere-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L952">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FocusedHemisphere</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">srl_indices_known</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">static_rotations_defined_externally</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_periodic_Phi</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map quaternion rotations to a focused three-coordinate hemisphere patch.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.__init__</span></code> (method)<a class="headerlink" href="#focusedhemisphere-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L955">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">srl_indices_known</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">static_rotations_defined_externally</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_periodic_Phi</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit static rotations and focused hyperspherical marginal ranges.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-set-ranges-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.set_ranges_</span></code> (method)<a class="headerlink" href="#focusedhemisphere-set-ranges-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L999">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ranges_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask_periodic_Phi</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Update periodic azimuth flags and compute patch bounds/area.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.forward_</span></code> (method)<a class="headerlink" href="#focusedhemisphere-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1046">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rotate and map quaternions into three scaled patch coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.inverse_</span></code> (method)<a class="headerlink" href="#focusedhemisphere-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1057">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s_scaled</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct quaternions from scaled hemisphere coordinates.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.__call__</span></code> (method)<a class="headerlink" href="#focusedhemisphere-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1068">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Dispatch to the forward or inverse quaternion-patch map.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-sample-quaternion-patch-v1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.sample_quaternion_patch_v1_</span></code> (method)<a class="headerlink" href="#focusedhemisphere-sample-quaternion-patch-v1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1073">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_quaternion_patch_v1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rejection-sample ``m`` uniform quaternions inside every fitted patch.
+</pre></div>
+</div>
+</section>
+<section id="focusedhemisphere-sample-quaternion-patch-v2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FocusedHemisphere.sample_quaternion_patch_v2_</span></code> (method)<a class="headerlink" href="#focusedhemisphere-sample-quaternion-patch-v2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1094">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_quaternion_patch_v2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Directly sample ``m`` uniform quaternions from separable patch marginals.
+</pre></div>
+</div>
+</section>
+<section id="quat2axisangle-function">
+<h3><code class="docutils literal notranslate"><span class="pre">quat2axisangle_</span></code> (function)<a class="headerlink" href="#quat2axisangle-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1113">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quat2axisangle_</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>can be used for visualising rotational distributions in 3D
+</pre></div>
+</div>
+</section>
+<section id="get-coupling-masks-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_coupling_masks_</span></code> (function)<a class="headerlink" href="#get-coupling-masks-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1124">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_coupling_masks_</span><span class="p">(</span><span class="n">dim_flow</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: TABLE 1 in arXiv:2001.05486v2 (i-flow)
+Input:
+    dim_flow : number of DOFs being transformed using coupling flow
+Output:
+    cond_masks : (n_layers, dim_flow) array of zeros and ones
+        &#39;conditionaling masks&#39; or &#39;coupling masks&#39;
+Usage:
+    In a NF model that is based on coupling:
+        each coupling layer splits the total number (dim_flow) of 1D margianl DOFs into two sets A and B
+        setting one coupling layer for each row of cond_masks allows all DOFs to be coupled
+            in practice it is not necesary to use all of the rows (just first 4 were generally used; n_layers = 4)
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-molecules-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_molecules_tf_</span></code> (function)<a class="headerlink" href="#reshape-to-molecules-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1149">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_molecules_tf_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reshape batched coordinates to ``(batch, molecules, atoms, 3)``.
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-atoms-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_atoms_tf_</span></code> (function)<a class="headerlink" href="#reshape-to-atoms-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1153">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_atoms_tf_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reshape batched coordinates to ``(batch, total_atoms, 3)``.
+</pre></div>
+</div>
+</section>
+<section id="reshape-to-flat-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reshape_to_flat_tf_</span></code> (function)<a class="headerlink" href="#reshape-to-flat-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1157">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reshape_to_flat_tf_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n_molecules</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Flatten all molecular Cartesian coordinates within each batch item.
+</pre></div>
+</div>
+</section>
+<section id="get-distance-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_distance_tf_</span></code> (function)<a class="headerlink" href="#get-distance-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1164">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_distance_tf_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">inds_2_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bond distance
+</pre></div>
+</div>
+</section>
+<section id="get-angle-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_angle_tf_</span></code> (function)<a class="headerlink" href="#get-angle-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1174">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_angle_tf_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">inds_3_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bond angle
+</pre></div>
+</div>
+</section>
+<section id="get-torsion-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_torsion_tf_</span></code> (function)<a class="headerlink" href="#get-torsion-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1195">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_torsion_tf_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">inds_4_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://github.com/noegroup/bgflow
+</pre></div>
+</div>
+</section>
+<section id="r-to-x-atom-function">
+<h3><code class="docutils literal notranslate"><span class="pre">r_to_x_atom_</span></code> (function)<a class="headerlink" href="#r-to-x-atom-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1231">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">r_to_x_atom_</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">row_ABCD_IC</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>transforms Cartesian coordiante of one atom into internal coordinate (IC) [i.e., a Z-matrix coordinate]
+    r_to_x_atom_ : r_{A} -&gt; x_{A}
+Inputs:
+    R            : (..., n_atoms_mol, 3) ; n_atoms_mol = number of atoms in a single molecule
+    row_ABCD_IC  : (4,) ; four indices of atoms in the molecule [A,B,C,D]
+        the indices corespond to atoms that are covalently bonded A-B-C-D
+Output:
+    x_IC         : (..., 3) ; x_IC = x_{A}
+</pre></div>
+</div>
+</section>
+<section id="ic-ladj-inv-function">
+<h3><code class="docutils literal notranslate"><span class="pre">IC_ladJ_inv_</span></code> (function)<a class="headerlink" href="#ic-ladj-inv-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1247">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">IC_ladJ_inv_</span><span class="p">(</span><span class="n">X_IC</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>log volume change of the internal coordinate representation
+Input:
+    X_IC : (..., n_atoms, 3) where the last axis must be [bond, angle, torsion]
+Output:
+    ladJ_inv : (..., 1) log volume change in the inverse direction (x -&gt; r)
+        = - log(det(Jacobian)) of the forward Jacobian = dx(r)/dr ; x(r) = r_to_x_atom_
+this is d*S2 coordinate ; d &gt; 0
+    size the sphere (bond distance) and the longitude (bond angle) contribute to local volume
+</pre></div>
+</div>
+</section>
+<section id="ic-forward-function">
+<h3><code class="docutils literal notranslate"><span class="pre">IC_forward_</span></code> (function)<a class="headerlink" href="#ic-forward-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1263">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">IC_forward_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">ABCD_IC</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Inputs:
+    r       : (m, n_mol, n_atoms_mol, 3) Cartesian coordiantes of the (single component) system
+    ABCD_IC : (n_atoms_IC, 4) matrix of indices for all bonded atoms that are represented using ICs
+Ouputs:
+    X_IC    : (m, n_mol, n_atoms_IC, 3) internal coordinates of the (single component) system
+    ladJ    : (m, n_mol, 1) log volume change of the IC representation. Sum over n_mol later.
+</pre></div>
+</div>
+</section>
+<section id="nerf-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">NeRF_tf_</span></code> (function)<a class="headerlink" href="#nerf-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1279">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">NeRF_tf_</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">rB</span><span class="p">,</span> <span class="n">rC</span><span class="p">,</span> <span class="n">rD</span><span class="p">,</span> <span class="n">no_ladJ</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: DOI 10.1002/jcc.20237
+
+xA -&gt; rA (inverse of r_to_x_atom_) ; xA = [d, theta, phi]
+
+Inputs:
+    internal coordinate of atom A (relative to atoms B, C and D):
+        d     : (..., ) ; A-B bond distance
+        theta : (..., ) ; ABC bond angle
+        phi   : (..., ) ; AB-CD torsional angle
+    constants:
+        rB    : (..., 3) Cartesian coordinate of atom B (bonded to A)
+        rC    : (..., 3) Cartesian coordinate of atom C (bonded to B)
+        rD    : (..., 3) Cartesian coordinate of atom D (bonded to C)
+    no_ladJ   : bool ; True because IC_ladJ_inv_ is a cheaper way to get the same number.
+
+Outputs:
+    rA        : (..., 3) Cartesian coordinate of atom A
+</pre></div>
+</div>
+</section>
+<section id="ic-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">IC_inverse_</span></code> (function)<a class="headerlink" href="#ic-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1326">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">IC_inverse_</span><span class="p">(</span><span class="n">X_IC</span><span class="p">,</span> <span class="n">r_CB</span><span class="p">,</span> <span class="n">ABCD_IC_inverse</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">inds_unpermute_atoms</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>reconstruct Cartesian coordinates of a molecule from internal coordinates
+    Cartesian coordinates of the first 3 atoms are specified already (r_CB)
+    All other atoms of the molecule reconstructed one-by-one using NeRF_tf_
+Inputs:
+    X_IC : (..., n_atoms_IC, 3) ; internal coordinates of atoms that are
+    r_CB : (..., 3, 3) ; the Cartesian coordinates of the &#39;Cartesian block&#39; (CB)
+    ABCD_IC_inverse : (n_atoms_IC, 4) ; n_atoms_IC == n_atoms_mol - 3
+        same as ABCD_IC used for the forward transfromation but the order of the rows is now different
+        the order of the rows is set such that NeRF_tf_ is &#39;walking&#39; along the molecule, (i.e.,
+        any new atom (rA) being reconstructed has [rB, rC, rD] already reconstructed earlier).
+    inds_unpermute_atoms : (n_atoms_mol,) indices to permute the atoms in the molecule back to original order
+Outputs:
+    R    : (..., n_atoms_mol, 3) ; Cartesian coordinates of the entire system
+    ladJ : (..., 1) ; log volume change of the current reconstruction (sum over molecules later)
+</pre></div>
+</div>
+</section>
+<section id="cond-0-true-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cond_0_true_</span></code> (function)<a class="headerlink" href="#cond-0-true-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1367">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cond_0_true_</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for mat_to_quat_tf_
+</pre></div>
+</div>
+</section>
+<section id="cond-1-true-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cond_1_true_</span></code> (function)<a class="headerlink" href="#cond-1-true-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1377">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cond_1_true_</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for mat_to_quat_tf_
+</pre></div>
+</div>
+</section>
+<section id="cond-2-true-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cond_2_true_</span></code> (function)<a class="headerlink" href="#cond-2-true-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1386">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cond_2_true_</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for mat_to_quat_tf_
+</pre></div>
+</div>
+</section>
+<section id="all-conds-false-function">
+<h3><code class="docutils literal notranslate"><span class="pre">all_conds_false_</span></code> (function)<a class="headerlink" href="#all-conds-false-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1395">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">all_conds_false_</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for mat_to_quat_tf_
+</pre></div>
+</div>
+</section>
+<section id="mat-to-quat-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">mat_to_quat_tf_</span></code> (function)<a class="headerlink" href="#mat-to-quat-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1404">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mat_to_quat_tf_</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: arXiv:2301.11355 (rigid body flows)
+
+transformation: rotation matrix (R) -&gt; quaternion (q)
+</pre></div>
+</div>
+</section>
+<section id="cb-ladj-inv-function">
+<h3><code class="docutils literal notranslate"><span class="pre">CB_ladJ_inv_</span></code> (function)<a class="headerlink" href="#cb-ladj-inv-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1446">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">CB_ladJ_inv_</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>*REF: arXiv:2301.11355 (rigid body flows)
+log volume change of transforming between &#39;Cartesian block&#39; (CB) and the representation of CB from *REF
+
+Cartesian block (e.g,. a water molecule H0 - O - H1) is : r_{CB} = [r_{O}, r_{H0}, r_{H1}]
+The representation is: x_{CB} = [r_{O}, a, d0, d1, q]
+
+Inputs:
+    a  : angle between bonds H0 - O and H1 - O
+    d0 : bond distance between H0 and O
+    d1 : bond distance between H1 and O
+Output:
+    ladJ_inv : log volume change of transformation x_{CB} -&gt; r_{CB}
+</pre></div>
+</div>
+</section>
+<section id="cb-forward-function">
+<h3><code class="docutils literal notranslate"><span class="pre">CB_forward_</span></code> (function)<a class="headerlink" href="#cb-forward-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1468">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">CB_forward_</span><span class="p">(</span><span class="n">xyz_CB</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: arXiv:2301.11355 (rigid body flows)
+
+Input:
+    xyz_CB : (..., 3, 3) Cartesian coordinates of the &#39;Cartesian block&#39; (CB) = r_{CB} = [rA, rB, rC]
+
+Outputs:
+    X       : list of 5 arrays [rA, q, a, dAB, dAC] = x_{CB}
+        rA  : (..., 3) ; Cartesian coordinate of atom A unchanged
+        q   : (..., 4) ; unit-quaternion describing the rotation of the CB
+        a   : (..., 1) ; angle between bonds rB - rA and rC - rA
+        dAB : (..., 1) ; bond distance between rB and rA
+        dAC : (..., 1) ; bond distance between rC and rA
+    ladJ    : (..., 1) ; log volume change of the transformation r_{CB} -&gt; x_{CB}
+</pre></div>
+</div>
+</section>
+<section id="quat-to-mat-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">quat_to_mat_tf_</span></code> (function)<a class="headerlink" href="#quat-to-mat-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1519">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quat_to_mat_tf_</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: INTRODUCTION TO ROBOTICS MECHANICS, PLANNING, AND CONTROL F. C. Park and K. M. Lynch
+
+transformation: quaternion (q) -&gt; rotation matrix (R)
+</pre></div>
+</div>
+</section>
+<section id="cb-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">CB_inverse_</span></code> (function)<a class="headerlink" href="#cb-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1532">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">CB_inverse_</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: arXiv:2301.11355 (rigid body flows)
+
+inverse of CB_forward_
+
+Inputs:
+    X      : list of 5 arrays [rA, q, a, dAB, dAC] = x_{CB}
+        explained in CB_forward_
+Outputs:
+    xyz_CB : (..., 3, 3) Cartesian coordinates of the &#39;Cartesian block&#39; (CB) = r_{CB}
+    ladJ   : (..., 1) ; log volume change of the transformation x_{CB} -&gt; r_{CB}
+</pre></div>
+</div>
+</section>
+<section id="test-cb-transformation-function">
+<h3><code class="docutils literal notranslate"><span class="pre">test_CB_transformation_</span></code> (function)<a class="headerlink" href="#test-cb-transformation-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1561">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_CB_transformation_</span><span class="p">(</span><span class="n">n_frames</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_molecules</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>comparing the analytical expression of log volume change in CB_ladJ_inv_ to a numerical analogue (using full jacobian)
+comparison on random Cartesian blocks
+comparisons show that the closed-form expression is correct and very efficient
+</pre></div>
+</div>
+</section>
+<section id="cb-single-molecule-forward-function">
+<h3><code class="docutils literal notranslate"><span class="pre">CB_single_molecule_forward_</span></code> (function)<a class="headerlink" href="#cb-single-molecule-forward-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1597">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">CB_single_molecule_forward_</span><span class="p">(</span><span class="n">xyz_CB</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for single molecule in vaccum
+TODO: was not tested properly yet, but seems to work
+</pre></div>
+</div>
+</section>
+<section id="cb-single-molecule-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">CB_single_molecule_inverse_</span></code> (function)<a class="headerlink" href="#cb-single-molecule-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1637">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">CB_single_molecule_inverse_</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct a canonical isolated three-atom Cartesian block.
+
+``X`` contains angle and two bond distances. Translation is fixed at zero
+and rotation at the identity because isolated-molecule energy is invariant
+to both. Returns coordinates and the inverse polar-coordinate Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="hemisphere-function">
+<h3><code class="docutils literal notranslate"><span class="pre">hemisphere_</span></code> (function)<a class="headerlink" href="#hemisphere-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1659">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">hemisphere_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Choose the quaternion representative whose scalar component is nonnegative.
+</pre></div>
+</div>
+</section>
+<section id="hemisphere-forward-function">
+<h3><code class="docutils literal notranslate"><span class="pre">hemisphere_forward_</span></code> (function)<a class="headerlink" href="#hemisphere-forward-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1663">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">hemisphere_forward_</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">rescale_marginals</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://doi.org/10.1021/acs.jctc.4c01612
+</pre></div>
+</div>
+</section>
+<section id="hemisphere-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">hemisphere_inverse_</span></code> (function)<a class="headerlink" href="#hemisphere-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1711">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">hemisphere_inverse_</span><span class="p">(</span><span class="n">xq</span><span class="p">,</span> <span class="n">rescale_marginals</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://doi.org/10.1021/acs.jctc.4c01612
+</pre></div>
+</div>
+</section>
+<section id="sample-q-function">
+<h3><code class="docutils literal notranslate"><span class="pre">sample_q_</span></code> (function)<a class="headerlink" href="#sample-q-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1749">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_q_</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>samples random 4D unit-vector
+</pre></div>
+</div>
+</section>
+<section id="quat-metrix-function">
+<h3><code class="docutils literal notranslate"><span class="pre">quat_metrix_</span></code> (function)<a class="headerlink" href="#quat-metrix-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1767">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quat_metrix_</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>for quaternion product done as a matrix multiplication (less efficent)
+Inputs:
+    q       : (..., 4)    ; unitvector in R^4
+Ouput:
+    R4      : (..., 4, 4) ; rotation matrix in R^4
+    inverse : bool        ; if True, R4.transpose() = inv(R4) returned
+Usage: in FocusedHemisphere
+    Used in Static_Rotations_Layer to rotate MD data away from problematic regions
+    of the hyperspherical representation of &#39;Cartesian block&#39; rotations (s = xq).
+</pre></div>
+</div>
+</section>
+<section id="quat-product-function">
+<h3><code class="docutils literal notranslate"><span class="pre">quat_product_</span></code> (function)<a class="headerlink" href="#quat-product-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1790">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quat_product_</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>closed-from quaternion product (more efficent)
+</pre></div>
+</div>
+</section>
+<section id="quat-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">quat_inverse_</span></code> (function)<a class="headerlink" href="#quat-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1799">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">quat_inverse_</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the conjugate/inverse of a unit quaternion.
+</pre></div>
+</div>
+</section>
+<section id="box-forward-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_forward_</span></code> (function)<a class="headerlink" href="#box-forward-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1808">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_forward_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>placeholder
+</pre></div>
+</div>
+</section>
+<section id="box-inverse-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_inverse_</span></code> (function)<a class="headerlink" href="#box-inverse-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/util_tf.py#L1814">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_inverse_</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>placeholder
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-util_tf.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

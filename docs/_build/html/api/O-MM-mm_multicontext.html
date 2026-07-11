@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.mm_multicontext &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.sc_system" href="O-MM-sc_system.html" />
+    <link rel="prev" title="O.MM.mm_helper" href="O-MM-mm_helper.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-MM-mm_helper.html" title="previous chapter">O.MM.mm_helper</a></li>
+      <li>Next: <a href="O-MM-sc_system.html" title="next chapter">O.MM.sc_system</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-mm-multicontext">
+<span id="api-o-mm-mm-multicontext"></span><h1>O.MM.mm_multicontext<a class="headerlink" href="#o-mm-mm-multicontext" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate batches of configurations in parallel OpenMM contexts.
+
+Each worker process owns one OpenMM ``Context`` and receives configurations
+through multiprocessing queues. The implementation is derived from bgflow&#39;s
+OpenMM bridge. Inputs and returned values are plain NumPy-compatible arrays;
+the units expected at this boundary are documented on :meth:`MultiContext.evaluate`.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="multicontext-class">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext</span></code> (class)<a class="headerlink" href="#multicontext-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L17">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MultiContext</span><span class="p">(</span><span class="n">n_workers</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">integrator</span><span class="p">,</span> <span class="n">platform_name</span><span class="p">,</span> <span class="n">platform_properties</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Manage OpenMM contexts running in independent worker processes.
+
+Parameters
+----------
+n_workers : int
+    The number of workers which operate one context each.
+system : openmm.System
+    The system that contains all forces.
+integrator : openmm.Integrator
+    An OpenMM integrator.
+platform_name : str
+    The name of an OpenMM platform (&#39;Reference&#39;, &#39;CPU&#39;, &#39;CUDA&#39;, or &#39;OpenCL&#39;)
+platform_properties : dict, optional
+    A dictionary of platform properties.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.__init__</span></code> (method)<a class="headerlink" href="#multicontext-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L34">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_workers</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">integrator</span><span class="p">,</span> <span class="n">platform_name</span><span class="p">,</span> <span class="n">platform_properties</span><span class="o">=</span><span class="p">{})</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Store context configuration and create empty task/result queues.
+
+Workers are started lazily on the first call to :meth:`evaluate`.
+Each worker receives a pickle-cloned integrator because an OpenMM
+integrator can belong to only one context.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-reinitialize-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext._reinitialize</span></code> (method)<a class="headerlink" href="#multicontext-reinitialize-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L61">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_reinitialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Replace queues and start a fresh set of worker processes.
+
+Existing workers first receive a soft-termination sentinel. The method
+mutates this object in place and returns ``None``.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-evaluate-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.evaluate</span></code> (method)<a class="headerlink" href="#multicontext-evaluate-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L83">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">positions</span><span class="p">,</span> <span class="n">box_vectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">evaluate_energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">evaluate_force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_positions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_path_probability_ratio</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">err_handling</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span> <span class="n">n_simulation_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Delegate energy and force computations to the workers.
+
+Parameters
+----------
+positions : numpy.ndarray
+    The particle positions in nanometer; its shape is (batch_size, num_particles, 3).
+box_vectors : numpy.ndarray, optional
+    The periodic box vectors in nanometer; its shape is (batch_size, 3, 3).
+    If not specified, don&#39;t change the box vectors.
+evaluate_energy : bool, optional
+    Whether to compute energies.
+evaluate_force : bool, optional
+    Whether to compute forces.
+evaluate_positions : bool, optional
+    Whether to return positions.
+evaluate_path_probability_ratio : bool, optional
+    Whether to compute the log path probability ratio. Makes only sense for PathProbabilityIntegrator instances.
+err_handling : {&quot;warning&quot;, &quot;ignore&quot;, &quot;exception&quot;}, default=&quot;warning&quot;
+    How each worker handles an exception while evaluating a state.
+n_simulation_steps : int, optional
+    If &gt; 0, perform a number of simulation steps and compute energy and forces for the resulting state.
+
+Returns
+-------
+energies : np.ndarray or None
+    The energies in units of kilojoule/mole; its shape  is (len(positions), )
+forces : np.ndarray or None
+    The forces in units of kilojoule/mole/nm; its shape is (len(positions), num_particles, 3)
+new_positions : np.ndarray or None
+    The positions in units of nm; its shape is (len(positions), num_particles, 3)
+log_path_probability_ratio : np.ndarray or None
+    The logarithmic path probability ratios; its shape  is (len(positions), )
+
+Notes
+-----
+Results are reordered to match the input batch after parallel
+evaluation. Although ``n_simulation_steps`` and path-probability
+evaluation are part of the API, the current worker does not advance
+the integrator and returns a path-probability ratio of zero.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-is-alive-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.is_alive</span></code> (method)<a class="headerlink" href="#multicontext-is-alive-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L158">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return true when at least one worker exists and all are alive.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-terminate-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.terminate</span></code> (method)<a class="headerlink" href="#multicontext-terminate-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L162">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Request soft termination of every worker.
+
+One ``None`` sentinel is placed on the shared task queue per worker.
+The method does not join the processes or wait for their termination.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-del-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.__del__</span></code> (method)<a class="headerlink" href="#multicontext-del-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L175">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Request worker termination when this manager is garbage-collected.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-worker-class">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.Worker</span></code> (class)<a class="headerlink" href="#multicontext-worker-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L179">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Worker</span><span class="p">(</span><span class="n">task_queue</span><span class="p">,</span> <span class="n">result_queue</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">integrator</span><span class="p">,</span> <span class="n">platform_name</span><span class="p">,</span> <span class="n">platform_properties</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Process that evaluates queued states in one OpenMM context.
+
+Parameters
+----------
+task_queue : multiprocessing.Queue
+    The queue that the MultiContext pushes tasks to.
+result_queue : multiprocessing.Queue
+    The queue that the MultiContext receives results from.
+system : openmm.System
+    The system that contains all forces.
+integrator : openmm.Integrator
+    An OpenMM integrator.
+platform_name : str
+    The name of an OpenMM platform (&#39;Reference&#39;, &#39;CPU&#39;, &#39;CUDA&#39;, or &#39;OpenCL&#39;)
+platform_properties : dict
+    A dictionary of platform properties.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-worker-init-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.Worker.__init__</span></code> (nested helper)<a class="headerlink" href="#multicontext-worker-init-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L198">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_queue</span><span class="p">,</span> <span class="n">result_queue</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">integrator</span><span class="p">,</span> <span class="n">platform_name</span><span class="p">,</span> <span class="n">platform_properties</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Store queues and serializable OpenMM context configuration.
+
+The actual OpenMM ``Context`` is deliberately created by
+:meth:`run` after the process starts. Creating CPU contexts in the
+parent process can deadlock on some platforms.
+</pre></div>
+</div>
+</section>
+<section id="multicontext-worker-run-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">MultiContext.Worker.run</span></code> (nested helper)<a class="headerlink" href="#multicontext-worker-run-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_multicontext.py#L214">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Consume tasks and return requested OpenMM state quantities.
+
+Positions and box vectors are received in nanometres. Energies,
+forces, and positions are returned in kJ/mol, kJ/(mol nm), and nm,
+respectively. A ``None`` task stops the loop. Evaluation errors are
+warned, ignored, or re-raised according to each task&#39;s
+``err_handling`` value.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-mm_multicontext.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

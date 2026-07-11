@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.mm_helper &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.mm_multicontext" href="O-MM-mm_multicontext.html" />
+    <link rel="prev" title="O.MM.ff_setup" href="O-MM-ff_setup.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-MM-ff_setup.html" title="previous chapter">O.MM.ff_setup</a></li>
+      <li>Next: <a href="O-MM-mm_multicontext.html" title="next chapter">O.MM.mm_multicontext</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-mm-helper">
+<span id="api-o-mm-mm-helper"></span><h1>O.MM.mm_helper<a class="headerlink" href="#o-mm-mm-helper" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mm_helper.py
+ECM:
+    f : update_HarmonicBondForce_
+    f : update_HarmonicAngleForce_
+    f : update_PeriodicTorsionForce_
+    f : update_RBTorsionForce_ ; not tested yet, because not in GAFF
+    f : update_NonbondedForce_
+    f : update_CustomNonbondedForce_ ; carefull with param1 vs 2, in GAFF was ok
+    f : put_lambda_into_system_ ; ! add method for update_RBTorsionForce_
+
+MM:
+    c : MM_system_helper
+    f : plot_simulation_info_
+    f : cell_lengths_and_angles_ ; mdtraj also has this method
+
+make supercells:
+    f : get_unitcell_stack_order_
+    f : supercell_from_unitcell_
+
+check box for opnemm:
+    f : box_in_reduced_form_
+    f : reducePeriodicBoxVectors_
+
+fix ordering of atoms in a molecule:
+    f : reorder_atoms_mol_
+    f : validate_reorder_atoms_mol_
+    f : reorder_atoms_unitcell_
+
+misc:
+    f : vectors_between_atoms_
+    f : change_box_
+    f : remove_clashes_
+    f : rename_atoms_ ; not used, blank
+    f : process_mercury_output_ ; not used?
+
+not used:
+    f : extract_subcell_from_supercell_
+    f : CustomIntegrator_
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="get-force-by-name-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_force_by_name_</span></code> (function)<a class="headerlink" href="#get-force-by-name-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L64">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_force_by_name_</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="update-harmonicbondforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_HarmonicBondForce_</span></code> (function)<a class="headerlink" href="#update-harmonicbondforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L69">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_HarmonicBondForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="update-harmonicangleforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_HarmonicAngleForce_</span></code> (function)<a class="headerlink" href="#update-harmonicangleforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L80">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_HarmonicAngleForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="update-periodictorsionforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_PeriodicTorsionForce_</span></code> (function)<a class="headerlink" href="#update-periodictorsionforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L91">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_PeriodicTorsionForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="update-rbtorsionforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_RBTorsionForce_</span></code> (function)<a class="headerlink" href="#update-rbtorsionforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L103">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_RBTorsionForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>only in OPLS, not in GAFF or TIP4P
+</pre></div>
+</div>
+</section>
+<section id="update-nonbondedforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_NonbondedForce_</span></code> (function)<a class="headerlink" href="#update-nonbondedforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L123">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_NonbondedForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="update-customnonbondedforce-function">
+<h3><code class="docutils literal notranslate"><span class="pre">update_CustomNonbondedForce_</span></code> (function)<a class="headerlink" href="#update-customnonbondedforce-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L152">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">update_CustomNonbondedForce_</span><span class="p">(</span><span class="n">_force</span><span class="p">,</span> <span class="n">_lam</span><span class="p">,</span> <span class="n">deepcopy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="put-lambda-into-system-function">
+<h3><code class="docutils literal notranslate"><span class="pre">put_lambda_into_system_</span></code> (function)<a class="headerlink" href="#put-lambda-into-system-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L175">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">put_lambda_into_system_</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">R0</span><span class="p">,</span> <span class="n">k_EC</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inds_true_atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF : http://docs.openmm.org/latest/userguide/theory/02_standard_forces.html
+
+force.getEnergyFunction()
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-class">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper</span></code> (class)<a class="headerlink" href="#mm-system-helper-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L251">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MM_system_helper</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.__init__</span></code> (method)<a class="headerlink" href="#mm-system-helper-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L252">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-inject-methods-from-another-class-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.inject_methods_from_another_class_</span></code> (method)<a class="headerlink" href="#mm-system-helper-inject-methods-from-another-class-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L256">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inject_methods_from_another_class_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_to_inject_methods_from</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-corrections-to-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.corrections_to_ff_</span></code> (method)<a class="headerlink" href="#mm-system-helper-corrections-to-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L259">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">corrections_to_ff_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-system-mass-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._system_mass_</span></code> (method)<a class="headerlink" href="#mm-system-helper-system-mass-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L264">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_system_mass_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-define-mu-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.define_mu_</span></code> (method)<a class="headerlink" href="#mm-system-helper-define-mu-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L267">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">define_mu_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_atom</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-set-b-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._set_b_</span></code> (method)<a class="headerlink" href="#mm-system-helper-set-b-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L286">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_b_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-set-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._set_r_</span></code> (method)<a class="headerlink" href="#mm-system-helper-set-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L290">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-set-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._set_v_</span></code> (method)<a class="headerlink" href="#mm-system-helper-set-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L294">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-forward-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.forward_atom_index_</span></code> (method)<a class="headerlink" href="#mm-system-helper-forward-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L298">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-inverse-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.inverse_atom_index_</span></code> (method)<a class="headerlink" href="#mm-system-helper-inverse-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L301">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_r_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L305">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-com-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_COM_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-com-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L311">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_COM_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-recenter-simulation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._recenter_simulation_</span></code> (method)<a class="headerlink" href="#mm-system-helper-recenter-simulation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L315">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_recenter_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_v_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L319">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_p_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L325">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_p_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-k-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_K_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-k-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L331">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_K_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-t-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_T_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-t-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L337">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_T_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_U_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L344">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_U_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_u_</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L350">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_u_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-f-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_F_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-f-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L355">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_F_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-b-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_b_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-b-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L361">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_b_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="id2">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_V_</span></code> (method)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L367">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_V_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-current-rho-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._current_rho_</span></code> (method)<a class="headerlink" href="#mm-system-helper-current-rho-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L373">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_rho_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-add-barostat-to-system-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._add_barostat_to_system_</span></code> (method)<a class="headerlink" href="#mm-system-helper-add-barostat-to-system-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L390">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_add_barostat_to_system_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-remove-barostat-from-system-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._remove_barostat_from_system_</span></code> (method)<a class="headerlink" href="#mm-system-helper-remove-barostat-from-system-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L413">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_remove_barostat_from_system_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-initialise-integrator-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.initialise_integrator_</span></code> (method)<a class="headerlink" href="#mm-system-helper-initialise-integrator-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L432">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_integrator_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrator_class</span><span class="p">,</span> <span class="n">collision_rate</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-list-forces-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._list_forces_</span></code> (method)<a class="headerlink" href="#mm-system-helper-list-forces-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L458">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_list_forces_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-turn-on-nonbonded-switchingfunction-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.turn_ON_nonbonded_SwitchingFunction</span></code> (method)<a class="headerlink" href="#mm-system-helper-turn-on-nonbonded-switchingfunction-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L464">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">turn_ON_nonbonded_SwitchingFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-adjust-ewalderrortolerance-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.adjust_EwaldErrorTolerance</span></code> (method)<a class="headerlink" href="#mm-system-helper-adjust-ewalderrortolerance-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L471">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">adjust_EwaldErrorTolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-reset-temperature-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._reset_temperature_</span></code> (method)<a class="headerlink" href="#mm-system-helper-reset-temperature-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L480">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_reset_temperature_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-print-potential-enrrgy-contributions-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._print_potential_enrrgy_contributions_</span></code> (method)<a class="headerlink" href="#mm-system-helper-print-potential-enrrgy-contributions-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L487">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_print_potential_enrrgy_contributions_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-u-gpu-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._U_GPU_</span></code> (method)<a class="headerlink" href="#mm-system-helper-u-gpu-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L518">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_U_GPU_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="id3">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.u_GPU_</span></code> (method)<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L540">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_GPU_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-f-gpu-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.F_GPU_</span></code> (method)<a class="headerlink" href="#mm-system-helper-f-gpu-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L546">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">F_GPU_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-minimise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.minimise_</span></code> (method)<a class="headerlink" href="#mm-system-helper-minimise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L568">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">minimise_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-minimise-xyz-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.minimise_xyz_</span></code> (method)<a class="headerlink" href="#mm-system-helper-minimise-xyz-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L575">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">minimise_xyz_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>energy minimising only the coordinates (r), box (b) is fixed
+Inputs:
+    r : single frame (N,3) or trajectory (m,N,3)
+    b : single frame (3,3) or trajectory (m,3,3)
+Output:
+    r : single frame (N,3) or trajectory (m,N,3) after minimising in fixed box(es)
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-minimise-xyz-check-shape-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.minimise_xyz_.check_shape_</span></code> (nested helper)<a class="headerlink" href="#mm-system-helper-minimise-xyz-check-shape-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L583">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_shape_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-hessian-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper._Hessian_</span></code> (method)<a class="headerlink" href="#mm-system-helper-hessian-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L619">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_Hessian_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">fixed_atom_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature_reduced</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-harmonic-fe-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.harmonic_FE_</span></code> (method)<a class="headerlink" href="#mm-system-helper-harmonic-fe-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L648">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">harmonic_FE_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">fixed_atom_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">n_steps_openmm</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_steps_adam</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">alpha_adam</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Classical Harmonic Approximation : configurational part only. Momentum not included here.
+Inputs:
+    r : (N,3) array of positions
+    b : (3,3) array of box
+    fixed_atom_index : index of atom to keep fixed; the only constraint in a crystal.
+Parameters:
+    dr : finite difference parameter; can try a few small positive values for a stable output
+    n_minimisations : number of times to run potential energy gradient descent (box is fixed).
+
+Output: dictionary = {
+    &#39;f0&#39; = configurational Helmholtz per system FE in kT at the local minimum
+    &#39;u0&#39; = potential energy per system in kT at the local minimum
+    &#39;r0&#39; = minimised structure at the local minimum
+    }
+
+Limitation:
+    Classical and requires finite temperature
+    Box is not minimised, fixed as the original input (b) provided
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-set-arrays-blank-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.set_arrays_blank_</span></code> (method)<a class="headerlink" href="#mm-system-helper-set-arrays-blank-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L730">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_arrays_blank_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-save-frame-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.save_frame_</span></code> (method)<a class="headerlink" href="#mm-system-helper-save-frame-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L741">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_frame_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-run-simulation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.run_simulation_</span></code> (method)<a class="headerlink" href="#mm-system-helper-run-simulation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L752">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-run-simulation-w-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.run_simulation_w_</span></code> (method)<a class="headerlink" href="#mm-system-helper-run-simulation-w-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L762">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_w_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>w : wrapped ; for NVT in the presence of shearing (at higher T) or alchemical
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-xyz-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.xyz</span></code> (method)<a class="headerlink" href="#mm-system-helper-xyz-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L776">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-velicities-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.velicities</span></code> (method)<a class="headerlink" href="#mm-system-helper-velicities-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L781">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">velicities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-coms-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.COMs</span></code> (method)<a class="headerlink" href="#mm-system-helper-coms-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L786">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">COMs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-boxes-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.boxes</span></code> (method)<a class="headerlink" href="#mm-system-helper-boxes-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L791">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.u</span></code> (method)<a class="headerlink" href="#mm-system-helper-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L796">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-temperature-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.temperature</span></code> (method)<a class="headerlink" href="#mm-system-helper-temperature-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L801">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-dt-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.dt</span></code> (method)<a class="headerlink" href="#mm-system-helper-dt-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L806">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dt</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-timescale-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.timescale</span></code> (method)<a class="headerlink" href="#mm-system-helper-timescale-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L810">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">timescale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-average-temperature-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.average_temperature</span></code> (method)<a class="headerlink" href="#mm-system-helper-average-temperature-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L822">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">average_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-average-energy-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.average_energy</span></code> (method)<a class="headerlink" href="#mm-system-helper-average-energy-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L825">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">average_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-average-volume-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.average_volume</span></code> (method)<a class="headerlink" href="#mm-system-helper-average-volume-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L828">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">average_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-plot-simulation-info-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.plot_simulation_info_</span></code> (method)<a class="headerlink" href="#mm-system-helper-plot-simulation-info-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L833">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_simulation_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>one plot with all information about the simulation
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-plot-temperature-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.plot_temperature_</span></code> (method)<a class="headerlink" href="#mm-system-helper-plot-temperature-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L837">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_temperature_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-temperature-plot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.temperature_plot</span></code> (method)<a class="headerlink" href="#mm-system-helper-temperature-plot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L849">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">temperature_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-plot-energy-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.plot_energy_</span></code> (method)<a class="headerlink" href="#mm-system-helper-plot-energy-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L853">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_energy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-energy-plot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.energy_plot</span></code> (method)<a class="headerlink" href="#mm-system-helper-energy-plot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L864">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">energy_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-plot-volume-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.plot_volume_</span></code> (method)<a class="headerlink" href="#mm-system-helper-plot-volume-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L868">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_volume_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-volume-plot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.volume_plot</span></code> (method)<a class="headerlink" href="#mm-system-helper-volume-plot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L879">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">volume_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-box-lengths-plot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.box_lengths_plot</span></code> (method)<a class="headerlink" href="#mm-system-helper-box-lengths-plot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L885">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_lengths_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-index-frame-average-box-othorhombic-case-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.index_frame_average_box_othorhombic_case_</span></code> (method)<a class="headerlink" href="#mm-system-helper-index-frame-average-box-othorhombic-case-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L890">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">index_frame_average_box_othorhombic_case_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-box-shapes-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.box_shapes</span></code> (method)<a class="headerlink" href="#mm-system-helper-box-shapes-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L898">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-partial-charges-mol-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.partial_charges_mol</span></code> (method)<a class="headerlink" href="#mm-system-helper-partial-charges-mol-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L905">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">partial_charges_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-box-line-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.box_line</span></code> (method)<a class="headerlink" href="#mm-system-helper-box-line-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L925">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;CRYST1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>only useful for the rough save_coordiantes_as_pdb_, not used otherwise.
+</pre></div>
+</div>
+</section>
+<section id="mm-system-helper-load-structures-with-mdtraj-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.load_structures_with_mdtraj_</span></code> (method)<a class="headerlink" href="#mm-system-helper-load-structures-with-mdtraj-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L941">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_structures_with_mdtraj_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-save-gro-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.save_gro_</span></code> (method)<a class="headerlink" href="#mm-system-helper-save-gro-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L968">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_gro_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-save-pdb-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.save_pdb_</span></code> (method)<a class="headerlink" href="#mm-system-helper-save-pdb-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L975">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_pdb_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="mm-system-helper-save-xtc-method">
+<h3><code class="docutils literal notranslate"><span class="pre">MM_system_helper.save_xtc_</span></code> (method)<a class="headerlink" href="#mm-system-helper-save-xtc-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L982">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_xtc_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_reference</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="plot-simulation-info-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_simulation_info_</span></code> (function)<a class="headerlink" href="#plot-simulation-info-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L999">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_simulation_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>after running an NVT or NPT simulation using SingleComponent, this plots some of the information about the simulation as a function of time
+the plots include:
+    temperature : red
+    potential energy : blue
+    volume : green
+    box vector length and angles
+    diagonal lengths of the box matrix
+
+useful for checking consistency (e.g., in NPT, does the supercell always relax to the same state and is this converged or needs to run longer)
+</pre></div>
+</div>
+</section>
+<section id="cell-lengths-and-angles-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cell_lengths_and_angles_</span></code> (function)<a class="headerlink" href="#cell-lengths-and-angles-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1109">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cell_lengths_and_angles_</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>matching mdtraj, could be done there instead
+Inputs:
+    b : (m,3,3) boxes (box-vectors are the rows; axis=-2)
+    radians: default False
+Outputs:
+    lengths_and_angles : m * [[a,b,c], [bc,ac,ab]]
+</pre></div>
+</div>
+</section>
+<section id="cell-lengths-and-angles-get-angle-method">
+<h3><code class="docutils literal notranslate"><span class="pre">cell_lengths_and_angles_.get_angle_</span></code> (method)<a class="headerlink" href="#cell-lengths-and-angles-get-angle-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1119">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_angle_</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">radians</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="save-gro-as-pdb-function">
+<h3><code class="docutils literal notranslate"><span class="pre">save_gro_as_pdb_</span></code> (function)<a class="headerlink" href="#save-gro-as-pdb-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1140">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_gro_as_pdb_</span><span class="p">(</span><span class="n">GRO</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="pdb-to-xyz-function">
+<h3><code class="docutils literal notranslate"><span class="pre">PDB_to_xyz_</span></code> (function)<a class="headerlink" href="#pdb-to-xyz-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1155">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">PDB_to_xyz_</span><span class="p">(</span><span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="pdb-to-box-function">
+<h3><code class="docutils literal notranslate"><span class="pre">PDB_to_box_</span></code> (function)<a class="headerlink" href="#pdb-to-box-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1158">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">PDB_to_box_</span><span class="p">(</span><span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="box-to-lengths-angles-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_to_lengths_angles_</span></code> (function)<a class="headerlink" href="#box-to-lengths-angles-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1161">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_to_lengths_angles_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>b : (3,3) or (m,3,3) ; box or boxes
+</pre></div>
+</div>
+</section>
+<section id="lengths-angles-to-box-function">
+<h3><code class="docutils literal notranslate"><span class="pre">lengths_angles_to_box_</span></code> (function)<a class="headerlink" href="#lengths-angles-to-box-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1166">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lengths_angles_to_box_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>x : (6) or (m,6) ; lengths and angles of one or more boxes
+</pre></div>
+</div>
+</section>
+<section id="get-index-average-box-automatic-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_index_average_box_automatic_</span></code> (function)<a class="headerlink" href="#get-index-average-box-automatic-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1171">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_index_average_box_automatic_</span><span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rules</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;av&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;max_prob&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="get-index-average-box-automatic-peak-finder-method">
+<h3><code class="docutils literal notranslate"><span class="pre">get_index_average_box_automatic_.peak_finder_</span></code> (method)<a class="headerlink" href="#get-index-average-box-automatic-peak-finder-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1194">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">peak_finder_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="get-index-average-box-automatic-plot-box-lengths-angles-histograms-method">
+<h3><code class="docutils literal notranslate"><span class="pre">get_index_average_box_automatic_.plot_box_lengths_angles_histograms_</span></code> (method)<a class="headerlink" href="#get-index-average-box-automatic-plot-box-lengths-angles-histograms-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1210">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_box_lengths_angles_histograms_</span><span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">b0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b1</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="get-unitcell-stack-order-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_unitcell_stack_order_</span></code> (function)<a class="headerlink" href="#get-unitcell-stack-order-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1253">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_unitcell_stack_order_</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>not sure if this is good
+
+tells how many times to stack the unitcell in each of the three directions
+    while minimising surface area to volume ratio (more spherical ~~ more cubic)
+
+Inputs:
+    b : (3,3) : box of the unit cell (NB: only the diagonal distances will be used)
+    n_mol_unitcell : number of molecules in the unit cell
+    top_n : how many results to include in output
+Output:
+    res: dictionary {n_mol_supercell : number of times to stack unitcell in each of the three unitcell vector directions}
+        res[n_mol_supercell of interest] --&gt; input for the supercell_from_unitcell_ function
+</pre></div>
+</div>
+</section>
+<section id="supercell-from-unitcell-function">
+<h3><code class="docutils literal notranslate"><span class="pre">supercell_from_unitcell_</span></code> (function)<a class="headerlink" href="#supercell-from-unitcell-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1319">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">supercell_from_unitcell_</span><span class="p">(</span><span class="n">PDB_unitcell</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cell</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>copy ideal unitcell along unitcell vectors to get ideal supercell of correct shape
+Inputs:
+    PDB_unitcell : unitcell coordinates, must contain the header with unitcell lengths and angles
+    cell : list of three integers (&gt; 0) for how many copies to make along each unitcell vector direction
+        [default : [1,1,1] : identity : no change]
+    save_output : if True, saves the supercell
+Outputs:
+    instance of mdtraj of the larger supercell for further modifications
+</pre></div>
+</div>
+</section>
+<section id="supercell-from-unitcell-expand-mdtraj-method">
+<h3><code class="docutils literal notranslate"><span class="pre">supercell_from_unitcell_.expand_mdtraj_</span></code> (method)<a class="headerlink" href="#supercell-from-unitcell-expand-mdtraj-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1332">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">expand_mdtraj_</span><span class="p">(</span><span class="n">input_instance</span><span class="p">,</span> <span class="n">n_copies</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="box-in-reduced-form-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_in_reduced_form_</span></code> (function)<a class="headerlink" href="#box-in-reduced-form-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1374">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_in_reduced_form_</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>method copied from openmm sources
+Input:
+    box : (3,3) box-vectors are rows
+Output:
+    bool : True if the box is already in the reduced form
+</pre></div>
+</div>
+</section>
+<section id="reduceperiodicboxvectors-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reducePeriodicBoxVectors_</span></code> (function)<a class="headerlink" href="#reduceperiodicboxvectors-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1398">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reducePeriodicBoxVectors_</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>method copied from openmm sources
+Input:
+    box : (3,3) box-vectors are rows
+Output:
+    the single box converted to format compatible with OpenMM
+</pre></div>
+</div>
+</section>
+<section id="reorder-atoms-mol-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reorder_atoms_mol_</span></code> (function)<a class="headerlink" href="#reorder-atoms-mol-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1417">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reorder_atoms_mol_</span><span class="p">(</span><span class="n">mol_pdb_fname</span><span class="p">,</span> <span class="n">template_pdb_fname</span><span class="p">,</span> <span class="n">output_pdb_fname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://gist.github.com/fabian-paul/abba9172d394dffb93624a710acbab16
+</pre></div>
+</div>
+</section>
+<section id="validate-reorder-atoms-mol-function">
+<h3><code class="docutils literal notranslate"><span class="pre">validate_reorder_atoms_mol_</span></code> (function)<a class="headerlink" href="#validate-reorder-atoms-mol-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1466">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">validate_reorder_atoms_mol_</span><span class="p">(</span><span class="n">template_pdb_fname</span><span class="p">,</span> <span class="n">output_pdb_fname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REF: https://gist.github.com/fabian-paul/abba9172d394dffb93624a710acbab16
+</pre></div>
+</div>
+</section>
+<section id="reorder-atoms-unitcell-function">
+<h3><code class="docutils literal notranslate"><span class="pre">reorder_atoms_unitcell_</span></code> (function)<a class="headerlink" href="#reorder-atoms-unitcell-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1490">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reorder_atoms_unitcell_</span><span class="p">(</span><span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">PDB_ref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Inputs:
+    PDB     : supercell or unitcell of a molecule (e.g., to_reorder.pdb)
+    PDB_ref : single molecule with intended order of atoms
+    n_atoms_mol : number of atoms in the molecule, including all atoms
+Outputs:
+    to_reorder_reordered.pdb : file with same xyz coordiantes as PDB, but atom order and names changed to match PDB_ref
+</pre></div>
+</div>
+</section>
+<section id="reorder-atoms-unitcell-split-method">
+<h3><code class="docutils literal notranslate"><span class="pre">reorder_atoms_unitcell_.split_</span></code> (method)<a class="headerlink" href="#reorder-atoms-unitcell-split-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1501">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">split_</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="reorder-atoms-unitcell-expand-mdtraj-method">
+<h3><code class="docutils literal notranslate"><span class="pre">reorder_atoms_unitcell_.expand_mdtraj_</span></code> (method)<a class="headerlink" href="#reorder-atoms-unitcell-expand-mdtraj-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1524">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">expand_mdtraj_</span><span class="p">(</span><span class="n">input_instance</span><span class="p">,</span> <span class="n">n_copies</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="vectors-between-atoms-function">
+<h3><code class="docutils literal notranslate"><span class="pre">vectors_between_atoms_</span></code> (function)<a class="headerlink" href="#vectors-between-atoms-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1551">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">vectors_between_atoms_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n_images_search</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ALL vectors (not just those within the diagonal subspace of the box eye(3)*b)
+
+naive search for the shortest distanace vector between two atoms
+
+Inputs:
+    r : (N,3) single configuration (can be selection of any N atoms of interest)
+    b : (3,3) box (box-vectors are the rows)
+    n_images_search : number of periodic images to search for the shortest vector
+        [if b very skewed can increase n_images_search; more expensive]
+Outputs:
+    vs_out : (N,N,3) shortest vectors between all atoms (from rows to columns)
+</pre></div>
+</div>
+</section>
+<section id="change-box-function">
+<h3><code class="docutils literal notranslate"><span class="pre">change_box_</span></code> (function)<a class="headerlink" href="#change-box-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1595">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">change_box_</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">make_orthorhombic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">traj</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dont remember
+</pre></div>
+</div>
+</section>
+<section id="change-box-wrap-points-1box-method">
+<h3><code class="docutils literal notranslate"><span class="pre">change_box_.wrap_points_1box_</span></code> (method)<a class="headerlink" href="#change-box-wrap-points-1box-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1599">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_points_1box_</span><span class="p">(</span><span class="n">Ri</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="remove-clashes-function">
+<h3><code class="docutils literal notranslate"><span class="pre">remove_clashes_</span></code> (function)<a class="headerlink" href="#remove-clashes-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1638">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_clashes_</span><span class="p">(</span><span class="n">PDB_unitcell</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>no needed in most cases?
+</pre></div>
+</div>
+</section>
+<section id="remove-clashes-wrap-points-1box-method">
+<h3><code class="docutils literal notranslate"><span class="pre">remove_clashes_.wrap_points_1box_</span></code> (method)<a class="headerlink" href="#remove-clashes-wrap-points-1box-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1651">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wrap_points_1box_</span><span class="p">(</span><span class="n">Ri</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="remove-clashes-minimum-image-othorhombic-method">
+<h3><code class="docutils literal notranslate"><span class="pre">remove_clashes_.minimum_image_othorhombic_</span></code> (method)<a class="headerlink" href="#remove-clashes-minimum-image-othorhombic-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1657">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">minimum_image_othorhombic_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="rename-atoms-function">
+<h3><code class="docutils literal notranslate"><span class="pre">rename_atoms_</span></code> (function)<a class="headerlink" href="#rename-atoms-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1726">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rename_atoms_</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="process-mercury-output-function">
+<h3><code class="docutils literal notranslate"><span class="pre">process_mercury_output_</span></code> (function)<a class="headerlink" href="#process-mercury-output-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1761">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">process_mercury_output_</span><span class="p">(</span><span class="n">PDB</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">single_mol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">custom_path_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>preparing initial structure
+</pre></div>
+</div>
+</section>
+<section id="extract-subcell-from-supercell-function">
+<h3><code class="docutils literal notranslate"><span class="pre">extract_subcell_from_supercell_</span></code> (function)<a class="headerlink" href="#extract-subcell-from-supercell-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1791">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">extract_subcell_from_supercell_</span><span class="p">(</span><span class="n">n_mol_in</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">r_in</span><span class="p">,</span> <span class="n">b_in</span><span class="p">,</span> <span class="n">cell_in</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">cell_out</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">ind_rO</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>rough method, was not used!
+
+cuts out a smaller cell from a bigger cell
+inputs (r_in) need to first go (successfully) through tidy_crystal_xyz_
+outputs (r_out, b_out); ouput needs to be energy-minimised before being used
+</pre></div>
+</div>
+</section>
+<section id="extract-subcell-from-supercell-check-shape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">extract_subcell_from_supercell_.check_shape_</span></code> (method)<a class="headerlink" href="#extract-subcell-from-supercell-check-shape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1801">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_shape_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="extract-subcell-from-supercell-dot-method">
+<h3><code class="docutils literal notranslate"><span class="pre">extract_subcell_from_supercell_.dot_</span></code> (method)<a class="headerlink" href="#extract-subcell-from-supercell-dot-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1808">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dot_</span><span class="p">(</span><span class="n">Ri</span><span class="p">,</span> <span class="n">mat</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-mm_helper.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

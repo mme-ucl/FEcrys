@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.pgm &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.pgm_rb" href="O-NN-pgm_rb.html" />
+    <link rel="prev" title="O.NN.model_helper" href="O-NN-model_helper.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-model_helper.html" title="previous chapter">O.NN.model_helper</a></li>
+      <li>Next: <a href="O-NN-pgm_rb.html" title="next chapter">O.NN.pgm_rb</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-pgm">
+<span id="api-o-nn-pgm"></span><h1>O.NN.pgm<a class="headerlink" href="#o-nn-pgm" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Probabilistic generative models for molecular crystals and molecules.
+
+The active models compose a physical coordinate representation with alternating
+rational-quadratic spline couplings. Position-to-conformation and
+conformation-to-position connector networks exchange conditioning information.
+Multiple thermodynamic or metastable states can share one model through a
+scalar state encoding selected by ``crystal_index``.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="positions-flow-layer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER</span></code> (class)<a class="headerlink" href="#positions-flow-layer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L17">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">POSITIONS_FLOW_LAYER</span><span class="p">(</span><span class="n">n_mol</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">DIM_P2C_connection</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">DIM_C2P_connection</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;POSITIONS_FLOW_LAYER&#39;</span><span class="p">,</span> <span class="n">n_hidden_main</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_hidden_connection</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">n_P2C</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PGMcrys_v1 only
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.__init__</span></code> (method)<a class="headerlink" href="#positions-flow-layer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L21">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">DIM_P2C_connection</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">DIM_C2P_connection</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;POSITIONS_FLOW_LAYER&#39;</span><span class="p">,</span> <span class="n">n_hidden_main</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_hidden_connection</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_activation</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">n_P2C</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct one positional spline layer and its P-to-C connector.
+
+The position flow has ``3*(n_mol-1)`` translation-invariant variables.
+``aux`` features condition its spline without themselves being
+transformed. ``layer_index`` selects a coupling mask.
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.forward_</span></code> (method)<a class="headerlink" href="#positions-flow-layer-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L89">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Transform positional variables conditioned on auxiliary features.
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.inverse_</span></code> (method)<a class="headerlink" href="#positions-flow-layer-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L99">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert positional variables with the same auxiliary features.
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-convert-to-aux-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.convert_to_aux_</span></code> (method)<a class="headerlink" href="#positions-flow-layer-convert-to-aux-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L109">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_to_aux_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encode flat positional variables into per-conformer auxiliary vectors.
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-convert-to-flow-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.convert_to_flow_</span></code> (method)<a class="headerlink" href="#positions-flow-layer-convert-to-flow-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L119">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_to_flow_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Insert the singleton molecule-like axis expected by the position flow.
+</pre></div>
+</div>
+</section>
+<section id="positions-flow-layer-convert-from-flow-method">
+<h3><code class="docutils literal notranslate"><span class="pre">POSITIONS_FLOW_LAYER.convert_from_flow_</span></code> (method)<a class="headerlink" href="#positions-flow-layer-convert-from-flow-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L125">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_from_flow_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove the singleton axis from positional flow variables.
+</pre></div>
+</div>
+</section>
+<section id="c2p-connector-v1-class">
+<h3><code class="docutils literal notranslate"><span class="pre">C2P_connector_v1</span></code> (class)<a class="headerlink" href="#c2p-connector-v1-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L131">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">C2P_connector_v1</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encode conformational variables into one flat C-to-P feature vector.
+</pre></div>
+</div>
+</section>
+<section id="c2p-connector-v1-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">C2P_connector_v1.__init__</span></code> (method)<a class="headerlink" href="#c2p-connector-v1-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L134">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Store connector metadata and construct its dense network.
+</pre></div>
+</div>
+</section>
+<section id="c2p-connector-v1-call-method">
+<h3><code class="docutils literal notranslate"><span class="pre">C2P_connector_v1.__call__</span></code> (method)<a class="headerlink" href="#c2p-connector-v1-call-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L147">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fourier-encode periodic inputs, flatten molecules, and return features.
+</pre></div>
+</div>
+</section>
+<section id="conformer-flow-layer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">CONFORMER_FLOW_LAYER</span></code> (class)<a class="headerlink" href="#conformer-flow-layer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L162">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CONFORMER_FLOW_LAYER</span><span class="p">(</span><span class="n">periodic_mask</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">,</span> <span class="n">DIM_P2C_connection</span><span class="p">,</span> <span class="n">DIM_C2P_connection</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;CONFORMER_FLOW_LAYER&#39;</span><span class="p">,</span> <span class="n">half_layer_class</span><span class="o">=</span><span class="n">SPLINE_COUPLING_HALF_LAYER</span><span class="p">,</span> <span class="n">kwargs_for_given_half_layer_class</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;n_hidden&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;dims_hidden&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;hidden_activation&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">},</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">custom_coupling_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_hidden_connection</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">connector_type</span><span class="o">=</span><span class="n">C2P_connector_v1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Notes
+</pre></div>
+</div>
+</section>
+<section id="conformer-flow-layer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">CONFORMER_FLOW_LAYER.__init__</span></code> (method)<a class="headerlink" href="#conformer-flow-layer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L165">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">periodic_mask</span><span class="p">,</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">,</span> <span class="n">DIM_P2C_connection</span><span class="p">,</span> <span class="n">DIM_C2P_connection</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;CONFORMER_FLOW_LAYER&#39;</span><span class="p">,</span> <span class="n">half_layer_class</span><span class="o">=</span><span class="n">SPLINE_COUPLING_HALF_LAYER</span><span class="p">,</span> <span class="n">kwargs_for_given_half_layer_class</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;n_hidden&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;dims_hidden&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;hidden_activation&#39;</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">leaky_relu</span><span class="p">},</span> <span class="n">use_tfp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">custom_coupling_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_hidden_connection</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">connector_type</span><span class="o">=</span><span class="n">C2P_connector_v1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct one conformational spline and optional C-to-P connector.
+
+``periodic_mask`` defines circular coordinates, ``layer_index`` or
+``custom_coupling_mask`` selects transformed marginals, and auxiliary
+P-to-C features are conditioning-only dimensions.
+</pre></div>
+</div>
+</section>
+<section id="conformer-flow-layer-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">CONFORMER_FLOW_LAYER.forward_</span></code> (method)<a class="headerlink" href="#conformer-flow-layer-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L253">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Transform conformation variables conditioned on ``aux``.
+</pre></div>
+</div>
+</section>
+<section id="conformer-flow-layer-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">CONFORMER_FLOW_LAYER.inverse_</span></code> (method)<a class="headerlink" href="#conformer-flow-layer-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L264">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert conformation variables conditioned on ``aux``.
+</pre></div>
+</div>
+</section>
+<section id="conformer-flow-layer-convert-to-aux-method">
+<h3><code class="docutils literal notranslate"><span class="pre">CONFORMER_FLOW_LAYER.convert_to_aux_</span></code> (method)<a class="headerlink" href="#conformer-flow-layer-convert-to-aux-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L285">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">convert_to_aux_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Encode conformational variables for conditioning a position layer.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-class">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE</span></code> (class)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L291">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">P3_version_SingleComponent_map_LITE</span><span class="p">(</span><span class="n">ic_map_OLD_version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Allows models from the paper to be loaded,
+Only the ic_map = SingleComponent_map part of the model was changed slightly since the paper (P3)
+To be able to load all of the saved models from before,
+this class fixes the errors that would otherwise appear if loading those models with current code.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.__init__</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L300">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_map_OLD_version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Adapt a saved paper-era coordinate map to the current model API.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-permute-unitcell-tf-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.permute_unitcell_tf_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-permute-unitcell-tf-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L351">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">permute_unitcell_tf_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply the legacy unit-cell molecule permutation to coordinates.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-unpermute-unitcell-tf-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.unpermute_unitcell_tf_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-unpermute-unitcell-tf-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L359">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unpermute_unitcell_tf_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Undo the legacy unit-cell molecule permutation.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-forward-reshape-cells-tf-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.forward_reshape_cells_tf_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-forward-reshape-cells-tf-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L368">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_reshape_cells_tf_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fold legacy unit cells into the batch axis.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-inverse-reshape-cells-tf-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.inverse_reshape_cells_tf_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-inverse-reshape-cells-tf-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L373">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_reshape_cells_tf_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore a separate legacy unit-cell axis from the batch axis.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-inverse-reshape-cells-tf-cat-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.inverse_reshape_cells_tf_cat_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-inverse-reshape-cells-tf-cat-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L378">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_reshape_cells_tf_cat_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore legacy unit cells by concatenating them on the molecule axis.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-ln-base-c-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.ln_base_C_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-ln-base-c-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L384">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_base_C_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the saved legacy conformational base log density.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-ln-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.ln_base_P_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-ln-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L389">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the saved legacy positional base log density.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-sample-base-c-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.sample_base_C_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-sample-base-c-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L394">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_C_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample legacy conformational variables uniformly on [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-sample-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.sample_base_P_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-sample-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L401">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample legacy positional variables uniformly on [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.forward_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L408">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply the paper-era coordinate representation and Jacobian bookkeeping.
+</pre></div>
+</div>
+</section>
+<section id="p3-version-singlecomponent-map-lite-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">P3_version_SingleComponent_map_LITE.inverse_</span></code> (method)<a class="headerlink" href="#p3-version-singlecomponent-map-lite-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L454">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_in</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert paper-era representation variables to Cartesian coordinates.
+</pre></div>
+</div>
+</section>
+<section id="load-p3-pgmcrys-function">
+<h3><code class="docutils literal notranslate"><span class="pre">load_P3_PGMcrys</span></code> (function)<a class="headerlink" href="#load-p3-pgmcrys-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L512">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_P3_PGMcrys</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">,</span> <span class="n">class_of_the_model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a paper-era PGMcrys artifact through its compatibility map.
+
+The legacy pickle contains initialisation arguments and weights. Historical
+architecture constants are validated, attention-head count is inferred
+from the filename convention, and weights are assigned to a current model.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-class">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1</span></code> (class)<a class="headerlink" href="#model-helper-pgmcrys-v1-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L549">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">model_helper_PGMcrys_v1</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>State-indexed representation, training, and sampling mixin for PGM models.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.__init__</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L552">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create a stateless mixin instance.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-forward-represenation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1._forward_represenation_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-forward-represenation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L556">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_represenation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map Cartesian coordinates through the selected state&#39;s representation.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.forward_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L564">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply representation then trainable coupling: ``r -&gt; x -&gt; z``.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-inverse-represenation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1._inverse_represenation_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-inverse-represenation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L572">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_represenation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert representation variables with the selected state&#39;s map.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.inverse_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L580">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply inverse coupling then inverse representation: ``z -&gt; x -&gt; r``.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-step-ml-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.step_ML_graph_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-step-ml-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L591">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step_ML_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_and_crystal_index</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Perform one state-conditioned maximum-likelihood gradient update.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-step-ml-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.step_ML</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-step-ml-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L612">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step_ML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Train on a random state-specific minibatch and return ``&lt;u + ln q&gt;``.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-forward-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.forward_graph_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-forward-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L626">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Graph-compatible state-indexed forward wrapper.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-inverse-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.inverse_graph_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-inverse-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L632">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Graph-compatible state-indexed inverse wrapper.
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.forward</span></code> (method)<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L637">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert input to float tensor and run the compiled forward map.
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.inverse</span></code> (method)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L641">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run the compiled inverse map for one state.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-ln-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.ln_model</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-ln-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L645">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate normalised log density ``ln q(r)`` for one state.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-sample-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.sample_model</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-sample-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L652">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate ``m`` state-specific Cartesian samples and log densities.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-pgmcrys-v1-test-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper_PGMcrys_v1.test_inverse_</span></code> (method)<a class="headerlink" href="#model-helper-pgmcrys-v1-test-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L660">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>same as method with the same name in model_helper but has crystal_index as arg
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-class">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1</span></code> (class)<a class="headerlink" href="#pgmcrys-v1-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L696">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PGMcrys_v1</span><span class="p">(</span><span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!! : molecule should have &gt;3 atoms (also true in ic_map)
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-load-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1.load_model</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-load-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L699">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">VERSION</span><span class="o">=</span><span class="s1">&#39;NEW&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a current single-file model or a paper-era legacy artifact.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1.__init__</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L706">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build a position/conformation flow shared across crystal states.
+
+``ic_maps`` supplies one compatible coordinate map per state. Each
+layer alternates conditioned position and conformation splines.
+``DIM_connection`` controls exchanged feature width, ``n_att_heads``
+selects dense versus attention conformer conditioners, and
+``identity_init`` starts spline transforms at identity when true.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-get-c2p-p2c-extensions-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1.get_C2P_P2C_extensions_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-get-c2p-p2c-extensions-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L858">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_C2P_P2C_extensions_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>psi_{C-&gt;P}, psi_{P-&gt;C} are extended along last axis by 1 additional dimension
+    This extra dimensions is called &#39;crystal encoding&#39;.
+    To be able to concateneate this crystal encoding,
+    the batch size axes needs to match.
+    The following steps adjust the batch axis:
+
+TODO: move this to layer, because this does not match the other types of layer.
+    The other types of layer will use self.P2C_extension_shape for both P and C.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-forward-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1._forward_coupling_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-forward-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L882">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply alternating C-to-P and P-to-C spline couplings forward.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-inverse-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1._inverse_coupling_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-inverse-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L904">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert alternating couplings in exact reverse order.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-class">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol</span></code> (class)<a class="headerlink" href="#pgmmol-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L928">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PGMmol</span><span class="p">(</span><span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>molecule should have &gt;3 atoms
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-load-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol.load_model</span></code> (method)<a class="headerlink" href="#pgmmol-load-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L931">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load an isolated-molecule model from the current artifact format.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol.__init__</span></code> (method)<a class="headerlink" href="#pgmmol-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L935">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build a conformation-only flow for one isolated molecule.
+
+One compatible ``SingleMolecule_map`` may be supplied per metastable
+state. Translation and global rotation are absent, so only conformer
+coupling layers are created. ``DIM_connection`` and ``n_att_heads`` are
+retained for API compatibility and unused.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-get-extension-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol.get_extension_</span></code> (method)<a class="headerlink" href="#pgmmol-get-extension-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L1028">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_extension_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return the broadcast scalar embedding for a molecular state.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-forward-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol._forward_coupling_</span></code> (method)<a class="headerlink" href="#pgmmol-forward-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L1038">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Transform isolated-molecule internal variables to the base space.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-inverse-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol._inverse_coupling_</span></code> (method)<a class="headerlink" href="#pgmmol-inverse-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L1053">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert isolated-molecule coupling layers in reverse order.
+</pre></div>
+</div>
+</section>
+<section id="pgmmol-test-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMmol.test_inverse_</span></code> (method)<a class="headerlink" href="#pgmmol-test-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm.py#L1067">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>same as method with the same name in model_helper but has crystal_index as arg
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-pgm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

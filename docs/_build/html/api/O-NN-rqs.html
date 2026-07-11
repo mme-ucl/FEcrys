@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.rqs &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.spline_layer" href="O-NN-spline_layer.html" />
+    <link rel="prev" title="O.NN.representation_layers" href="O-NN-representation_layers.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-representation_layers.html" title="previous chapter">O.NN.representation_layers</a></li>
+      <li>Next: <a href="O-NN-spline_layer.html" title="next chapter">O.NN.spline_layer</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-rqs">
+<span id="api-o-nn-rqs"></span><h1>O.NN.rqs<a class="headerlink" href="#o-nn-rqs" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>TensorFlow rational-quadratic spline transformations.
+
+The module implements monotonic elementwise bijections used by the FECrys
+normalising flows. Transformations return both transformed values and
+elementwise log-absolute Jacobian determinants. The implementation follows
+Durkan et al., arXiv:1906.04032, and uses float64 internally near spline knots
+before returning float32 tensors.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="cast-64-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cast_64_</span></code> (function)<a class="headerlink" href="#cast-64-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L38">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cast_64_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert ``x`` to a TensorFlow ``float64`` tensor.
+</pre></div>
+</div>
+</section>
+<section id="cast-32-function">
+<h3><code class="docutils literal notranslate"><span class="pre">cast_32_</span></code> (function)<a class="headerlink" href="#cast-32-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L41">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">cast_32_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert ``x`` to a TensorFlow ``float32`` tensor.
+</pre></div>
+</div>
+</section>
+<section id="clip-by-value-preserve-gradient-function">
+<h3><code class="docutils literal notranslate"><span class="pre">clip_by_value_preserve_gradient</span></code> (function)<a class="headerlink" href="#clip-by-value-preserve-gradient-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L45">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">clip_by_value_preserve_gradient</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">clip_value_min</span><span class="p">,</span> <span class="n">clip_value_max</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Clip forward values while preserving the identity gradient.
+
+This matches ``tensorflow_probability.math.clip_by_value_preserve_gradient``:
+values are limited to the supplied interval, but differentiation with
+respect to ``t`` sees a derivative of one.
+</pre></div>
+</div>
+</section>
+<section id="get-grid-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_grid_</span></code> (function)<a class="headerlink" href="#get-grid-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L58">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_grid_</span><span class="p">(</span><span class="n">MLP_output</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">n_bins</span><span class="p">,</span> <span class="n">min_bin_w</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">shape_parallel</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert unconstrained network outputs into ordered spline knots.
+
+Parameters
+----------
+MLP_output : tensor
+    Flattened bin logits with final size ``dim * n_bins``.
+dim, n_bins : int
+    Number of transformed variables and bins per variable.
+min_bin_w : float
+    Minimum bin width in normalised interval units. It must satisfy
+    ``min_bin_w * n_bins &lt;= 1``.
+interval : sequence of two float
+    Lower and upper spline bounds.
+shape_parallel : list of int
+    Additional batch-like dimensions between the leading batch and
+    transformed-variable axes.
+
+Returns
+-------
+tensorflow.Tensor
+    Ordered knot positions with shape ``(-1, *shape_parallel, dim,
+    n_bins + 1)``.
+</pre></div>
+</div>
+</section>
+<section id="softplus-function">
+<h3><code class="docutils literal notranslate"><span class="pre">softplus_</span></code> (function)<a class="headerlink" href="#softplus-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L97">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">softplus_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply the elementwise softplus function ``log(1 + exp(x))``.
+</pre></div>
+</div>
+</section>
+<section id="soft-cap-function">
+<h3><code class="docutils literal notranslate"><span class="pre">soft_cap_</span></code> (function)<a class="headerlink" href="#soft-cap-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L101">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">soft_cap_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Continue softplus above ``a`` with a more slowly growing logarithm.
+
+``s`` controls the slope/softness of the continuation. Inputs and
+parameters are evaluated in float64.
+</pre></div>
+</div>
+</section>
+<section id="softplus-with-a-softcap-function">
+<h3><code class="docutils literal notranslate"><span class="pre">softplus_with_a_softcap_</span></code> (function)<a class="headerlink" href="#softplus-with-a-softcap-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L113">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">softplus_with_a_softcap_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply softplus up to ``a`` and its soft-capped continuation above it.
+</pre></div>
+</div>
+</section>
+<section id="normalize-knot-slopes-function">
+<h3><code class="docutils literal notranslate"><span class="pre">normalize_knot_slopes_</span></code> (function)<a class="headerlink" href="#normalize-knot-slopes-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L117">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">normalize_knot_slopes_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map unconstrained logits to positive, softly capped knot slopes.
+
+``knot_slope_range`` supplies a hard positive offset and the location at
+which the upper soft cap begins. The upper value is not a strict maximum.
+</pre></div>
+</div>
+</section>
+<section id="rqs-bin-function">
+<h3><code class="docutils literal notranslate"><span class="pre">rqs_bin_</span></code> (function)<a class="headerlink" href="#rqs-bin-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L131">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rqs_bin_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xA</span><span class="p">,</span> <span class="n">xB</span><span class="p">,</span> <span class="n">yA</span><span class="p">,</span> <span class="n">yB</span><span class="p">,</span> <span class="n">sA</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">sB</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate or invert one rational-quadratic spline bin.
+
+``xA``/``xB`` and ``yA``/``yB`` are the bin&#39;s input and output knots;
+``sA`` and ``sB`` are positive boundary slopes. All arguments broadcast.
+With ``forward=False``, ``x`` denotes an output-space value. Returns the
+transformed value and log absolute derivative in the chosen direction.
+Small negative inverse discriminants caused by round-off are clipped to
+zero.
+</pre></div>
+</div>
+</section>
+<section id="rqs-function">
+<h3><code class="docutils literal notranslate"><span class="pre">rqs_</span></code> (function)<a class="headerlink" href="#rqs-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L176">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rqs_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">identity_BCs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">periodic_BCs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply an elementwise monotonic rational-quadratic spline.
+
+Parameters
+----------
+x : tensor, shape (..., dim)
+    Values inside ``interval``.
+w, h : tensor, shape (..., dim * n_bins)
+    Unconstrained logits for input-bin widths and output-bin heights.
+s : tensor, shape (..., dim * (n_bins + 1))
+    Unconstrained knot-slope logits.
+interval : sequence of two float, default=(-1, 1)
+    Common input and output domain.
+identity_BCs : bool, default=False
+    Fix both outer slopes to one.
+periodic_BCs : bool, default=False
+    Tie the two outer slopes when identity boundaries are disabled.
+forward : bool, default=True
+    Evaluate input-to-output when true and the inverse otherwise.
+min_bin_width : float
+    Smallest allowed bin width.
+knot_slope_range : sequence of two float
+    Positive slope offset and soft-cap location.
+eps : float
+    Boundary clipping margin. The implementation currently fixes this to
+    ``1e-6`` internally for historical float32 compatibility.
+
+Returns
+-------
+y, log_abs_det_jacobian : tensorflow.Tensor
+    Float32 tensors, each with shape ``(..., dim)``.
+</pre></div>
+</div>
+</section>
+<section id="shift-function">
+<h3><code class="docutils literal notranslate"><span class="pre">shift_</span></code> (function)<a class="headerlink" href="#shift-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L316">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">shift_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shifts</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply an invertible periodic translation within an interval.
+
+``shifts`` may be scalar or broadcastable to ``x``. Values wrap into the
+half-open interval ``[a, b)``. Setting ``forward=False`` applies the
+inverse translation.
+</pre></div>
+</div>
+</section>
+<section id="periodic-rqs-function">
+<h3><code class="docutils literal notranslate"><span class="pre">periodic_rqs_</span></code> (function)<a class="headerlink" href="#periodic-rqs-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L331">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">periodic_rqs_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">list_w</span><span class="p">,</span> <span class="n">list_h</span><span class="p">,</span> <span class="n">list_s</span><span class="p">,</span> <span class="n">list_shifts</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compose shifted splines to form a periodic bijection.
+
+The leading axis of ``list_w``, ``list_h``, ``list_s``, and
+``list_shifts`` enumerates transformations. Each stage shifts into a local
+periodic coordinate system, applies :func:`rqs_` with tied boundary
+slopes, then reverses the shift. Inverse evaluation traverses stages in
+reverse order. Returns transformed values and the sum of elementwise log
+Jacobians, both shaped like ``x``.
+</pre></div>
+</div>
+</section>
+<section id="test-periodic-rqs-function">
+<h3><code class="docutils literal notranslate"><span class="pre">test_periodic_rqs_</span></code> (function)<a class="headerlink" href="#test-periodic-rqs-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L383">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_periodic_rqs_</span><span class="p">(</span><span class="n">n_bins</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n_transforms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Visually test scalar periodic-spline inversion and Jacobian cancellation.
+
+Random spline parameters are generated for 1,000 points. The function
+prints mean/max Jacobian cancellation error, displays diagnostic plots,
+and returns ``None``. It is an interactive diagnostic, not a unit test.
+</pre></div>
+</div>
+</section>
+<section id="test-periodic-rqs-parallel-function">
+<h3><code class="docutils literal notranslate"><span class="pre">test_periodic_rqs_parallel_</span></code> (function)<a class="headerlink" href="#test-periodic-rqs-parallel-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/rqs.py#L431">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_periodic_rqs_parallel_</span><span class="p">(</span><span class="n">n_bins</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n_transforms</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">min_bin_width</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">knot_slope_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run the periodic-spline diagnostic with an extra parallel axis.
+
+Two copies of a 1D grid are transformed together to exercise broadcasting.
+Inversion and log-Jacobian errors are printed and plotted; no value is
+returned.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-rqs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

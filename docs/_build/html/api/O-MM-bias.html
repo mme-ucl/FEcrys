@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.bias &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.ecm_basic" href="O-MM-ecm_basic.html" />
+    <link rel="prev" title="O.MM.Tx" href="O-MM-Tx.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-MM-Tx.html" title="previous chapter">O.MM.Tx</a></li>
+      <li>Next: <a href="O-MM-ecm_basic.html" title="next chapter">O.MM.ecm_basic</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-bias">
+<span id="api-o-mm-bias"></span><h1>O.MM.bias<a class="headerlink" href="#o-mm-bias" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py">View module on GitHub</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Module docstring pending.</p>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="potential-energy-function">
+<h3><code class="docutils literal notranslate"><span class="pre">_potential_energy_</span></code> (function)<a class="headerlink" href="#potential-energy-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L83">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_potential_energy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;u+v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate physical and/or bias energy for a coordinate batch.
+
+Parameters
+----------
+self : SingleComponent
+    Simulation object to which :class:`BIAS` has attached energy-group
+    properties.
+r : array-like, shape (n_frames, n_atoms, 3)
+    Cartesian coordinates in the units expected by ``_set_r_``.
+b : array-like, shape (n_frames, 3, 3), optional
+    Periodic boxes. The current context box is retained when omitted.
+which : {&quot;u&quot;, &quot;v&quot;, &quot;u+v&quot;, &quot;v+u&quot;}
+    Select physical, bias, or total potential energy.
+
+Returns
+-------
+numpy.ndarray, shape (n_frames, 1)
+    Reduced energies in ``kT``.
+
+Notes
+-----
+The active context is updated once per frame. Its original coordinates and
+box are restored before returning.
+</pre></div>
+</div>
+</section>
+<section id="bias-class">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS</span></code> (class)<a class="headerlink" href="#bias-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L131">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">BIAS</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Manage static bias forces attached to a ``SingleComponent`` system.
+
+The manager records each bias constructor, keeps bias forces in OpenMM
+group 15, and exposes separate physical/bias energy evaluation. Construct
+and add biases before reinitialising the OpenMM simulation context.
+</pre></div>
+</div>
+</section>
+<section id="bias-set-potential-energy-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.set_potential_energy_</span></code> (method)<a class="headerlink" href="#bias-set-potential-energy-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L139">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_potential_energy_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">define_current_CV_attribute</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Attach force-group energy accessors to the simulation object.
+
+Group 15 is reserved for bias forces; all earlier groups are treated
+as the physical system. The method adds ``_current_BIAS_``,
+``_current_U_``, ``_current_U_add_BIAS_``, and ``potential_energy_`` to
+the simulation object&#39;s class/instance. Energies read directly from
+these properties are in kJ/mol. ``define_current_CV_attribute`` is
+retained for a planned CustomCVForce implementation and currently has
+no effect.
+</pre></div>
+</div>
+</section>
+<section id="bias-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.__init__</span></code> (method)<a class="headerlink" href="#bias-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L193">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise an empty bias registry for a configured simulation.
+
+``sc.system`` must not already contain force-group-15 forces. The
+constructor does not modify the OpenMM system until :meth:`add_bias_`
+is called.
+</pre></div>
+</div>
+</section>
+<section id="bias-all-groups-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.all_groups</span></code> (method)<a class="headerlink" href="#bias-all-groups-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L222">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">all_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Force-group number for every force in current system order.
+</pre></div>
+</div>
+</section>
+<section id="bias-add-bias-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.add_bias_</span></code> (method)<a class="headerlink" href="#bias-add-bias-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L226">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_bias_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct, register, and add one bias to the OpenMM system.
+
+``cls`` must accept ``sc=...`` plus ``kwargs`` and expose a
+``bias_related_forces`` sequence. ``name`` must be unique; an integer
+sequence number is used when omitted. The method updates accounting,
+installs energy accessors, marks the simulation as biased, and returns
+``None``. Reinitialise the simulation context before running dynamics.
+</pre></div>
+</div>
+</section>
+<section id="bias-remove-all-bias-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.remove_all_bias_</span></code> (method)<a class="headerlink" href="#bias-remove-all-bias-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L271">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_all_bias_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove all group-15 forces and reset the bias registry.
+
+This mutates ``sc.system`` but does not rebuild an existing simulation
+context. The method asserts that the original physical-force count is
+restored.
+</pre></div>
+</div>
+</section>
+<section id="bias-remove-all-bias-index-bias-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.remove_all_bias_.index_bias_</span></code> (nested helper)<a class="headerlink" href="#bias-remove-all-bias-index-bias-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L281">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">index_bias_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return current system indices of all force-group-15 forces.
+</pre></div>
+</div>
+</section>
+<section id="bias-save-simulation-data-zero-bias-method">
+<h3><code class="docutils literal notranslate"><span class="pre">BIAS.save_simulation_data_zero_bias_</span></code> (method)<a class="headerlink" href="#bias-save-simulation-data-zero-bias-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L321">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_simulation_data_zero_bias_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dont_save_just_stat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Select and optionally save frames on which the bias is effectively zero.
+
+Bias energies below ``eps`` (in reduced ``kT`` units) are classified as
+unbiased. The method reports retained fraction and mean physical
+energies, stores biased/unbiased indices and statistics on this object,
+and serializes a restart-style dataset unless ``dont_save_just_stat``
+is true. ``path_and_name`` is passed directly to ``save_pickle_``.
+</pre></div>
+</div>
+</section>
+<section id="set-inds-torsion-for-bias-function">
+<h3><code class="docutils literal notranslate"><span class="pre">_set_inds_torsion_for_bias_</span></code> (function)<a class="headerlink" href="#set-inds-torsion-for-bias-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L367">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_inds_torsion_for_bias_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_torsion</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map one molecule&#39;s torsion indices to every molecule in the topology.
+
+Returns the four original within-molecule indices and an integer array of
+shape ``(n_mol, 4)`` in simulation topology order.
+</pre></div>
+</div>
+</section>
+<section id="set-means-torsions-for-bias-function">
+<h3><code class="docutils literal notranslate"><span class="pre">_set_means_torsions_for_bias_</span></code> (function)<a class="headerlink" href="#set-means-torsions-for-bias-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L387">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_means_torsions_for_bias_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">means</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Broadcast a repeating sequence of torsion centres across molecules.
+
+A scalar is repeated for every molecule. A sequence must have a length
+dividing ``n_mol`` and is tiled in molecule order. Returns shape
+``(n_mol,)`` in radians.
+</pre></div>
+</div>
+</section>
+<section id="walls-class">
+<h3><code class="docutils literal notranslate"><span class="pre">WALLS</span></code> (class)<a class="headerlink" href="#walls-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L408">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">WALLS</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">inds_torsion</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">means</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">width_percentage</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">68.17</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Confine a torsion to metastable wells with smooth periodic walls.
+
+This static bias discourages rare transitions out of selected torsional
+basins. It is intended for cases where most sampled frames remain unbiased;
+a retained zero-bias fraction above roughly 95% is a useful diagnostic.
+
+example for case of n_mol=16:
+
+    sc.inject_methods_from_another_class_(WALLS)
+    av_value = 1.88 # minimiser of unbiased marginal FES that would be sampled in the absence of the rare event
+    sc.set_walls_(inds_torsion=[18, 15, 10,  8], means=[-av_value,av_value])
+    Verbose output:
+        inds_torsion provided: [18 15 10  8]
+        inds_torsion for self.topology: [5, 4, 15, 13] # can be different if permuation of atoms used
+        16 means: [-1.6  1.6 -1.6  1.6 -1.6  1.6 -1.6  1.6 -1.6  1.6 -1.6  1.6 -1.6  1.6
+        -1.6  1.6]
+        bias: system was updated to include bias, run initialise_simulation_ to apply this change to simulation
+</pre></div>
+</div>
+</section>
+<section id="walls-smooth-periodic-square-well-v2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WALLS.smooth_periodic_square_well_v2_</span></code> (method)<a class="headerlink" href="#walls-smooth-periodic-square-well-v2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L440">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">smooth_periodic_square_well_v2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">centre</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the wall energy for angles ``phi`` around ``centre``.
+
+Angles are periodic in radians. The returned NumPy array is zero inside
+the permitted region and rises quadratically in the transformed
+distance to ``self.height`` at the periodic boundary.
+</pre></div>
+</div>
+</section>
+<section id="walls-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WALLS.__init__</span></code> (method)<a class="headerlink" href="#walls-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L455">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">inds_torsion</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">means</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">width_percentage</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">68.17</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build one periodic wall torsion for every molecule.
+
+``inds_torsion`` gives four within-molecule atom indices. ``means`` is
+one or a repeating sequence of desired angles in radians.
+``width_percentage`` is the unbiased fraction of the full 2-pi domain,
+and ``height`` is the maximum wall energy in kJ/mol. The constructed
+group-15 ``CustomTorsionForce`` is exposed in ``bias_related_forces``
+but is not itself added to the system.
+</pre></div>
+</div>
+</section>
+<section id="walls-check-plot-torsion-method">
+<h3><code class="docutils literal notranslate"><span class="pre">WALLS.check_plot_torsion_</span></code> (method)<a class="headerlink" href="#walls-check-plot-torsion-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L491">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_plot_torsion_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inds</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate and optionally plot the biased torsion for every molecule.
+
+``r`` is reshaped into molecules and the returned angles have shape
+``(n_frames, n_mol)`` in radians. When plotting, ``inds`` optionally
+highlights selected frames in red and the wall profile is scaled to
+each histogram for visual comparison.
+</pre></div>
+</div>
+</section>
+<section id="floor-class">
+<h3><code class="docutils literal notranslate"><span class="pre">FLOOR</span></code> (class)<a class="headerlink" href="#floor-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L523">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">FLOOR</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">inds_torsion</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">percentage_raise</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span> <span class="n">specific_AD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Raise selected torsional wells with an accelerated-MD-style bias.
+
+The bias is applied to matching ``PeriodicTorsionForce`` and
+``RBTorsionForce`` terms. Its practical sampling effectiveness remains
+experimental and should be checked by reweighting diagnostics.
+</pre></div>
+</div>
+</section>
+<section id="floor-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FLOOR.__init__</span></code> (method)<a class="headerlink" href="#floor-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L535">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">inds_torsion</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">percentage_raise</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span> <span class="n">specific_AD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct floor forces for a selected molecular torsion.
+
+``percentage_raise`` chooses the fraction of each torsion&#39;s energy
+range below which the floor acts. With ``specific_AD=True``, only exact
+A-B-C-D terms (in either direction) match; otherwise every term rotating
+about the selected B-C bond matches. Generated forces are assigned to
+group 15 and collected in ``bias_related_forces``.
+</pre></div>
+</div>
+</section>
+<section id="floor-init-add-nested-helper">
+<h3><code class="docutils literal notranslate"><span class="pre">FLOOR.__init__.ADD_</span></code> (nested helper)<a class="headerlink" href="#floor-init-add-nested-helper" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L572">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ADD_</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="n">a4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return whether one force-field torsion matches the selection.
+</pre></div>
+</div>
+</section>
+<section id="floor-check-plot-torsion-method">
+<h3><code class="docutils literal notranslate"><span class="pre">FLOOR.check_plot_torsion_</span></code> (method)<a class="headerlink" href="#floor-check-plot-torsion-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/bias.py#L673">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_plot_torsion_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate and optionally plot raw and reweighted torsion histograms.
+
+Returns angles with shape ``(n_frames, n_mol)`` in radians. ``weights``
+must provide one value per frame and is used for the black reweighted
+histogram; the unweighted distribution is shown in red.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-bias.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

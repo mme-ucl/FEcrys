@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.ff_setup &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.mm_helper" href="O-MM-mm_helper.html" />
+    <link rel="prev" title="O.MM.ecm_basic" href="O-MM-ecm_basic.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-MM-ecm_basic.html" title="previous chapter">O.MM.ecm_basic</a></li>
+      <li>Next: <a href="O-MM-mm_helper.html" title="next chapter">O.MM.mm_helper</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-ff-setup">
+<span id="api-o-mm-ff-setup"></span><h1>O.MM.ff_setup<a class="headerlink" href="#o-mm-ff-setup" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py">View module on GitHub</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Module docstring pending.</p>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="change-charges-itp-top-function">
+<h3><code class="docutils literal notranslate"><span class="pre">change_charges_itp_top_</span></code> (function)<a class="headerlink" href="#change-charges-itp-top-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L6">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">change_charges_itp_top_</span><span class="p">(</span><span class="n">path_top_or_itp_file_in</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_top_or_itp_file_out</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">replacement_charges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">neutralise_charge</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="change-n-mol-top-function">
+<h3><code class="docutils literal notranslate"><span class="pre">change_n_mol_top_</span></code> (function)<a class="headerlink" href="#change-n-mol-top-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L77">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">change_n_mol_top_</span><span class="p">(</span><span class="n">path_top_file_in</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_top_file_out</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_n_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-class">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation</span></code> (class)<a class="headerlink" href="#methods-for-permutation-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L127">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">methods_for_permutation</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-current-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_r_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L133">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-current-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_v_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L139">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-current-f-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_F_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-f-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L145">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_F_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-system-mass-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._system_mass_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-system-mass-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L151">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_system_mass_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-set-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._set_r_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L155">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-set-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._set_v_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L159">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-forward-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.forward_atom_index_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-forward-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L163">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-inverse-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.inverse_atom_index_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-inverse-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L167">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-set-arrays-blank-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.set_arrays_blank_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-arrays-blank-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L173">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_arrays_blank_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-save-frame-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.save_frame_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-save-frame-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L184">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_frame_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-run-simulation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.run_simulation_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-run-simulation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L194">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-run-simulation-w-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.run_simulation_w_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-run-simulation-w-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L206">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_w_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="methods-for-permutation-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.u_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L220">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>speed up evaluation also # ..
+</pre></div>
+</div>
+</section>
+<section id="itp2ff-class">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF</span></code> (class)<a class="headerlink" href="#itp2ff-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L248">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">itp2FF</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.__init__</span></code> (method)<a class="headerlink" href="#itp2ff-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L249">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-itp-mol-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.itp_mol</span></code> (method)<a class="headerlink" href="#itp2ff-itp-mol-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L254">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">itp_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-itp-mol-adjusted-charges-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.itp_mol_adjusted_charges</span></code> (method)<a class="headerlink" href="#itp2ff-itp-mol-adjusted-charges-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L258">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">itp_mol_adjusted_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-top-crys-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.top_crys</span></code> (method)<a class="headerlink" href="#itp2ff-top-crys-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L263">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_crys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-gro-mol-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.gro_mol</span></code> (method)<a class="headerlink" href="#itp2ff-gro-mol-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L267">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gro_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-pdb-mol-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.pdb_mol</span></code> (method)<a class="headerlink" href="#itp2ff-pdb-mol-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L271">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pdb_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-single-mol-pdb-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_pdb</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L275">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-single-mol-pdb-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF._single_mol_pdb_file_</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L278">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_pdb_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-single-mol-pdb-permuted-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_pdb_permuted</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-permuted-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L282">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_pdb_permuted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-single-mol-permutations-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_permutations</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-permutations-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L286">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_permutations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-set-pemutation-to-match-topology-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.set_pemutation_to_match_topology_</span></code> (method)<a class="headerlink" href="#itp2ff-set-pemutation-to-match-topology-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L289">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_pemutation_to_match_topology_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-a-step-after-initialise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.a_step_after_initialise_</span></code> (method)<a class="headerlink" href="#itp2ff-a-step-after-initialise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L345">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">a_step_after_initialise_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="itp2ff-initialise-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.initialise_FF_</span></code> (method)<a class="headerlink" href="#itp2ff-initialise-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L348">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuralise_net_charge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">replacement_charges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this only after (n_mol and n_atoms_mol) defined in __init__ of SingleComponent
+</pre></div>
+</div>
+</section>
+<section id="itp2ff-set-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.set_FF_</span></code> (method)<a class="headerlink" href="#itp2ff-set-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L373">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this just before self.system initialisation
+</pre></div>
+</div>
+</section>
+<section id="itp2ff-reset-n-mol-top-method">
+<h3><code class="docutils literal notranslate"><span class="pre">itp2FF.reset_n_mol_top_</span></code> (method)<a class="headerlink" href="#itp2ff-reset-n-mol-top-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L379">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_n_mol_top_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="opls-general-class">
+<h3><code class="docutils literal notranslate"><span class="pre">OPLS_general</span></code> (class)<a class="headerlink" href="#opls-general-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L405">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OPLS_general</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="opls-general-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">OPLS_general.__init__</span></code> (method)<a class="headerlink" href="#opls-general-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L406">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="opls-general-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">OPLS_general.FF_name</span></code> (method)<a class="headerlink" href="#opls-general-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L416">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-general-class">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF_general</span></code> (class)<a class="headerlink" href="#gaff-general-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L419">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GAFF_general</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-general-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF_general.__init__</span></code> (method)<a class="headerlink" href="#gaff-general-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L420">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-general-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF_general.FF_name</span></code> (method)<a class="headerlink" href="#gaff-general-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L430">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="remove-force-by-names-function">
+<h3><code class="docutils literal notranslate"><span class="pre">remove_force_by_names_</span></code> (function)<a class="headerlink" href="#remove-force-by-names-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L435">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_force_by_names_</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="remove-force-by-names-remove-force-by-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">remove_force_by_names_.remove_force_by_name_</span></code> (method)<a class="headerlink" href="#remove-force-by-names-remove-force-by-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L436">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_force_by_name_</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="get-pairs-mol-inner-function">
+<h3><code class="docutils literal notranslate"><span class="pre">_get_pairs_mol_inner_</span></code> (function)<a class="headerlink" href="#get-pairs-mol-inner-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L452">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_pairs_mol_inner_</span><span class="p">(</span><span class="n">single_mol_pdb_file</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>n atoms in a row is n-1 bonds
+
+n = 3 for this velff because nrexcl = 2
+    within 2 bonds away removed
+    within 3 bonds away kept (1-2-3-4 ; 1-4 kept)
+</pre></div>
+</div>
+</section>
+<section id="get-pairs-function">
+<h3><code class="docutils literal notranslate"><span class="pre">_get_pairs_</span></code> (function)<a class="headerlink" href="#get-pairs-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L489">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_pairs_</span><span class="p">(</span><span class="n">remove_mol_ij</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="custom-lj-force-function">
+<h3><code class="docutils literal notranslate"><span class="pre">custom_LJ_force_</span></code> (function)<a class="headerlink" href="#custom-lj-force-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L501">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_LJ_force_</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">C6_C12_types_dictionary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LJ : all Lennard-Jones
+</pre></div>
+</div>
+</section>
+<section id="custom-c-force-function">
+<h3><code class="docutils literal notranslate"><span class="pre">custom_C_force_</span></code> (function)<a class="headerlink" href="#custom-c-force-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L570">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_C_force_</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>C : all Coulombic
+</pre></div>
+</div>
+</section>
+<section id="tmff-class">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF</span></code> (class)<a class="headerlink" href="#tmff-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L647">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">tmFF</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tailor-made FF
+</pre></div>
+</div>
+</section>
+<section id="tmff-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF.__init__</span></code> (method)<a class="headerlink" href="#tmff-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L649">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tmff-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF.FF_name</span></code> (method)<a class="headerlink" href="#tmff-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L659">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tmff-a-step-after-initialise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF.a_step_after_initialise_</span></code> (method)<a class="headerlink" href="#tmff-a-step-after-initialise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L662">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">a_step_after_initialise_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tmff-recast-nb-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF.recast_NB_</span></code> (method)<a class="headerlink" href="#tmff-recast-nb-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L691">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">recast_NB_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tmff-corrections-to-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tmFF.corrections_to_ff_</span></code> (method)<a class="headerlink" href="#tmff-corrections-to-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L706">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">corrections_to_ff_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbos</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="velff-class">
+<h3><code class="docutils literal notranslate"><span class="pre">velff</span></code> (class)<a class="headerlink" href="#velff-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L709">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">velff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>keeping seperate to load pickled files
+</pre></div>
+</div>
+</section>
+<section id="velff-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">velff.__init__</span></code> (method)<a class="headerlink" href="#velff-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L711">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="velff-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">velff.FF_name</span></code> (method)<a class="headerlink" href="#velff-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L721">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-ff_setup.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

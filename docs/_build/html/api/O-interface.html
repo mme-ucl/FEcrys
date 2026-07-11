@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.interface &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.plotting" href="O-plotting.html" />
+    <link rel="prev" title="O" href="O.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O.html" title="previous chapter">O</a></li>
+      <li>Next: <a href="O-plotting.html" title="next chapter">O.plotting</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-interface">
+<span id="api-o-interface"></span><h1>O.interface<a class="headerlink" href="#o-interface" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>High-level workflows for training and evaluating FEcrys flow models.
+
+The classes in this module connect molecular-dynamics datasets, internal-
+coordinate maps, probabilistic generative models, and BAR/MBAR free-energy
+estimators.  They also centralise persistence of training results and generated
+samples.  Methods whose names end in an underscore follow the naming convention
+used throughout the original FEcrys research code; the suffix does not imply a
+private method.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="nn-interface-helper-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper</span></code> (class)<a class="headerlink" href="#nn-interface-helper-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L18">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_helper</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Provide persistence and free-energy analysis shared by the interfaces.
+
+Subclasses are expected to set ``name``, construct ``model`` and ``trainer``,
+and populate the energy and evaluation arrays used by the analysis methods.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-helper-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L25">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise standard result directories and the split-index cache.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-misc-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_misc</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-misc-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L34">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_misc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix used for miscellaneous training-result files.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-save-misc-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.save_misc_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-save-misc-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L37">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_misc_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save the trainer&#39;s accumulated diagnostics and free-energy curves.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_inds_rand</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L43">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_inds_rand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix used to persist the shuffled dataset indices.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-save-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.save_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-save-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L46">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save the indices defining the training/validation split.
+
+Parameters
+----------
+key : str, optional
+    Suffix that distinguishes states sharing the same interface name.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-load-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.load_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-load-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L55">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore previously saved training/validation split indices.
+
+Parameters
+----------
+key : str, optional
+    State-specific suffix used when the indices were saved.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-inv-test-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_inv_test</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-inv-test-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L66">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_inv_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix used for model-inversion diagnostic results.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-save-inv-test-results-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.save_inv_test_results_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-save-inv-test-results-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L69">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inv_test_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save inversion diagnostics collected by the trainer.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-load-inv-test-results-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.load_inv_test_results_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-load-inv-test-results-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L72">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_inv_test_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load inversion diagnostics into ``inv_test_results``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-bar-inputs-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_BAR_inputs</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-bar-inputs-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L77">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_BAR_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix for two-state BAR input and output files.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-mbar-inputs-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_mBAR_inputs</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-mbar-inputs-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L84">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_mBAR_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix for multistate BAR input and output files.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-samples-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_samples</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-samples-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L91">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix for configurations sampled from the trained model.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-name-save-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.name_save_model</span></code> (method)<a class="headerlink" href="#nn-interface-helper-name-save-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L97">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">name_save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Prefix for the serialised generative model.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-save-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.save_model_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-save-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L100">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_model_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serialise the current model using its native save method.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-load-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.load_model_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-load-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L103">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_model_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">VERSION</span><span class="o">=</span><span class="s1">&#39;NEW&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a saved model, optionally enabling legacy import aliases.
+
+Parameters
+----------
+VERSION : {&#39;NEW&#39;, &#39;OLD&#39;}, optional
+    ``&#39;NEW&#39;`` uses the current package layout.  Any other value installs
+    aliases for the former top-level ``NN`` package before loading an
+    old pickle.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-set-training-validation-split-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.set_training_validation_split_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-set-training-validation-split-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L130">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_training_validation_split_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_training</span><span class="p">,</span> <span class="n">inds_rand</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Shuffle a dataset and construct its training and validation subsets.
+
+The same permutation is applied to coordinates ``r`` and reduced
+potential energies ``u``.  If no permutation is supplied or cached,
+:func:`find_split_indices_` searches for a split whose energy
+distributions agree within the hard-coded tolerance.
+
+Parameters
+----------
+n_training : int
+    Number of shuffled observations assigned to the training subset.
+inds_rand : array_like of int, optional
+    Complete permutation of dataset indices.  It is cached in
+    ``self.inds_rand`` for reproducible reuse.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-check-pes-matching-dataset-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.check_PES_matching_dataset_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-check-pes-matching-dataset-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L167">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">check_PES_matching_dataset_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compare stored energies with the configured potential-energy function.
+
+Parameters
+----------
+m : int, optional
+    Maximum number of configurations checked in each data subset.
+
+Notes
+-----
+The method prints the mean, minimum, and maximum residual for both the
+training and validation data; it does not impose an acceptance threshold.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-load-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.load_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-load-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L188">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index_of_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load saved MD and model energy samples from every evaluation batch.
+
+Parameters
+----------
+index_of_state : int, optional
+    Thermodynamic-state index embedded in the BAR filenames.
+
+Notes
+-----
+The loaded values populate ``MD_energies_T``, ``MD_energies_V``, and
+``BG_energies`` with axes ``(state, evaluation, sample)``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-plot-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.plot_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-plot-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L235">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">_from</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">_range</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot energy-overlap histograms over the course of training.
+
+Parameters
+----------
+dpi : int, optional
+    Resolution of the histogram figure.
+n_bins : int, optional
+    Number of common energy bins.
+_from : int, optional
+    First model-evaluation index to display.
+_range : tuple of float, optional
+    Explicit lower and upper histogram limits.  By default they are
+    inferred from validation energies and extended toward higher energy.
+
+Returns
+-------
+None
+    The colour scale and histogram figures are created with Matplotlib.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-solve-bar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.solve_BAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-solve-bar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L304">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_BAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index_of_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">uncertainty_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method_for_selective_evalaution_</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate absolute free energies from saved two-state BAR inputs.
+
+Parameters
+----------
+rerun : bool, optional
+    Recompute even when a saved output is available.
+index_of_state : int, optional
+    State whose training and validation BAR inputs should be loaded.
+key : str, optional
+    Suffix distinguishing the saved result for this state.
+n_bootstraps : int, optional
+    Number of bootstrap samples passed to :class:`pymbar.MBAR`.
+uncertainty_method : str, optional
+    PyMBAR uncertainty method, for example ``&#39;bootstrap&#39;``.
+save_output : bool, optional
+    Persist the resulting ``estimates_BAR`` array.
+method_for_selective_evalaution_ : callable, optional
+    Alternative evaluator used when model-sample energies should be
+    computed only for selected training batches.
+
+Notes
+-----
+``estimates_BAR`` has leading rows for training free energy/error and
+validation free energy/error.  Failed estimates are marked with ``1e20``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-set-final-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.set_final_result_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-set-final-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L418">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_final_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Aggregate raw validation BAR estimates into the reported result.
+
+Running free-energy averages and their dispersion are computed with
+:func:`FE_of_model_curve_`.  The final values are exposed as
+``BAR_V_FE``, ``BAR_V_SD``, and ``BAR_V_SE``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-helper-plot-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_helper.plot_result_</span></code> (method)<a class="headerlink" href="#nn-interface-helper-plot-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L476">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">entropy_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_red</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_mol</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_raw_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha_raw_errors</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot raw and running free-energy estimates against training batch.
+
+Parameters
+----------
+window : float, optional
+    Half-width of the vertical plotting window around the final estimate.
+entropy_only : bool, optional
+    Retained for API compatibility; the current implementation does not
+    transform the plotted values.
+plot_red : bool, optional
+    Show running grid-search and BAR estimates with uncertainty bounds.
+n_mol : int, optional
+    Number of molecules used to convert crystal to per-molecule values.
+colors : sequence of str, optional
+    Colours for raw BAR, auxiliary, grid-search, and averaged BAR curves.
+ax : matplotlib.axes.Axes, optional
+    Existing axes.  When omitted, the pyplot state is used.
+plot_raw_errors : bool, optional
+    Shade the raw PyMBAR standard-error interval.
+alpha_raw_errors : float, optional
+    Opacity of the raw-error band.
+
+Returns
+-------
+None
+    The plot is modified in place and final numerical estimates printed.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc</span></code> (class)<a class="headerlink" href="#nn-interface-sc-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L556">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_sc</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ic_map_class</span><span class="o">=</span><span class="n">SingleComponent_map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Represent one metastable state described by one MD dataset.
+
+The dataset is split into training and validation observations, while one
+internal-coordinate map is fitted to the full coordinate ensemble.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L563">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ic_map_class</span><span class="o">=</span><span class="n">SingleComponent_map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure a single-state interface and optionally load its dataset.
+
+Parameters
+----------
+name : str
+    Experiment identifier used to construct result filenames.
+path_dataset : str or array_like
+    Pickled simulation-data path when ``training`` is true.  In
+    evaluation-only mode it may instead supply energy data directly.
+fraction_training : float, optional
+    Fraction of observations assigned to the training subset.
+training : bool, optional
+    Whether coordinate data and simulation metadata are required.
+ic_map_class : type, optional
+    Internal-coordinate map class constructed by :meth:`set_ic_map_step1`.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-import-md-dataset-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.import_MD_dataset_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-import-md-dataset-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L604">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_MD_dataset_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load an MD dataset and reconstruct its molecular system.
+
+The method restores the :class:`SingleComponent` setup recorded with
+the simulation, exposes its reduced potential as ``u_``, and imports
+coordinates, box vectors, temperatures, and reduced energies.  The
+saved box is required to be constant across the NVT trajectory.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-set-ic-map-step1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.set_ic_map_step1</span></code> (method)<a class="headerlink" href="#nn-interface-sc-set-ic-map-step1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L634">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>self.sc.mol is available for this reason; to check the indices of atoms in the molecule
+once (ind_root_atom, option) pair is chosen, keep a fixed note of this for this molecule
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-set-ic-map-step2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.set_ic_map_step2</span></code> (method)<a class="headerlink" href="#nn-interface-sc-set-ic-map-step2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L647">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_rand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_PES</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove centre-of-mass motion and split the coordinate dataset.
+
+Parameters
+----------
+inds_rand : array_like of int, optional
+    Reusable permutation defining the training/validation split.
+check_PES : bool, optional
+    Compare stored energies with the reconstructed potential after
+    splitting.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-truncate-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.truncate_data_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-truncate-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L666">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">truncate_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restrict the interface to ``m`` observations and rebuild its split.
+
+Parameters
+----------
+m : int
+    Number of observations retained.  A split of this size is selected
+    first, then divided again according to ``fraction_training``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-set-ic-map-step3-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc.set_ic_map_step3</span></code> (method)<a class="headerlink" href="#nn-interface-sc-set-ic-map-step3-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L685">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="n">WhitenFlow</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit the internal-coordinate map and verify its numerical inverse.
+
+Parameters
+----------
+n_mol_unitcell : int, optional
+    Number of molecules in the crystallographic unit cell underlying the
+    simulated supercell.
+COM_remover : type, optional
+    Flow layer used to whiten or remove centre-of-mass coordinates.
+
+Notes
+-----
+Inversion errors are reported on at most 1000 validation structures, and
+transformed-coordinate magnitudes are checked against the expected unit
+interval.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap</span></code> (class)<a class="headerlink" href="#nn-interface-sc-multimap-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L734">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_sc_multimap</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">paths_datasets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="n">PGMcrys_v1</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ic_map_class</span><span class="o">=</span><span class="n">SingleComponent_map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Coordinate a shared generative model across several metastable states.
+
+Each state owns an :class:`NN_interface_sc` instance and its own coordinate
+map.  A single model and trainer then learn across all states and can produce
+state-specific BAR estimates or joint MBAR differences.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L742">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">paths_datasets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="n">PGMcrys_v1</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ic_map_class</span><span class="o">=</span><span class="n">SingleComponent_map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct one single-state interface for every supplied dataset.
+
+Parameters
+----------
+name : str
+    Shared experiment identifier.
+paths_datasets : list
+    Dataset path or evaluation-only energy input for each state.
+fraction_training : float, optional
+    Fraction of each dataset assigned to training.
+running_in_notebook : bool, optional
+    Allow the trainer to use notebook-oriented progress displays.
+training : bool, optional
+    Whether full coordinates and simulation systems will be loaded.
+model_class : type, optional
+    Multi-map probabilistic generative model implementation.
+identity_init : bool, optional
+    Initialise trainable transformations near the identity.
+ic_map_class : type, optional
+    Internal-coordinate map used for each state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-save-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.save_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-save-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L794">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save each state&#39;s training/validation permutation separately.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-load-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.load_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-load-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L800">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load the saved training/validation permutation for every state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-set-ic-map-step1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.set_ic_map_step1</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-set-ic-map-step1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L806">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Define atom ordering for every state&#39;s internal-coordinate map.
+
+Parameters
+----------
+ind_root_atom : int, optional
+    Root atom used to build the molecular coordinate tree.
+option : optional
+    Alternative map-construction option forwarded unchanged to each map.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-set-ic-map-step2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.set_ic_map_step2</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-set-ic-map-step2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L820">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_PES</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove centre-of-mass motion and split all state datasets.
+
+Parameters
+----------
+check_PES : bool, optional
+    Verify each dataset against its reconstructed potential.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-set-ic-map-step3-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.set_ic_map_step3</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-set-ic-map-step3-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L830">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol_unitcells</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="n">WhitenFlow</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise and test the internal-coordinate map for every state.
+
+Parameters
+----------
+n_mol_unitcells : list of int or int, optional
+    Molecule count of the underlying unit cell for each state.  A scalar
+    is accepted only for a single-state interface.
+COM_remover : type, optional
+    Centre-of-mass transformation used by each coordinate map.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-set-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.set_model</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-set-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L866">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">evaluation_batch_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">identity_init</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build the shared normalising-flow model and run an inverse check.
+
+Parameters
+----------
+learning_rate : float, optional
+    Initial optimiser learning rate.
+evaluation_batch_size : int, optional
+    Number of structures used for model evaluation and sampling batches.
+n_layers : int, optional
+    Number of coupling transformations in the model.
+DIM_connection : int, optional
+    Width of the inter-component connection representation.
+n_att_heads : int, optional
+    Number of attention heads used by the model.
+identity_init : bool, optional
+    Override the interface-wide identity-initialisation setting.
+initialise : bool, optional
+    Force model variable creation, useful for eager-mode debugging.
+test_inverse : bool, optional
+    Test forward/inverse consistency on validation structures.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-set-trainer-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.set_trainer</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-set-trainer-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L918">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_trainer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches_between_evaluations</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Attach a trainer to the current model.
+
+Parameters
+----------
+n_batches_between_evaluations : int, optional
+    Training updates between diagnostic and free-energy evaluations.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.u_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L932">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the reduced potential of state ``k`` at coordinates ``r``.
+
+Parameters
+----------
+r : array_like
+    Batched Cartesian coordinates.
+k : int
+    State index.
+
+Returns
+-------
+array_like
+    Reduced potential energies returned by the state&#39;s energy function.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-train-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.train</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-train-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L949">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">save_BAR</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_mBAR</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_misc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_divided_by_n_mol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f_halfwindow_visualisation</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_on_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">training_batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Train the shared model and optionally save evaluation artefacts.
+
+Parameters
+----------
+n_batches : int, optional
+    Number of optimisation batches.
+save_BAR, save_mBAR : bool, optional
+    Save inputs required for later two-state BAR or multistate MBAR.
+save_misc : bool, optional
+    Persist learning curves and trainer diagnostics after training.
+verbose : bool, optional
+    Display live training plots.
+verbose_divided_by_n_mol : bool, optional
+    Report per-molecule lattice rather than whole-crystal free energies.
+f_halfwindow_visualisation : float or list, optional
+    Half-width of the displayed free-energy window.
+test_inverse : bool, optional
+    Collect forward/inverse consistency diagnostics during training.
+evaluate_on_training_data : bool, optional
+    Evaluate additional free-energy diagnostics on training observations.
+evaluate_main : bool, optional
+    Enable the trainer&#39;s main periodic evaluation.
+training_batch_size : int, optional
+    Number of configurations in each gradient update.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-load-misc-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.load_misc_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-load-misc-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1057">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_misc_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore trainer outputs and distribute state-specific curves.
+
+The saved arrays are copied into the corresponding single-state
+interfaces, where running free-energy means and standard deviations are
+reconstructed from validation estimates.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-load-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.load_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-load-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1077">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load saved energy-overlap samples for every state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-plot-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.plot_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-plot-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1081">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot training-time energy overlap for one state.
+
+Parameters
+----------
+crystal_index : int, optional
+    State to plot.
+**kwargs
+    Forwarded to the single-state plotting method.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-solve-bar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.solve_BAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-solve-bar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1093">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_BAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Solve and aggregate two-state BAR estimates for every state.
+
+Parameters
+----------
+rerun : bool, optional
+    Recompute results even if saved outputs exist.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-plot-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.plot_result_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-plot-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1104">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot the free-energy convergence result for one state.
+
+Parameters
+----------
+crystal_index : int, optional
+    State to plot.
+**kwargs
+    Forwarded to :meth:`NN_interface_helper.plot_result_`.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-solve-mbar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.solve_mBAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-solve-mbar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1118">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_mBAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">uncertainty_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compute pairwise free-energy differences from saved multistate inputs.
+
+Parameters
+----------
+rerun : bool, optional
+    Ignore an existing saved MBAR output and recompute all evaluations.
+n_bootstraps : int, optional
+    Number of bootstrap samples passed to :class:`pymbar.MBAR`.
+uncertainty_method : str, optional
+    PyMBAR uncertainty method, such as ``&#39;bootstrap&#39;``.
+save_output : bool, optional
+    Save ``estimates_mBAR`` after computation.
+
+Notes
+-----
+The result stores free-energy and standard-error matrices for training
+and validation data at every model-evaluation point.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-sample-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.sample_model_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-sample-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1198">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_model_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Draw full evaluation-sized batches from one model state.
+
+Parameters
+----------
+m : int
+    Requested sample count.  Only
+    ``floor(m / evaluation_batch_size) * evaluation_batch_size`` samples
+    are returned.
+crystal_index : int, optional
+    State from which to sample.
+
+Returns
+-------
+numpy.ndarray
+    Concatenated Cartesian configurations generated by the model.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-save-samples-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.save_samples_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-save-samples-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1218">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_samples_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate and save state-specific model samples.
+
+Parameters
+----------
+m : int, optional
+    Requested number of samples per state; see :meth:`sample_model_` for
+    batch-size rounding behaviour.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-load-samples-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap.load_samples_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-load-samples-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1230">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_samples_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load saved model samples for one state or for all states.
+
+Parameters
+----------
+crystal_index : int, optional
+    State to load.  If omitted, ``samples_from_model`` becomes a list in
+    state order; otherwise it is the selected state&#39;s array.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation</span></code> (class)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1248">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_sc_multimap_selective_evaluation</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">parent_class</span><span class="o">=</span><span class="n">default_parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>this should allow the interface_T.py things to also work with this if needed, selecting parent_class = one of them
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-new-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.__new__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-new-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1253">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">parent_class</span><span class="o">=</span><span class="n">default_parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create a runtime subclass combining this mixin with ``parent_class``.
+
+Parameters
+----------
+parent_class : type, optional
+    Interface implementation that supplies dataset, model, and analysis
+    behaviour.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1265">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">parent_class</span><span class="o">=</span><span class="n">default_parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise the dynamically selected parent interface.
+
+Parameters
+----------
+*args, **kwargs
+    Forwarded to ``parent_class.__init__``.
+parent_class : type, optional
+    Consumed by :meth:`__new__`; documented here for a consistent public
+    constructor signature.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-train-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.train</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-train-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1282">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_divided_by_n_mol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f_halfwindow_visualisation</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training_batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Train while postponing potential evaluation of generated samples.
+
+Parameters
+----------
+n_batches : int, optional
+    Number of optimisation batches.
+verbose : bool, optional
+    Display live diagnostic plots.
+verbose_divided_by_n_mol : bool, optional
+    Display per-molecule rather than whole-crystal free energies.
+f_halfwindow_visualisation : float or list, optional
+    Vertical half-width used by training plots.
+test_inverse : bool, optional
+    Collect model inversion diagnostics.
+training_batch_size : int, optional
+    Number of configurations in each gradient update.
+
+Notes
+-----
+BAR metadata and generated configurations are saved, but state potential
+functions are deliberately withheld from the trainer.  Expensive model-
+sample energies are evaluated later only for selected batches.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-solve-bar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.solve_BAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-solve-bar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1357">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_BAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_selective_evalautions</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate BAR only at batches with the best validation performance.
+
+Parameters
+----------
+rerun : bool, optional
+    Retained for compatibility; selective state solves currently force
+    recomputation so newly evaluated batches are included.
+n_selective_evalautions : int, optional
+    Number of lowest-validation-loss batches whose model samples receive
+    an explicit potential-energy evaluation.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-reset-final-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.reset_final_result_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-reset-final-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1378">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_final_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rebuild final BAR curves using only successfully evaluated batches.
+
+Parameters
+----------
+obj : NN_interface_sc
+    State interface whose raw estimates and reported final values are
+    updated.  Unevaluated curve positions are filled with ``NaN`` for
+    plotting.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-method-for-selective-evalaution-v1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation.method_for_selective_evalaution_v1_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-method-for-selective-evalaution-v1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1419">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">method_for_selective_evalaution_v1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">index_of_state</span><span class="p">,</span> <span class="n">AVMD_V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compute validation BAR estimates for the best saved model batches.
+
+Parameters
+----------
+obj : NN_interface_sc
+    State interface holding saved BAR inputs and receiving the estimates.
+index_of_state : int
+    State whose potential function evaluates generated configurations.
+AVMD_V : array_like
+    Validation free-energy diagnostic by evaluation batch.  Its negative
+    is used as the selection loss.
+
+Notes
+-----
+Completed batch results are cached individually.  ``inds_solved_current``
+records all unmasked validation estimates available after the operation.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-selective-evaluation-function">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_selective_evaluation_</span></code> (function)<a class="headerlink" href="#nn-interface-sc-multimap-selective-evaluation-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/interface.py#L1496">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">NN_interface_sc_multimap_selective_evaluation_</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">n_states</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">list_r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">list_b0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">list_u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">list_u_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">single_mol_pdb_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fraction_training</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parent_class</span><span class="o">=</span><span class="n">NN_interface_sc_multimap</span><span class="p">,</span> <span class="n">model_class</span><span class="o">=</span><span class="n">PGMcrys_v1</span><span class="p">,</span> <span class="n">ic_map_class</span><span class="o">=</span><span class="n">SingleComponent_map</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build a selective-evaluation interface from in-memory state data.
+
+Parameters
+----------
+name : str
+    Experiment identifier used in saved-result filenames.
+n_states : int, optional
+    Number of metastable states.
+list_r : list of array_like, optional
+    Cartesian MD coordinates for each state, shaped ``(frames, atoms, 3)``
+    in nanometres.
+list_b0 : list of array_like, optional
+    Static ``(3, 3)`` simulation box for each state, in nanometres.
+list_u : list of array_like, optional
+    Reduced whole-crystal potential energies for each MD trajectory.
+list_u_ : list of callable, optional
+    Batched reduced-potential functions, one per state.
+single_mol_pdb_file : str, optional
+    PDB file describing one molecule for internal-coordinate construction.
+training : bool, optional
+    Populate the complete in-memory datasets needed for training.  If false,
+    only supplied potential functions are attached.
+fraction_training : float, optional
+    Fraction of each in-memory trajectory assigned to training.
+running_in_notebook : bool, optional
+    Configure notebook-oriented trainer output.
+parent_class : type, optional
+    Base interface dynamically combined with selective evaluation.
+model_class : type, optional
+    Shared generative-model implementation.
+ic_map_class : type, optional
+    Internal-coordinate map implementation.
+
+Returns
+-------
+NN_interface_sc_multimap_selective_evaluation
+    Configured dynamic interface.  Coordinate maps, model, and trainer still
+    need to be initialised through their normal setup methods.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-interface.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

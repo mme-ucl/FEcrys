@@ -29,7 +29,18 @@ perturbation](https://doi.org/10.1103/PhysRevE.65.046122).
 The [interactive Figure 1 code map](docs/figure-1-code-map.html) connects the
 normalising-flow architecture in the [accompanying manuscript](https://chemrxiv.org/doi/full/10.26434/chemrxiv-2025-92x2f/v4)  to the modules,
 classes, and functions that implement each stage. Select any component to see
-its responsibility, data shape, relationships, and source location.
+its responsibility, data shape, relationships, and source location on GitHub.
+
+The Sphinx website adds a complete, source-linked API reference generated from
+the Python docstrings. After activating the Conda environment, build it with:
+
+```bash
+python -m sphinx -W --keep-going -b html docs docs/_build/html
+```
+
+Open `docs/_build/html/index.html` to browse the generated site. The API pages
+are extracted statically, so building the documentation does not import or
+initialise TensorFlow, OpenMM, or the molecular systems.
 
 ## Requirements
 

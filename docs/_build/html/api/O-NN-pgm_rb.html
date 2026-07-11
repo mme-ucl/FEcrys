@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.pgm_rb &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.representation_layers" href="O-NN-representation_layers.html" />
+    <link rel="prev" title="O.NN.pgm" href="O-NN-pgm.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-pgm.html" title="previous chapter">O.NN.pgm</a></li>
+      <li>Next: <a href="O-NN-representation_layers.html" title="next chapter">O.NN.representation_layers</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-pgm-rb">
+<span id="api-o-nn-pgm-rb"></span><h1>O.NN.pgm_rb<a class="headerlink" href="#o-nn-pgm-rb" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Variable-cell (NPT) coordinate maps, flow model, and training interfaces.
+
+An NPT microstate is carried as ``rb`` with shape ``(batch, N + 3, 3)``:
+particle coordinates followed by three lower-triangular box vectors. The model
+extends positional flow variables with six cell degrees of freedom. This path
+is experimental and should be validated carefully for each system.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="rb-to-r-b-function">
+<h3><code class="docutils literal notranslate"><span class="pre">rb_to_r_b_</span></code> (function)<a class="headerlink" href="#rb-to-r-b-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L66">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rb_to_r_b_</span><span class="p">(</span><span class="n">rb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Split combined ``rb`` states into coordinates and box vectors.
+</pre></div>
+</div>
+</section>
+<section id="r-b-to-rb-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">r_b_to_rb_tf_</span></code> (function)<a class="headerlink" href="#r-b-to-rb-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L73">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">r_b_to_rb_tf_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Concatenate TensorFlow coordinates and boxes along the atom axis.
+</pre></div>
+</div>
+</section>
+<section id="r-b-to-rb-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">r_b_to_rb_np_</span></code> (function)<a class="headerlink" href="#r-b-to-rb-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L77">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">r_b_to_rb_np_</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Concatenate NumPy coordinates and boxes along the atom axis.
+</pre></div>
+</div>
+</section>
+<section id="box-forward-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_forward_tf_</span></code> (function)<a class="headerlink" href="#box-forward-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L83">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_forward_tf_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>placeholder
+</pre></div>
+</div>
+</section>
+<section id="box-inverse-tf-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_inverse_tf_</span></code> (function)<a class="headerlink" href="#box-inverse-tf-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L89">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_inverse_tf_</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>placeholder
+</pre></div>
+</div>
+</section>
+<section id="box-forward-np-function">
+<h3><code class="docutils literal notranslate"><span class="pre">box_forward_np_</span></code> (function)<a class="headerlink" href="#box-forward-np-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L98">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">box_forward_np_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>placeholder
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb</span></code> (class)<a class="headerlink" href="#singlecomponent-map-rb-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L106">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleComponent_map_rb</span><span class="p">(</span><span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!! : molecule must have &gt;3 atoms to use this M_{IC} layer
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.__init__</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L108">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB_single_mol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create an uninitialised variable-cell map for one molecule type.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-remove-com-from-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.remove_COM_from_data_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-remove-com-from-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L117">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_COM_from_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>important step : fixing the first rO atoms (i.e., rO atom in the first molecule to zero)
+other rO atoms shifted into the [0,1) box, taking the molecules with them.
+Only the rO atoms are under PBCs, because molecules are whole and not transformed here in any way.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-initalise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.initalise_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-initalise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L158">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initalise_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rb_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">COM_remover</span><span class="o">=</span><span class="s1">&#39;blank&#39;</span><span class="p">,</span> <span class="n">focused</span><span class="o">=</span><span class="s1">&#39;blank&#39;</span><span class="p">,</span> <span class="n">whiten_setting</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit NPT position, box, internal, and rotational transformations.
+
+One molecular anchor removes translation. Remaining fractional
+positions are periodic; ``whiten_setting`` selects no whitening,
+positions-only whitening, or joint position/box whitening.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-sample-base-p-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.sample_base_P_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-sample-base-p-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L275">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_base_P_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample reduced positions and six box variables uniformly on [-1, 1].
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-white-setting-0-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.white_setting_0_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-white-setting-0-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L280">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">white_setting_0_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Scale box variables without whitening positions.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-white-setting-1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.white_setting_1_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-white-setting-1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L300">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">white_setting_1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Whiten positions separately while only scaling box variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-white-setting-2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.white_setting_2_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-white-setting-2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L329">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">white_setting_2_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Jointly whiten and scale concatenated position and box variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-forward-rb-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.forward_rb_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-forward-rb-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L359">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_rb_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map combined coordinates/boxes to NPT flow variables and Jacobian.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-inverse-rb-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.inverse_rb_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-inverse-rb-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L421">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_rb_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_in</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reconstruct combined coordinates/boxes from NPT flow variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-xo-reshape-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.xO_reshape_</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-xo-reshape-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L477">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">xO_reshape_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Insert or remove the dummy anchor while preserving six box DOFs.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-flow-mask-xo-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.flow_mask_xO</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-flow-mask-xo-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L483">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">flow_mask_xO</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mask the dummy anchor and allow all physical position/box variables.
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-map-rb-flow-mask-x-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent_map_rb.flow_mask_X</span></code> (method)<a class="headerlink" href="#singlecomponent-map-rb-flow-mask-x-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L489">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">flow_mask_X</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>All-ones mask for molecular internal and rotational variables.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-class">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb</span></code> (class)<a class="headerlink" href="#pgmcrys-v1-rb-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L498">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PGMcrys_v1_rb</span><span class="p">(</span><span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>!! : molecule should have &gt;3 atoms (also true in ic_map)
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-load-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb.load_model</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-load-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L501">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_model</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">VERSION</span><span class="o">=</span><span class="s1">&#39;blank&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load a variable-cell model from the current artifact format.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb.__init__</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L505">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ic_maps</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build an NPT PGM with alternating position-box/conformer flows.
+
+``ic_maps`` provides one compatible variable-cell representation per
+state. Six box degrees of freedom extend the positional layer. Remaining
+architecture arguments mirror ``PGMcrys_v1``.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-get-c2p-p2c-extensions-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb.get_C2P_P2C_extensions_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-get-c2p-p2c-extensions-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L645">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_C2P_P2C_extensions_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Broadcast the selected state encoding for both coupling directions.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-forward-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb._forward_coupling_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-forward-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L661">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply alternating position-box and conformer couplings forward.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-inverse-coupling-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb._inverse_coupling_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-inverse-coupling-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L682">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_coupling_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert NPT couplings in exact reverse order.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-forward-represenation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb._forward_represenation_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-forward-represenation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L705">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_forward_represenation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply the selected state&#39;s combined coordinate-box representation.
+</pre></div>
+</div>
+</section>
+<section id="pgmcrys-v1-rb-inverse-represenation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">PGMcrys_v1_rb._inverse_represenation_</span></code> (method)<a class="headerlink" href="#pgmcrys-v1-rb-inverse-represenation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L712">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inverse_represenation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Invert representation variables to the combined ``rb`` state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb</span></code> (class)<a class="headerlink" href="#nn-interface-sc-rb-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L723">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_sc_rb</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prepare one NPT dataset and coordinate map for model training.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L726">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load metadata and optionally import one variable-cell MD dataset.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-reduced-enthalpy-from-reduced-energies-and-boxes-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.reduced_enthalpy_from_reduced_energies_and_boxes_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-reduced-enthalpy-from-reduced-energies-and-boxes-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L756">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reduced_enthalpy_from_reduced_energies_and_boxes_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reduced_energies</span><span class="p">,</span> <span class="n">boxes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert reduced potential energies to NPT reduced enthalpies.
+
+Adds isotropic ``PV/(kT)`` and the variable-cell measure/Jacobian term
+used by this implementation. Inputs contain one energy and box per
+frame; output has shape ``(n_frames, 1)``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.u_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L781">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the reduced NPT enthalpy of combined coordinate-box states.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-import-md-dataset-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.import_MD_dataset_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-import-md-dataset-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L799">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_MD_dataset_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load saved NPT simulation data and construct aligned ``rb``/enthalpy arrays.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-truncate-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.truncate_data_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-truncate-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L824">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">truncate_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Keep ``m`` balanced samples, discard temporary split arrays, and reset indices.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-set-ic-map-step1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.set_ic_map_step1</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-set-ic-map-step1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L841">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>self.sc.mol is available for this reason; to check the indices of atoms in the molecule
+once (ind_root_atom, option) pair is chosen, keep a fixed note of this for this molecule
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-set-ic-map-step2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.set_ic_map_step2</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-set-ic-map-step2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L854">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds_rand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_PES</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove translation, create a train/validation split, and check energies.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-rb-set-ic-map-step3-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_rb.set_ic_map_step3</span></code> (method)<a class="headerlink" href="#nn-interface-sc-rb-set-ic-map-step3-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L864">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol_unitcell</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">whiten_setting</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit the NPT representation and print a small inversion diagnostic.
+</pre></div>
+</div>
+</section>
+<section id="adjust-ranges-function">
+<h3><code class="docutils literal notranslate"><span class="pre">adjust_ranges_</span></code> (function)<a class="headerlink" href="#adjust-ranges-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L898">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">adjust_ranges_</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Expand bond/angle scaler ranges to common bounds across all states.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-class">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb</span></code> (class)<a class="headerlink" href="#nn-interface-sc-multimap-rb-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L913">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NN_interface_sc_multimap_rb</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">paths_datasets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Coordinate multi-state NPT preprocessing, training, and FE analysis.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.__init__</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L916">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">paths_datasets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">fraction_training</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">training</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create one single-state NPT interface per supplied dataset.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-save-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.save_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-save-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L943">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save each state&#39;s train/validation permutation under a distinct key.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-load-inds-rand-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.load_inds_rand_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-load-inds-rand-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L949">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_inds_rand_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore every state&#39;s saved train/validation permutation.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-set-ic-map-step1-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.set_ic_map_step1</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-set-ic-map-step1-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L955">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind_root_atom</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure common internal-coordinate anchor choices for all states.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-set-ic-map-step2-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.set_ic_map_step2</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-set-ic-map-step2-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L961">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_PES</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove translation and split every state&#39;s dataset.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-set-ic-map-step3-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.set_ic_map_step3</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-set-ic-map-step3-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L965">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_ic_map_step3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_mol_unitcells</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">whiten_setting</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Fit one NPT map per state using state-specific unit-cell sizes.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-set-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.set_model</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-set-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L992">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">evaluation_batch_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">n_layers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">DIM_connection</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_att_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">initialise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct the shared NPT model and optionally test each state map.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-set-trainer-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.set_trainer</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-set-trainer-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1020">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_trainer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches_between_evaluations</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Create the shared training orchestrator and evaluation schedule.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-u-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.u_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-u-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1028">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate combined-state reduced enthalpy with state ``k``&#39;s system.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-train-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.train</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-train-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1032">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">save_BAR</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">save_mBAR</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_misc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_divided_by_n_mol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f_halfwindow_visualisation</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_on_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">training_batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Train all NPT states and optionally save BAR/MBAR diagnostics.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-load-misc-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.load_misc_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-load-misc-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1116">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_misc_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore training histories and propagate state-specific result views.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-load-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.load_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-load-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1131">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load saved generated/MD energy histories for every state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-plot-energies-during-training-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.plot_energies_during_training_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-plot-energies-during-training-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1135">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_energies_during_training_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot energy-overlap diagnostics for one state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-solve-bar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.solve_BAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-solve-bar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1139">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_BAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Solve saved two-state BAR inputs independently for every state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-plot-result-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.plot_result_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-plot-result-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1144">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot final free-energy estimates for one state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-solve-mbar-using-pymbar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.solve_mBAR_using_pymbar_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-solve-mbar-using-pymbar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1149">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">solve_mBAR_using_pymbar_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rerun</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_bootstraps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">uncertainty_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Solve saved cross-state MBAR inputs over all evaluation batches.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-sample-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.sample_model_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-sample-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1212">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_model_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate full evaluation-sized batches up to requested count ``m``.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-save-samples-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.save_samples_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-save-samples-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1217">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_samples_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate and pickle samples for every state.
+</pre></div>
+</div>
+</section>
+<section id="nn-interface-sc-multimap-rb-load-samples-method">
+<h3><code class="docutils literal notranslate"><span class="pre">NN_interface_sc_multimap_rb.load_samples_</span></code> (method)<a class="headerlink" href="#nn-interface-sc-multimap-rb-load-samples-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/pgm_rb.py#L1222">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_samples_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crystal_index</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load samples for one state or all states into ``samples_from_model``.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-pgm_rb.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

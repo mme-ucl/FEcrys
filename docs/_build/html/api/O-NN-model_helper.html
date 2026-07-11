@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.NN.model_helper &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.NN.pgm" href="O-NN-pgm.html" />
+    <link rel="prev" title="O.NN.github_wutobias_r2z" href="O-NN-github_wutobias_r2z.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-sc_system.html">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-NN-github_wutobias_r2z.html" title="previous chapter">O.NN.github_wutobias_r2z</a></li>
+      <li>Next: <a href="O-NN-pgm.html" title="next chapter">O.NN.pgm</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-nn-model-helper">
+<span id="api-o-nn-model-helper"></span><h1>O.NN.model_helper<a class="headerlink" href="#o-nn-model-helper" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py">View module on GitHub</a></p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Common model, persistence, training, and free-energy utilities.
+
+The model mixin wraps TensorFlow forward/inverse maps with NumPy-facing APIs,
+tracks Jacobians, and implements a versioned single-file persistence format.
+The estimator and trainer routines compare molecular-dynamics samples with
+generated samples using likelihood, exponential averaging, BAR, and MBAR
+quantities. Energies and free energies are reduced and expressed in ``kT``.
+</pre></div>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="no-nans-function">
+<h3><code class="docutils literal notranslate"><span class="pre">no_nans_</span></code> (function)<a class="headerlink" href="#no-nans-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L21">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">no_nans_</span><span class="p">(</span><span class="n">grads</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return whether every supplied gradient tensor contains finite values.
+</pre></div>
+</div>
+</section>
+<section id="boundmethodref-class">
+<h3><code class="docutils literal notranslate"><span class="pre">_BoundMethodRef</span></code> (class)<a class="headerlink" href="#boundmethodref-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L29">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">_BoundMethodRef</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serializable placeholder for an allow-listed bound method name.
+</pre></div>
+</div>
+</section>
+<section id="boundmethodref-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">_BoundMethodRef.__init__</span></code> (method)<a class="headerlink" href="#boundmethodref-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L32">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Store the method name for restoration after deserialization.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-class">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper</span></code> (class)<a class="headerlink" href="#model-helper-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L47">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">model_helper</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mixin providing training and persistence around an invertible model.
+
+Subclasses must implement ``sample_base_``, ``ln_base_``, ``forward_``, and
+``inverse_``. Forward/inverse functions return transformed values and
+per-sample log-absolute Jacobian determinants.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.__init__</span></code> (method)<a class="headerlink" href="#model-helper-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L54">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>the class which inherits these methods should have the following methods:
+
+sample_base_ : m   -&gt; z         ; z : list or tensors
+ln_base_     : z   -&gt; ln_p0     ; tensor which shape (m,1)
+
+forward_     : xyz -&gt; z, ladJ   ; z : list, ladJ : tensor which shape (m,1)
+inverse_     : z   -&gt; xyz, ladJ ; zyz : list, ladJ : tensor which shape (m,1)
+</pre></div>
+</div>
+</section>
+<section id="model-helper-serialize-obj-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper._serialize_obj_</span></code> (method)<a class="headerlink" href="#model-helper-serialize-obj-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L66">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_serialize_obj_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GitHub Copilot written
+</pre></div>
+</div>
+</section>
+<section id="model-helper-deserialize-obj-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper._deserialize_obj_</span></code> (method)<a class="headerlink" href="#model-helper-deserialize-obj-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L127">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_deserialize_obj_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>GitHub Copilot written
+</pre></div>
+</div>
+</section>
+<section id="model-helper-restore-bound-methods-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper._restore_bound_methods_</span></code> (method)<a class="headerlink" href="#model-helper-restore-bound-methods-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L174">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_restore_bound_methods_</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Resolve serialized method placeholders and legacy strategy aliases.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-initialise-weights-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.initialise_weights_</span></code> (method)<a class="headerlink" href="#model-helper-initialise-weights-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L197">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_weights_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build Keras weights by sending one base sample through the inverse map.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-reset-optimiser-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.reset_optimiser_</span></code> (method)<a class="headerlink" href="#model-helper-reset-optimiser-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L204">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_optimiser_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimiser_LR_decay</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Replace the optimiser with a fresh Adam instance.
+
+The two-element input is stored as learning rate and decay rate; the
+current TensorFlow optimiser uses only the learning rate.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-ln-model-for-step-ml-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.ln_model_for_step_ML_</span></code> (method)<a class="headerlink" href="#model-helper-ln-model-for-step-ml-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L214">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_model_for_step_ML_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return latent variables and model log density for one tensor batch.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-step-ml-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.step_ML_graph_</span></code> (method)<a class="headerlink" href="#model-helper-step-ml-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L221">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step_ML_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs_batch</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Perform one maximum-likelihood gradient update.
+
+Non-finite gradients are detected and skipped. Returns negative mean
+log likelihood and a Boolean indicating whether the update was applied.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-forward-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.forward_graph_</span></code> (method)<a class="headerlink" href="#model-helper-forward-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L243">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>TensorFlow-graph-compatible wrapper around the subclass forward map.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-inverse-graph-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.inverse_graph_</span></code> (method)<a class="headerlink" href="#model-helper-inverse-graph-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L248">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_graph_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>TensorFlow-graph-compatible wrapper around the subclass inverse map.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-initialise-graphs-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.initialise_graphs_</span></code> (method)<a class="headerlink" href="#model-helper-initialise-graphs-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L253">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_graphs_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_initialise</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Compile forward, inverse, and training-step methods with ``tf.function``.
+
+With ``re_initialise=True``, existing instance wrappers are removed
+before tracing again. Stable input shapes reduce expensive retracing.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-forward-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.forward</span></code> (method)<a class="headerlink" href="#model-helper-forward-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L275">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Convert NumPy-like Cartesian input and evaluate the compiled forward map.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.inverse</span></code> (method)<a class="headerlink" href="#model-helper-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L279">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the compiled inverse map on base/model variables.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-step-ml-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.step_ML</span></code> (method)<a class="headerlink" href="#model-helper-step-ml-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L283">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">step_ML</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Train on a random coordinate minibatch and report loss estimates.
+
+Sampling is without replacement. Returns ``(AVMD_T_f, AVMD_T_s)`` when
+energies ``u`` are provided; without energies both entries are the
+negative-log-likelihood loss.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-ln-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.ln_model</span></code> (method)<a class="headerlink" href="#model-helper-ln-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L302">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">ln_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate the normalised model log density ``ln q(r)``.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-sample-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.sample_model</span></code> (method)<a class="headerlink" href="#model-helper-sample-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L309">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sample_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate ``m`` Cartesian samples and their model log densities.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-print-model-size-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.print_model_size</span></code> (method)<a class="headerlink" href="#model-helper-print-model-size-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L317">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">print_model_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Calculate, store, and print trainable parameter counts and shapes.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-save-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.save_model</span></code> (method)<a class="headerlink" href="#model-helper-save-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L328">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Modified with GitHub Copilot for TF 2.19
+</pre></div>
+</div>
+</section>
+<section id="model-helper-is-new-model-artifact-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper._is_new_model_artifact_</span></code> (method)<a class="headerlink" href="#model-helper-is-new-model-artifact-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L351">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_is_new_model_artifact_</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Written with GitHub Copilot for TF 2.19
+</pre></div>
+</div>
+</section>
+<section id="model-helper-load-model-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper._load_model_</span></code> (method)<a class="headerlink" href="#model-helper-load-model-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L366">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_load_model_</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">class_of_the_model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>in each class_of_the_model have a method:
+@staticmethod
+def load_model(path_and_name : str):
+    return class_of_the_model.load_model_(path_and_name, class_of_the_model)
+
+Modified with GitHub Copilot for TF 2.19
+</pre></div>
+</div>
+</section>
+<section id="model-helper-test-inverse-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.test_inverse_</span></code> (method)<a class="headerlink" href="#model-helper-test-inverse-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L395">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test_inverse_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Measure coordinate and Jacobian round-trip errors in both directions.
+
+The forward test maps validation coordinates ``r -&gt; z -&gt; r``; the
+backward test maps fresh base samples ``z -&gt; r -&gt; z``. Returned nested
+summaries contain coordinate mean/max and Jacobian mean/min/max errors.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-index-transferable-parameters-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.index_transferable_parameters_</span></code> (method)<a class="headerlink" href="#model-helper-index-transferable-parameters-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L448">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">index_transferable_parameters_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Locate trainable tensors whose TensorFlow name contains ``TRANSFERABLE``.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-save-transferable-parameters-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.save_transferable_parameters_</span></code> (method)<a class="headerlink" href="#model-helper-save-transferable-parameters-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L457">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_transferable_parameters_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_and_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serialize transferable-model metadata and selected weights.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-load-transferable-parameters-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.load_transferable_parameters_</span></code> (method)<a class="headerlink" href="#model-helper-load-transferable-parameters-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L462">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_transferable_parameters_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_and_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load compatible transferable weights and rebuild compiled graphs.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-set-transferable-parameters-fixed-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.set_transferable_parameters_fixed_</span></code> (method)<a class="headerlink" href="#model-helper-set-transferable-parameters-fixed-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L474">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_transferable_parameters_fixed_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Exclude indexed transferable tensors from subsequent optimisation.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-set-transferable-parameters-trainable-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.set_transferable_parameters_trainable_</span></code> (method)<a class="headerlink" href="#model-helper-set-transferable-parameters-trainable-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L483">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_transferable_parameters_trainable_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore optimisation over every model trainable variable.
+</pre></div>
+</div>
+</section>
+<section id="model-helper-initialise-method">
+<h3><code class="docutils literal notranslate"><span class="pre">model_helper.initialise</span></code> (method)<a class="headerlink" href="#model-helper-initialise-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L495">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Build weights, optimiser, compiled graphs, and transferability index.
+</pre></div>
+</div>
+</section>
+<section id="pool-function">
+<h3><code class="docutils literal notranslate"><span class="pre">pool_</span></code> (function)<a class="headerlink" href="#pool-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L504">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pool_</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Output: weighted average of x
+</pre></div>
+</div>
+</section>
+<section id="tolbar-function">
+<h3><code class="docutils literal notranslate"><span class="pre">tolBAR_</span></code> (function)<a class="headerlink" href="#tolbar-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L509">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tolBAR_</span><span class="p">(</span><span class="n">incuA</span><span class="p">,</span> <span class="n">incuB</span><span class="p">,</span> <span class="n">wsA</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wsB</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f_window_grain</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">180000.0</span><span class="p">,</span> <span class="mf">60000.0</span><span class="p">,</span> <span class="mi">30000</span><span class="p">],</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">return_errs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>This is only used as a double check. Final FE results are always solved using pymbar
+
+local implementation of 2-state BAR, finding f (via grid search) that best fits the BAR equality A = B below.
+    &#39;tol&#39; is tolerance of the best fit (absolute error |A-B|)
+
+No standard error method is included here, therefore cannot be taken as a final result.
+
+Inputs as used in current work:
+    f is absolute FE
+
+    incuA : (m,1) shaped array = \phi(r) = u(r) + ln(p(r)) ; r ~ \mu
+        \mu = \mu(r) = exp(-u(r)) / Z, is the MD distribution of NVT data with
+            unknown normalisation constant Z, but we have m ergodic samples r ~ \mu
+            Want output f to be as close as possible to underlying FE -ln(Z).
+
+    incuB : (m,1) shaped array = \phi(r) = u(r) + ln(p(r)) ; r ~ p
+        p is any normalised distribution that is similar to \mu,
+        Should be able to evaluate ln(p) exactly, and sample m ergodic samples from it r ~ p
+
+    wsA : was the sampling from \mu (no bias)? YES: wsA = None, NO : wsA = weights to reweight the bias.
+    wsB : is the sampling from p ergodic? Yes by default: wsB = None.
+    f_window_grain : list [float, float, int] = [a ,b, grain]
+        a = minimum f that may be valid in this system
+        b = maximum f that may be valid in this system
+        grain = how many values on a grid to try between a and b (probably does not make much difference given tol)
+Output:
+    f : scalar : estimate of -ln(Z)
+</pre></div>
+</div>
+</section>
+<section id="tolbar-bar-method">
+<h3><code class="docutils literal notranslate"><span class="pre">tolBAR_._BAR_</span></code> (method)<a class="headerlink" href="#tolbar-bar-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L546">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_BAR_</span><span class="p">(</span><span class="n">grid_f</span><span class="p">,</span> <span class="n">incuA</span><span class="p">,</span> <span class="n">incuB</span><span class="p">,</span> <span class="n">wsA</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wsB</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate BAR equality error on a free-energy grid and select its minimum.
+</pre></div>
+</div>
+</section>
+<section id="get-fe-estimates-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_FE_estimates_</span></code> (function)<a class="headerlink" href="#get-fe-estimates-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L615">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_FE_estimates_</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">r_training</span><span class="p">,</span> <span class="n">r_validation</span><span class="p">,</span> <span class="n">name_save_BAR_inputs</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">u_training</span><span class="p">,</span> <span class="n">u_validation</span><span class="p">,</span> <span class="n">u_function_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_training</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_validation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crystal_index</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">evaluation_batch_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">evaluate_on_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_generated_configurations_anyway</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>FE evalaution from the model:
+
+During training every so often this function is ran on each macrostate being trained.
+
+The overall cost of this function therefore can be high, but
+can this be reduced to just a validation loss evalaution (does not require a FF).
+If the FF is cheap to evaluate, and want FEs as effeciently as possible:
+    use only the top 7 to 9 arguments, with other arguments left as default.
+
+Inputs (arguments):
+    model         : instace of PGM model with methods: ln_model, sample_model, and test_inverse_
+    r_training    : (m_T,N,3) : Cartesian coordiantes of the training data (dataset contains m_T configurations)
+    r_validation  : (m_V,N,3) : Cartesian coordiantes of the validation data (dataset contains m_V configurations)
+    name_save_BAR_inputs : path and name where to save pymbar inputs for BAR
+        (saved with suffix added at the end of the name: &#39;_V&#39; ; validation, &#39;_T&#39; ; training)
+    u_training    : (m_T,1)   : potential energies of the training data
+    u_validation  : (m_T,1)   : potential energies of the validation data
+    u_function_   : potential energy function of the current macrostate
+    w_training    : (m,1)     : weights of training data (only if the MD data sampled from a biased ensemble)
+    w_validation  : (m,1)     : weights of validation data (only if the MD data sampled from a biased ensemble)
+    crystal_index : in multimap model, index of the current macrostate. (! placeholder is 0, no warnings)
+    evaluation_batch_size : number of samples to include for all types of FE estiamates
+    shuffle       : default True, otherwise evaluating only on the first evaluation_batch_size configurations
+    test_inverse  : extra cost if True, but useful when testing a model (allows plottin inversion accuracy during training)
+    evaluate_on_training_data : extra cost if True, default False (not necesary for general use)
+    save_generated_configurations_anyway : optional, default is False (saving only the small energy arrays, saving disk space)
+Outputs:
+    running_estimates : abbreviations defined in doi/10.1021/acs.jctc.4c00520 (*P1)
+        all elements of this output can be undestood by refering to the short lines they were defined
+    inv_test_result   : [None] if test_inverse False, otherwise depends the outputs from model.test_inverse_
+</pre></div>
+</div>
+</section>
+<section id="fe-of-model-function">
+<h3><code class="docutils literal notranslate"><span class="pre">FE_of_model_</span></code> (function)<a class="headerlink" href="#fe-of-model-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L811">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FE_of_model_</span><span class="p">(</span><span class="n">AVMD_V</span><span class="p">,</span> <span class="n">BAR_V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>weighted average of raw BAR_V FE estimates
+the weights = np.exp(AVMD_V) ; higher is better (lower validation error)
+    motivation for heuristic : since AVMD_V is a type of FE estimate, exponentiating it a type of weight &gt;= 0
+REF: doi/10.1021/acs.jctc.4c01612 (P2, defined also in P3)
+
+Inputs:
+    AVMD_V : (n_evaluation_batches, 1) array of raw FE estimates based on AVMD_V
+    BAR_V  : (n_evaluation_batches, 1) array of raw estimates based on BAR_V
+Output:
+    av_BAR_V : scalar value : averaged BAR_V FE from the training run
+</pre></div>
+</div>
+</section>
+<section id="fe-of-model-curve-function">
+<h3><code class="docutils literal notranslate"><span class="pre">FE_of_model_curve_</span></code> (function)<a class="headerlink" href="#fe-of-model-curve-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L829">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FE_of_model_curve_</span><span class="p">(</span><span class="n">AVMD_V</span><span class="p">,</span> <span class="n">BAR_V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cumulative weighted average using FE_of_model_
+Inputs: same as in FE_of_model_
+Output: (n_evaluation_batches, ) array of *averaged BAR_V FEs from the training run
+    *(averaged up to each evaluation batch)
+</pre></div>
+</div>
+</section>
+<section id="get-phi-ij-function">
+<h3><code class="docutils literal notranslate"><span class="pre">get_phi_ij_</span></code> (function)<a class="headerlink" href="#get-phi-ij-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L842">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_phi_ij_</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">list_r</span><span class="p">,</span> <span class="n">list_potential_energy_functions</span><span class="p">,</span> <span class="n">evalation_sample_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>composition of maps r^{[i]} -&gt; z -&gt; r^{[j]} ; states i,j = 0,...,n_states
+
+    n_states = len(list_r) = len(list_potential_energy_functions)
+
+Inputs:
+    model : instace of PGM model with methods: forward, inverse
+        both methods need to have crystal_index : int as argument
+    list_r : list of MD datasets ergodically sampled in n_states different states
+    list_potential_energy_functions : list of corresponding potential energy functions
+    evalation_sample_size : number of samples to evalaute (here this is the same number in each direction)
+    shuffle : default True, otherwise evaluating only on the first evaluation_batch_size configurations
+Outputs:
+    phi_ij : MBAR input for pymbar to compute FE differences between all pairs of states
+</pre></div>
+</div>
+</section>
+<section id="trainer-class">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER</span></code> (class)<a class="headerlink" href="#trainer-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L886">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TRAINER</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">max_training_batches</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">n_batches_between_evaluations</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Orchestrate multi-state likelihood training and periodic FE evaluation.
+
+The trainer owns progress arrays, evaluation schedules, BAR/MBAR inputs,
+convergence plots, and inversion diagnostics. It delegates actual gradient
+updates and transformations to a compatible PGM model.
+</pre></div>
+</div>
+</section>
+<section id="trainer-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.__init__</span></code> (method)<a class="headerlink" href="#trainer-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L893">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">max_training_batches</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">n_batches_between_evaluations</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">running_in_notebook</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>takes the model + MD data, to train, and evaluate the model during training
+Inputs:
+    model : instace of PGM model with methods:
+        step_ML, forward, inverse, ln_model, sample_model, and test_inverse_
+    max_training_batches : any large number
+        to allocate long enough arrays into which output numbers are stored during training
+    n_batches_between_evaluations : evaluation stride
+        number of training batches between which model is evaluated for FE estimate(s)
+    running_in_notebook : True is better if running the training in a jupyter notebook
+Output:
+    None
+        NB: if running_in_notebook, the cell in which TRAINER is initialised (here)
+        is the cell where progress of training, and FE estiamte(s) printed using text
+</pre></div>
+</div>
+</section>
+<section id="trainer-print-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.print_</span></code> (method)<a class="headerlink" href="#trainer-print-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L949">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">print_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Update notebook display output or overwrite terminal progress text.
+</pre></div>
+</div>
+</section>
+<section id="trainer-train-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.train</span></code> (method)<a class="headerlink" href="#trainer-train-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L954">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_batches</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">list_r_training</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">list_r_validation</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">list_u_training</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">list_u_validation</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">list_w_training</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">list_w_validation</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">list_potential_energy_functions</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">training_batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">evaluation_batch_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">evaluate_main</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name_save_BAR_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name_save_mBAR_inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f_halfwindow_visualisation</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_divided_by_n_mol</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">evaluate_on_training_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">test_inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_generated_configurations_anyway</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run model-training batches with scheduled free-energy diagnostics.
+
+One coordinate/energy dataset pair is required per model state. Optional
+weights support biased MD data, and potential-energy callables enable
+generated-sample BAR/MBAR estimates. The method mutates training state,
+may save estimator inputs and plots progress, and returns ``None``.
+``n_batches`` must fit within the arrays allocated at construction.
+</pre></div>
+</div>
+</section>
+<section id="trainer-estimates-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.estimates</span></code> (method)<a class="headerlink" href="#trainer-estimates-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1225">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimates</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Free-energy diagnostic tensor truncated to completed evaluations.
+</pre></div>
+</div>
+</section>
+<section id="trainer-evaluation-grid-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.evaluation_grid</span></code> (method)<a class="headerlink" href="#trainer-evaluation-grid-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1230">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">evaluation_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Training-batch indices at which completed evaluations occurred.
+</pre></div>
+</div>
+</section>
+<section id="trainer-avmd-t-f-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.AVMD_T_f</span></code> (method)<a class="headerlink" href="#trainer-avmd-t-f-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1235">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">AVMD_T_f</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Training-set likelihood-derived estimates through the current batch.
+</pre></div>
+</div>
+</section>
+<section id="trainer-save-the-above-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.save_the_above_</span></code> (method)<a class="headerlink" href="#trainer-save-the-above-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1239">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_the_above_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serialize accumulated FE curves, diagnostics, and training time.
+</pre></div>
+</div>
+</section>
+<section id="trainer-save-inv-test-results-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TRAINER.save_inv_test_results_</span></code> (method)<a class="headerlink" href="#trainer-save-inv-test-results-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1250">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inv_test_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Serialize inversion-test histories for every state.
+</pre></div>
+</div>
+</section>
+<section id="plot-inv-test-res-function">
+<h3><code class="docutils literal notranslate"><span class="pre">plot_inv_test_res_</span></code> (function)<a class="headerlink" href="#plot-inv-test-res-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/NN/model_helper.py#L1256">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_inv_test_res_</span><span class="p">(</span><span class="n">inv_test_result</span><span class="p">,</span> <span class="n">mean_range</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">forward_inverse</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">plot_during_training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Print and optionally plot Jacobian round-trip error histories.
+
+``mean_range`` selects mean and min/max summaries; ``forward_inverse``
+selects Cartesian-to-base and base-to-Cartesian round trips. Reported
+numbers compare averages over the first and last ten recorded evaluations.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-NN-model_helper.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

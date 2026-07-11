@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>O.MM.sc_system &#8212; FECrys documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=a66d8bb5" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=fd8b8fc0" />
+    <script src="../_static/documentation_options.js?v=249f3023"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="O.MM.velff" href="O-MM-velff.html" />
+    <link rel="prev" title="O.MM.mm_multicontext" href="O-MM-mm_multicontext.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">FECrys</a></h1>
+
+
+
+<p class="blurb">Free-energy calculations for molecular crystals</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=mme-ucl&repo=FEcrys&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Figure 1 architecture map</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="O-MM-Tx.html">O.MM.Tx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-bias.html">O.MM.bias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ecm_basic.html">O.MM.ecm_basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-ff_setup.html">O.MM.ff_setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_helper.html">O.MM.mm_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-mm_multicontext.html">O.MM.mm_multicontext</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">O.MM.sc_system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-MM-velff.html">O.MM.velff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-github_wutobias_r2z.html">O.NN.github_wutobias_r2z</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-model_helper.html">O.NN.model_helper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm.html">O.NN.pgm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-pgm_rb.html">O.NN.pgm_rb</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-representation_layers.html">O.NN.representation_layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-rqs.html">O.NN.rqs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-spline_layer.html">O.NN.spline_layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-NN-util_tf.html">O.NN.util_tf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O.html">O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-interface.html">O.interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-plotting.html">O.plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-sym.html">O.sym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="O-util_np.html">O.util_np</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing-docs.html">Building the documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">API reference</a><ul>
+      <li>Previous: <a href="O-MM-mm_multicontext.html" title="previous chapter">O.MM.mm_multicontext</a></li>
+      <li>Next: <a href="O-MM-velff.html" title="next chapter">O.MM.velff</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="o-mm-sc-system">
+<span id="api-o-mm-sc-system"></span><h1>O.MM.sc_system<a class="headerlink" href="#o-mm-sc-system" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py">View module on GitHub</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Module docstring pending.</p>
+</div>
+<section id="classes-and-functions">
+<h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
+<section id="singlecomponent-class">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent</span></code> (class)<a class="headerlink" href="#singlecomponent-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L10">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SingleComponent</span><span class="p">(</span><span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">FF_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;GAFF&#39;</span><span class="p">,</span> <span class="n">atom_order_PDB_match_itp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">FF_class</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-new-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.__new__</span></code> (method)<a class="headerlink" href="#singlecomponent-new-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L11">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">PDB</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">FF_name</span><span class="o">=</span><span class="s1">&#39;GAFF&#39;</span><span class="p">,</span> <span class="n">atom_order_PDB_match_itp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">FF_class</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.__init__</span></code> (method)<a class="headerlink" href="#singlecomponent-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L28">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PDB</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">FF_name</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;GAFF&#39;</span><span class="p">,</span> <span class="n">atom_order_PDB_match_itp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">FF_class</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-set-rdkit-mol-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.set_rdkit_mol_</span></code> (method)<a class="headerlink" href="#singlecomponent-set-rdkit-mol-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L100">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_rdkit_mol_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>not used in this class, just to check atom indices
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-print-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.print</span></code> (method)<a class="headerlink" href="#singlecomponent-print-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L107">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">text</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-initialise-system-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.initialise_system_</span></code> (method)<a class="headerlink" href="#singlecomponent-initialise-system-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L112">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_system_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">PME_cutoff</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">removeCMMotion</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nonbondedMethod</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">PME</span><span class="p">,</span> <span class="n">custom_EwaldErrorTolerance</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">SwitchingFunction_factor</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-initialise-simulation-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.initialise_simulation_</span></code> (method)<a class="headerlink" href="#singlecomponent-initialise-simulation-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L215">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rbv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minimise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">timestep_ps</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">,</span> <span class="n">collision_rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">barostat_type</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">barostat_1_scaling</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">stride_barostat</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">custom_integrator</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-save-simulation-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.save_simulation_data_</span></code> (method)<a class="headerlink" href="#singlecomponent-save-simulation-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L302">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_simulation_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>simulation timescale = len(u) * stride_save_frame * timestep_ps
+</pre></div>
+</div>
+</section>
+<section id="singlecomponent-load-simulation-data-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.load_simulation_data_</span></code> (method)<a class="headerlink" href="#singlecomponent-load-simulation-data-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L325">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_simulation_data_</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="singlecomponent-initialise-from-save-method">
+<h3><code class="docutils literal notranslate"><span class="pre">SingleComponent.initialise_from_save_</span></code> (method)<a class="headerlink" href="#singlecomponent-initialise-from-save-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L329">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_from_save_</span><span class="p">(</span><span class="n">path_and_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resume_simulation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="concatenate-datasets-function">
+<h3><code class="docutils literal notranslate"><span class="pre">concatenate_datasets_</span></code> (function)<a class="headerlink" href="#concatenate-datasets-function" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L353">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">concatenate_datasets_</span><span class="p">(</span><span class="n">paths_datasets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">remove_warmup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-class">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ</span></code> (class)<a class="headerlink" href="#lj-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L388">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LJ</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.__init__</span></code> (method)<a class="headerlink" href="#lj-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L390">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.FF_name</span></code> (method)<a class="headerlink" href="#lj-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L395">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-single-mol-pdb-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ._single_mol_pdb_file_</span></code> (method)<a class="headerlink" href="#lj-single-mol-pdb-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L399">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_pdb_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-initialise-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.initialise_FF_</span></code> (method)<a class="headerlink" href="#lj-initialise-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L402">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-top-file-gmx-crys-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.top_file_gmx_crys</span></code> (method)<a class="headerlink" href="#lj-top-file-gmx-crys-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L411">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_file_gmx_crys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-reset-n-mol-top-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.reset_n_mol_top_</span></code> (method)<a class="headerlink" href="#lj-reset-n-mol-top-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L414">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_n_mol_top_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="lj-set-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">LJ.set_FF_</span></code> (method)<a class="headerlink" href="#lj-set-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L429">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-class">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P</span></code> (class)<a class="headerlink" href="#tip4p-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L436">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TIP4P</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mixin class for SingleComponent. Methods relevant only for using TIP4P are here.
+</pre></div>
+</div>
+</section>
+<section id="tip4p-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.__init__</span></code> (method)<a class="headerlink" href="#tip4p-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L440">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.FF_name</span></code> (method)<a class="headerlink" href="#tip4p-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L445">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-single-mol-pdb-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._single_mol_pdb_file_</span></code> (method)<a class="headerlink" href="#tip4p-single-mol-pdb-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L449">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_pdb_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-initialise-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.initialise_FF_</span></code> (method)<a class="headerlink" href="#tip4p-initialise-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L452">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this after (n_mol and n_atoms_mol) defined in __init__ of SingleComponent
+</pre></div>
+</div>
+</section>
+<section id="tip4p-top-file-gmx-crys-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.top_file_gmx_crys</span></code> (method)<a class="headerlink" href="#tip4p-top-file-gmx-crys-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L468">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_file_gmx_crys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-reset-n-mol-top-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.reset_n_mol_top_</span></code> (method)<a class="headerlink" href="#tip4p-reset-n-mol-top-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L471">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_n_mol_top_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-set-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.set_FF_</span></code> (method)<a class="headerlink" href="#tip4p-set-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L487">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-add-v-sites-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.add_v_sites_</span></code> (method)<a class="headerlink" href="#tip4p-add-v-sites-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L494">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_v_sites_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-remove-v-sites-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.remove_v_sites_</span></code> (method)<a class="headerlink" href="#tip4p-remove-v-sites-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L510">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_v_sites_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-current-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._current_r_</span></code> (method)<a class="headerlink" href="#tip4p-current-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L527">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-current-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._current_v_</span></code> (method)<a class="headerlink" href="#tip4p-current-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L533">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-current-f-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._current_F_</span></code> (method)<a class="headerlink" href="#tip4p-current-f-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L539">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_F_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-set-r-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._set_r_</span></code> (method)<a class="headerlink" href="#tip4p-set-r-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L544">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-set-v-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._set_v_</span></code> (method)<a class="headerlink" href="#tip4p-set-v-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L548">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-forward-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.forward_atom_index_</span></code> (method)<a class="headerlink" href="#tip4p-forward-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L552">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-system-mass-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P._system_mass_</span></code> (method)<a class="headerlink" href="#tip4p-system-mass-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L557">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_system_mass_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="tip4p-inverse-atom-index-method">
+<h3><code class="docutils literal notranslate"><span class="pre">TIP4P.inverse_atom_index_</span></code> (method)<a class="headerlink" href="#tip4p-inverse-atom-index-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L561">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-class">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF</span></code> (class)<a class="headerlink" href="#gaff-class" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L566">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GAFF</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mixin class for SingleComponent. Methods relevant only for using GAFF are here.
+
+attribes needed before running self.initialise_FF_
+
+self.misc_dir
+self.name
+.. add
+</pre></div>
+</div>
+</section>
+<section id="gaff-init-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.__init__</span></code> (method)<a class="headerlink" href="#gaff-init-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L576">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-ff-name-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.FF_name</span></code> (method)<a class="headerlink" href="#gaff-ff-name-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L581">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-initialise-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.initialise_FF_</span></code> (method)<a class="headerlink" href="#gaff-initialise-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L584">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this after (n_mol and n_atoms_mol) defined near the end of __init__ of SingleComponent
+this is at the end of __init__
+</pre></div>
+</div>
+</section>
+<section id="gaff-single-mol-pdb-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF._single_mol_pdb_file_</span></code> (method)<a class="headerlink" href="#gaff-single-mol-pdb-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L603">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_pdb_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-single-mol-prepi-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF._single_mol_prepi_file_</span></code> (method)<a class="headerlink" href="#gaff-single-mol-prepi-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L606">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_prepi_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-single-mol-frcmod-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF._single_mol_frcmod_file_</span></code> (method)<a class="headerlink" href="#gaff-single-mol-frcmod-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L609">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_frcmod_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-single-mol-mol2-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF._single_mol_mol2_file_</span></code> (method)<a class="headerlink" href="#gaff-single-mol-mol2-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L612">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_mol2_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-first-time-molecule-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.first_time_molecule_</span></code> (method)<a class="headerlink" href="#gaff-first-time-molecule-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L615">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">first_time_molecule_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-can-run-tleap-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.can_run_tleap</span></code> (method)<a class="headerlink" href="#gaff-can-run-tleap-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L676">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">can_run_tleap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-tleap-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.tleap_file</span></code> (method)<a class="headerlink" href="#gaff-tleap-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L686">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">tleap_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-prmtop-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.prmtop_file</span></code> (method)<a class="headerlink" href="#gaff-prmtop-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L689">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">prmtop_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-inpcrd-file-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF._inpcrd_file_</span></code> (method)<a class="headerlink" href="#gaff-inpcrd-file-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L692">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_inpcrd_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-create-prmtop-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.create_prmtop_</span></code> (method)<a class="headerlink" href="#gaff-create-prmtop-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L695">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_prmtop_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-top-file-gmx-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.top_file_gmx</span></code> (method)<a class="headerlink" href="#gaff-top-file-gmx-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L729">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_file_gmx</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-top-file-gmx-adjusted-charges-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.top_file_gmx_adjusted_charges</span></code> (method)<a class="headerlink" href="#gaff-top-file-gmx-adjusted-charges-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L733">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_file_gmx_adjusted_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-top-file-gmx-crys-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.top_file_gmx_crys</span></code> (method)<a class="headerlink" href="#gaff-top-file-gmx-crys-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L737">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_file_gmx_crys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-reset-n-mol-top-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.reset_n_mol_top_</span></code> (method)<a class="headerlink" href="#gaff-reset-n-mol-top-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L740">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_n_mol_top_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-set-ff-amber-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.set_FF_amber_</span></code> (method)<a class="headerlink" href="#gaff-set-ff-amber-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L750">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_amber_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-set-ff-gmx-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.set_FF_gmx_</span></code> (method)<a class="headerlink" href="#gaff-set-ff-gmx-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L754">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_gmx_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+<section id="gaff-set-ff-method">
+<h3><code class="docutils literal notranslate"><span class="pre">GAFF.set_FF_</span></code> (method)<a class="headerlink" href="#gaff-set-ff-method" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/sc_system.py#L779">View source on GitHub</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docstring pending.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &#169;2026, FECrys contributors.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.4.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/api/O-MM-sc_system.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
