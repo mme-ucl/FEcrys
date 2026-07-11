@@ -1,66 +1,12 @@
 
-''' util_tf.py
+"""TensorFlow numerical and coordinate-transformation utilities.
 
-convert arrays tf <-> np:
-    f : np2tf_
-    f : tf2np_
-
-methods:
-    f : norm_
-    f : unit_
-    f : norm_clipped_
-    f : unit_clipped_
-    f : det_3x3 
-    f : make_COM_removal_matrix_
-    f : PCA_
-    c : NotWhitenFlow
-    c : WhitenFlow
-    f : pad_ranges_
-    f : get_ranges_centres_MIN_MAX_
-    f : get_ranges_centres_
-    f : scale_shift_x_
-    f : scale_shift_individual_x_
-    c : FocusedBonds
-    c : FocusedAngle
-    f : average_torsion_np_
-    f : centre_torsion_tf_
-    c : FocusedTorsions
-    f : merge_periodic_masks_
-    c : Static_Rotations_Layer
-    f : ample_phi_in_limits_
-    f : sample_theta1_in_limits_
-    f : sample_theta0_fastest_
-    c : identity_shift
-    c : FocusedHemisphere
-    f : quat2axisangle_
-    f : get_coupling_masks_
-    f : reshape_to_molecules_tf_
-    f : reshape_to_atoms_tf_
-    f : reshape_to_flat_tf_
-    f : get_distance_tf_
-    f : get_angle_tf_
-    f : get_torsion_tf_
-    f : r_to_x_atom_
-    f : IC_ladJ_inv_
-    f : IC_forward_
-    f : NeRF_tf_
-    f : IC_inverse_
-    f : mat_to_quat_tf_ (cond_0_true_, cond_1_true_, cond_2_true_, all_conds_false_)
-    f : CB_ladJ_inv_
-    f : CB_forward_
-    f : quat_to_mat_tf_
-    f : CB_inverse_
-    f : test_CB_transformation_
-    f : CB_single_molecule_forward_
-    f : CB_single_molecule_inverse_
-    f : hemisphere_ 
-    f : hemisphere_forward_
-    f : hemisphere_inverse_
-    f : sample_q_
-    f : quat_metrix_
-    f : quat_product_, quat_inverse_ # not used
-    f : box_forward_, box_inverse_ # not used
-'''
+This module supplies whitening, range scaling, focused bond/angle/torsion and
+rotation maps, molecular internal-coordinate transformations, quaternion
+geometry, and box representations. Transformation functions return values and
+log-absolute Jacobian determinants in the direction requested. Unless stated
+otherwise, tensors use float32 and Cartesian components occupy the final axis.
+"""
 
 from ..util_np import *
 
@@ -71,8 +17,15 @@ from .rqs import cast_32_, cast_64_, rqs_bin_
 ## ## ## ## 
 
 DTYPE_tf = tf.float32
-np2tf_ = lambda x : tf.cast(x, dtype=DTYPE_tf)
-tf2np_ = lambda x : x.numpy() 
+
+def np2tf_(x):
+    """Convert an array-like value to the configured TensorFlow float dtype."""
+    return tf.cast(x, dtype=DTYPE_tf)
+
+
+def tf2np_(x):
+    """Return a TensorFlow eager tensor as a NumPy array."""
+    return x.numpy()
 
 PI = 3.14159265358979323846264338327950288
 
@@ -81,15 +34,32 @@ PI = 3.14159265358979323846264338327950288
 
 _clip_low_at_ = 1e-8
 _clip_high_at_ = 1e+18
-clip_positive_ = lambda x : tf.clip_by_value(x, _clip_low_at_, _clip_high_at_) 
+def clip_positive_(x):
+    """Clip tensor values to the positive numerical-stability interval."""
+    return tf.clip_by_value(x, _clip_low_at_, _clip_high_at_)
 
-norm_ = lambda x : tf.norm(x, axis=-1,keepdims=True)
-unit_ = lambda x : x / norm_(x)
 
-norm_clipped_ = lambda x : clip_positive_(tf.norm(x,axis=-1,keepdims=True))
-unit_clipped_ = lambda x : x / norm_clipped_(x)
+def norm_(x):
+    """Euclidean norm along the final axis, retaining that axis."""
+    return tf.norm(x, axis=-1, keepdims=True)
+
+
+def unit_(x):
+    """Normalise vectors along the final axis without zero-norm protection."""
+    return x / norm_(x)
+
+
+def norm_clipped_(x):
+    """Final-axis Euclidean norm clipped below for numerical stability."""
+    return clip_positive_(tf.norm(x, axis=-1, keepdims=True))
+
+
+def unit_clipped_(x):
+    """Normalise final-axis vectors using a positive clipped norm."""
+    return x / norm_clipped_(x)
 
 def det_3x3_(M, keepdims=False):
+    """Compute determinants of tensors shaped ``(..., 3, 3)``."""
     # M : (...,3,3)
     return tf.reduce_sum( tf.linalg.cross(M[...,0], M[...,1]) * M[...,2], axis=-1, keepdims=keepdims)
 
@@ -155,7 +125,15 @@ def PCA_(X0, removedims=3, diagonal=False, isotropic=False, not_whiten=False):
     return X0mean, Twhiten, Tblacken, std, _eigval
 
 class NotWhitenFlow:
+    """Remove global translation by fixing the first particle at the origin.
+
+    The map reduces ``3*n_mol`` coordinates to ``3*(n_mol-1)``. It is volume
+    preserving in this reduced representation; optional ``whiten_anyway`` then
+    fits a conventional zero-dimension-removal whitening transform.
+    """
+
     def __init__(self, r_flat, removedims=3, whiten_anyway=False):
+        """Infer particle count and optionally fit a secondary whitening map."""
 
         # r_flat : (m, dim) ; dim = n_mol*3
         self.dim_larger = r_flat.shape[1]
@@ -171,6 +149,7 @@ class NotWhitenFlow:
             self.whiten_anyway = False
 
     def forward(self, x):
+        """Subtract the first particle, drop it, and return the reduced array."""
         ladJ = 0.0
         
         x = tf.reshape(x, [-1,self.n_mol,3])
@@ -184,6 +163,7 @@ class NotWhitenFlow:
         return x, ladJ
     
     def inverse(self, x):
+        """Restore a zero first particle and expand to the original dimension."""
         ladJ = 0.0
 
         if self.whiten_anyway: x, ladJ = self.WF_keepdim.inverse(x)
@@ -196,6 +176,7 @@ class NotWhitenFlow:
         return x, ladJ
 
     def _forward_np(self, x):
+        """NumPy implementation of the translation-removing forward map."""
         x = np.array(x)
         x = np.reshape(x, [-1,self.n_mol,3])
         x -= x[:,:1]
@@ -210,6 +191,7 @@ class NotWhitenFlow:
 class WhitenFlow:
     ' REF: https://github.com/noegroup/bgflow'
     def __init__(self, r, removedims=3, diagonal=False, isotropic=False):
+        """Fit PCA mean, whitening, and inverse matrices to ``r``."""
         
         # r : (m, dim)
 
@@ -229,33 +211,44 @@ class WhitenFlow:
         self.jacobian_xz = -tf.reduce_sum(tf.math.log(self.std))
 
     def _whiten(self, x):
+        """Apply mean removal/PCA whitening and return its constant log-Jacobian."""
         y = tf.einsum('oi,ij->oj',x - self.X0mean, self.Twhiten) 
         dlogp = self.jacobian_xz * tf.ones((x.shape[0], 1))
         return y, dlogp
 
     def _blacken(self, x):
+        """Apply inverse whitening and return its constant log-Jacobian."""
         y = tf.einsum('oi,ij->oj', x, self.Tblacken) + self.X0mean
         dlogp = -self.jacobian_xz * tf.ones((x.shape[0], 1))
         return y, dlogp
 
     def forward(self, x):
+        """Whiten a tensor batch."""
         y, dlogp = self._whiten(x)
         return y, dlogp
 
     def inverse(self, x):
+        """Reconstruct a tensor batch from whitened coordinates."""
         y, dlogp = self._blacken(x)
         return y, dlogp
 
     def _forward_np(self, x):
+        """NumPy forward whitening without returning the Jacobian."""
         y = np.einsum('oi,ij->oj',x - self.X0mean.numpy(), self.Twhiten.numpy()) 
         return y
 
 def pad_ranges_(Min, Max, factor):
+    """Return symmetric padding needed to enlarge a range by ``factor``."""
     Range = Max - Min
     assert factor >= 1.0
     return (Range*factor - Range)*0.5
 
 def get_ranges_centres_MIN_MAX_(x, axis:list, percentage_pad=0.0, range_limits:list=None, keepdims=False):
+    """Estimate marginal ranges and centres from extrema.
+
+    Optional limits are asserted to contain the observed data. Returns float32
+    tensors whose reduced axes follow ``keepdims``.
+    """
     # old
     axis = tuple(axis)
 
@@ -312,6 +305,7 @@ def get_ranges_centres_(x, axis:list, range_limits=None, keepdims=False, centroi
 '''
 #'''
 def get_ranges_centres_(x, axis:list, range_limits=None, keepdims=False):
+    """Return data ranges and midpoints using the current min/max estimator."""
     return get_ranges_centres_MIN_MAX_(x, axis=axis, percentage_pad=0.0, range_limits=range_limits, keepdims=keepdims)
 #'''
 
@@ -320,6 +314,7 @@ def scale_shift_x_(x,
                    physical_centres_x, # (n,)
                    forward=True,
                    ):
+    """Map each final-axis marginal between its physical range and [-1, 1]."""
     n_dof = x.shape[-1]
 
     y = [] ; ladJ = 0.0
@@ -348,6 +343,7 @@ def scale_shift_x_general_(x,
                            model_centre = 0.0,
                            forward=True,
                            ):
+    """Map marginals between fitted physical ranges and a chosen model interval."""
     n_dof = x.shape[-1]
 
     y = [] ; ladJ = 0.0
@@ -374,6 +370,7 @@ def scale_shift_individual_x_(x,
                               physical_centres_x, # [1,...] use add_batch_axis True
                               forward=True,
                              ):
+    """Vectorised per-entry scaling to/from [-1, 1] with batch Jacobians."""
     axes_sum = - tf.range(1,tf.rank(x))
     
     if forward:
@@ -410,12 +407,15 @@ def scale_shift_individual_x_(x,
 """
 
 class FocusedBonds:
-    def __init__(self, 
+    """Affine map focusing observed bond lengths into [-1, 1]."""
+
+    def __init__(self,
                  X, # (m,n_mol,D) or (m, n_mol)
                  axis = [0,1], # default axis for first case above
                  #percentage_pad = 1.0,
                  focused = True,
                  ):
+        """Fit marginal ranges within the physical 0.05–0.22 nm limits."""
         self.axis = tuple(axis)
 
         self.min_bond_length = 0.05 # (units: nm)
@@ -448,21 +448,27 @@ class FocusedBonds:
         ##
 
     def forward_(self, X):
+        """Scale physical bond lengths to model coordinates."""
         return scale_shift_individual_x_(X, self.ranges, self.centres, forward=True)
     def inverse_(self, X):
+        """Restore physical bond lengths from model coordinates."""
         return scale_shift_individual_x_(X, self.ranges, self.centres, forward=False)
     def __call__(self, X, forward=True):
+        """Dispatch to the forward or inverse bond transform."""
         if forward: return self.forward_(X)
         else:       return self.inverse_(X)
 
 class FocusedAngles:
-    def __init__(self, 
+    """Affine map focusing observed angles into [-1, 1]."""
+
+    def __init__(self,
                  X, # (m,n_mol,D) or (m, n_mol)
                  axis = [0,1], # default axis for first case above
                  #percentage_pad = 1.0,
                  range_limits = [0.0,PI],
                  focused = True,
                  ):
+        """Fit marginal ranges inside the supplied angular limits in radians."""
         self.axis = tuple(axis)
 
         self.min_angle = range_limits[0]
@@ -494,10 +500,13 @@ class FocusedAngles:
         ##
 
     def forward_(self, X):
+        """Scale physical angles to model coordinates."""
         return scale_shift_individual_x_(X, self.ranges, self.centres, forward=True)
     def inverse_(self, X):
+        """Restore physical angles from model coordinates."""
         return scale_shift_individual_x_(X, self.ranges, self.centres, forward=False)
     def __call__(self, X, forward=True):
+        """Dispatch to the forward or inverse angle transform."""
         if forward: return self.forward_(X)
         else:       return self.inverse_(X)
 
@@ -510,18 +519,22 @@ def average_torsion_np_(x,
                         keepdims = True,
                         pooling_method_ = np.mean,
                         ):
+    """Compute a circular mean/median-like torsion centre in radians."""
     return np.arctan2(pooling_method_(np.sin(x),axis=axis,keepdims=keepdims),
                       pooling_method_(np.cos(x),axis=axis,keepdims=keepdims)
                      )
 
 def centre_torsion_tf_(x, x_mean, forward=True):
+    """Shift periodic angles by a centre while wrapping to [-pi, pi)."""
     if forward:
         return tf.math.floormod(x - x_mean + PI, 2.0*PI) - PI
     else:
         return tf.math.floormod(x + x_mean + PI, 2.0*PI) - PI
     
 class FocusedTorsions:
-    def __init__(self, 
+    """Centre and scale torsions while preserving fully periodic marginals."""
+
+    def __init__(self,
                  X, # (m, n_mol, D)
                  axis = [0,1], # default axis for first case above
                  #percentage_pad = 0.0,
@@ -529,6 +542,7 @@ class FocusedTorsions:
                  verbose = True,
                  mask_periodic = None,
                  ):
+        """Fit circular centres/ranges and infer or accept periodic flags."""
         self.axis = tuple(axis)
 
         #self.percentage_pad = percentage_pad 
@@ -558,6 +572,7 @@ class FocusedTorsions:
         self.set_ranges_(mask_periodic)
 
     def set_ranges_(self, mask_periodic):
+        """Apply shared periodic flags and update ranges/secondary centres."""
 
         if mask_periodic is not None:
             assert set(mask_periodic.flatten().tolist()) in [set([0]),set([0,1]),set([1])]
@@ -581,16 +596,19 @@ class FocusedTorsions:
         print('This topology is shared over all molecules.\n')
 
     def forward_(self, X):
+        """Centre torsions and scale them to model coordinates."""
         Y = centre_torsion_tf_(X, self.centres_0, forward=True)
         Z, ladJ = scale_shift_individual_x_(Y, self.ranges, self.centres_1, forward=True)
         return Z, ladJ
     
     def inverse_(self, Z):
+        """Undo torsion scaling and circular centring."""
         Y, ladJ = scale_shift_individual_x_(Z, self.ranges, self.centres_1, forward=False)
         X = centre_torsion_tf_(Y, self.centres_0, forward=False)
         return X, ladJ
     
     def __call__(self, X, forward=True):
+        """Dispatch to the forward or inverse torsion transform."""
         if forward: return self.forward_(X)
         else:       return self.inverse_(X)
 
@@ -729,10 +747,13 @@ cell600 = [ [ 0.5       ,  0.5       ,  0.5       ,  0.5       ],
             [-0.30901699, -0.5       , -0.80901699,  0.        ] ]
 
 class Static_Rotations_Layer:
+    """Choose fixed quaternion rotations that avoid hemisphere singularities."""
+
     def __init__(self,
                  q,
                  indices : list = None,
                  ):
+        """Select grid rotations for each molecule or restore known indices."""
         ' self.n_mol here can be diffent from self.n_mol in the ic_map or PGMcrys model, depending on how q was reshaped '
         self.n_mol = q.shape[1] 
         ' convert cell600 vectors (a uniform grid on S3) to rotation matrices '
@@ -747,6 +768,7 @@ class Static_Rotations_Layer:
            The three error functions are dicussed in self.find_best_
         """
     def find_best_(self, q):
+        """Grid-search rotations minimising hemisphere-coordinate pathologies."""
 
         self.best_indices = []
         ''' 
@@ -793,14 +815,17 @@ class Static_Rotations_Layer:
             self.best_indices.append(np.argmin(errs))
             
     def forward_(self, q):
+        """Apply the selected per-molecule quaternion rotations."""
         # k is index for different molecules
         return tf.einsum('kij,...kj->...ki',self.P,q)
 
     def inverse_(self, q):
+        """Apply transposed selected rotations to recover original quaternions."""
         # k is index for different molecules
         return tf.einsum('kji,...kj->...ki',self.P,q)
 
 def sample_phi_in_limits_(m, E, F):
+    """Sample ``m`` uniform azimuths independently between bounds ``E`` and ``F``."""
     # m : int
     # E : (1,n_mol)
     # F : (1,n_mol)
@@ -809,6 +834,7 @@ def sample_phi_in_limits_(m, E, F):
     return np.random.rand(m,n_mol)*(F-E) + E
 
 def sample_theta1_in_limits_(m, C, D):
+    """Sample polar angles with the correct sine surface-area density."""
     # m : int
     # C : (1,n_mol)
     # D : (1,n_mol)
@@ -818,6 +844,12 @@ def sample_theta1_in_limits_(m, C, D):
     return np.arcsin(rand) + c
 
 def sample_theta0_fastest_(m, A, B, test=False):
+    """Sample first hyperspherical angles with their ``sin(theta)^2`` density.
+
+    A fixed rational-quadratic approximation inverts the analytic cumulative
+    map. Returns samples shaped ``(m, n_mol)`` and an optional approximation
+    error diagnostic.
+    """
 
     def rqs_here_(  x,
                     w, 
@@ -826,6 +858,7 @@ def sample_theta0_fastest_(m, A, B, test=False):
                     interval = [0., 0.5*PI],
                     forward = False,
                 ):
+        """Evaluate the fixed spline used to invert the theta0 cumulative map."""
         x = cast_64_(x)
         w = cast_64_(w)
         h = cast_64_(h)
@@ -904,21 +937,29 @@ def sample_theta0_fastest_(m, A, B, test=False):
     return samples, err
 
 class identity_shift:
+    """Identity rotation strategy used when rotations are configured externally."""
+
     def __init__(self,):
+        """Create a stateless identity transform."""
         ''
     def forward_(self,x):
+        """Return ``x`` unchanged."""
         return x
     def inverse_(self,x):
+        """Return ``x`` unchanged."""
         return x
                 
 class FocusedHemisphere:
-    def __init__(self, 
+    """Map quaternion rotations to a focused three-coordinate hemisphere patch."""
+
+    def __init__(self,
                  q, # (m, n_mol, 4)
                  srl_indices_known = None, # redundant because selection already pickled when saving model
                  focused = True,
                  static_rotations_defined_externally = False,
                  mask_periodic_Phi = None,
                  ):
+        """Fit static rotations and focused hyperspherical marginal ranges."""
         self.focused = focused
         q = np2tf_(q)
         '''
@@ -956,6 +997,7 @@ class FocusedHemisphere:
         self.set_ranges_(mask_periodic_Phi)
 
     def set_ranges_(self, mask_periodic_Phi):
+        """Update periodic azimuth flags and compute patch bounds/area."""
         if mask_periodic_Phi is None: pass
         else:  self.Focused_Phi.set_ranges_(mask_periodic_Phi)
         
@@ -1002,6 +1044,7 @@ class FocusedHemisphere:
             # self.log_area_patch is for all patches.
 
     def forward_(self, q):
+        """Rotate and map quaternions into three scaled patch coordinates."""
         q = self.static_rotations_layer.forward_(q)
         s, ladJ = hemisphere_forward_(q, rescale_marginals=False)
         theta0, ladj_scale_t0 = self.Focused_Theta0.forward_(s[...,0])
@@ -1012,6 +1055,7 @@ class FocusedHemisphere:
         return s_scaled, ladJ
 
     def inverse_(self, s_scaled):
+        """Reconstruct quaternions from scaled hemisphere coordinates."""
         theta0, ladj_scale_t0 = self.Focused_Theta0.inverse_(s_scaled[...,0])
         theta1, ladj_scale_t1 = self.Focused_Theta1.inverse_(s_scaled[...,1])
         phi, ladj_scale_phi = self.Focused_Phi.inverse_(s_scaled[...,2])
@@ -1022,10 +1066,12 @@ class FocusedHemisphere:
         return qh, ladJ
     
     def __call__(self, X, forward=True):
+        """Dispatch to the forward or inverse quaternion-patch map."""
         if forward: return self.forward_(X)
         else:       return self.inverse_(X)
 
     def sample_quaternion_patch_v1_(self, m):
+        """Rejection-sample ``m`` uniform quaternions inside every fitted patch."""
         # accept uniform samples at places where it is in the rectangle
         # if is in the rectangle when base samples model would see are in the data range (focused)
         # samples falling outside of this range are rejected, until enough samples are collected
@@ -1046,6 +1092,7 @@ class FocusedHemisphere:
         return np2tf_(samples) # (m,n_mol,4)
 
     def sample_quaternion_patch_v2_(self, m):
+        """Directly sample ``m`` uniform quaternions from separable patch marginals."""
         # the rectangle area integral in s is seperable into 3 parts
         # sampling can thus be done seperately on each of the marginals of s
         t0 = np2tf_(sample_theta0_fastest_(m, self.A, self.B, test=False)[0])
@@ -1100,15 +1147,15 @@ def get_coupling_masks_(dim_flow : int):
 ##
 
 def reshape_to_molecules_tf_(r, n_molecules, n_atoms_in_molecule):
-    # same as numpy version in utils_np
+    """Reshape batched coordinates to ``(batch, molecules, atoms, 3)``."""
     return tf.reshape(r,[r.shape[0], n_molecules, n_atoms_in_molecule, 3])
 
 def reshape_to_atoms_tf_(r, n_molecules, n_atoms_in_molecule):
-    # same as numpy version in utils_np
+    """Reshape batched coordinates to ``(batch, total_atoms, 3)``."""
     return tf.reshape(r,[r.shape[0], n_molecules*n_atoms_in_molecule, 3])
     
 def reshape_to_flat_tf_(r, n_molecules, n_atoms_in_molecule):
-    # same as numpy version in utils_np
+    """Flatten all molecular Cartesian coordinates within each batch item."""
     return tf.reshape(r,[r.shape[0], n_molecules*n_atoms_in_molecule*3])
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
@@ -1588,6 +1635,12 @@ def CB_single_molecule_forward_(xyz_CB):
     return [a, dAB, dAC], ladJ
 
 def CB_single_molecule_inverse_(X):
+    """Reconstruct a canonical isolated three-atom Cartesian block.
+
+    ``X`` contains angle and two bond distances. Translation is fixed at zero
+    and rotation at the identity because isolated-molecule energy is invariant
+    to both. Returns coordinates and the inverse polar-coordinate Jacobian.
+    """
 
     a, dAB, dAC = X
 
@@ -1603,7 +1656,9 @@ def CB_single_molecule_inverse_(X):
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 ## hemisphere:
 
-hemisphere_ = lambda x : x * tf.where(x[...,:1]<0.0, -1.0, 1.0)
+def hemisphere_(x):
+    """Choose the quaternion representative whose scalar component is nonnegative."""
+    return x * tf.where(x[..., :1] < 0.0, -1.0, 1.0)
 
 def hemisphere_forward_(q, rescale_marginals=True):
     '''
@@ -1742,8 +1797,7 @@ def quat_product_(q,p):
     return w
 
 def quat_inverse_(q):
-    # ! assumes the input is already a unit-vector
-    # allows quat_product_ to be inverted
+    """Return the conjugate/inverse of a unit quaternion."""
     q0 = q[...,:1]
     q123 = q[...,1:]
     return tf.concat([q0,-q123],axis=-1)

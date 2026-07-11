@@ -1,13 +1,12 @@
 
-''' spline_layer.py
-    c : MLP
-    f : get_pos_encoding_
-    c : AT_MLP
-    c : SPLINE_COUPLING_helper
-    c : SPLINE_COUPLING_HALF_LAYER
-    c : SPLINE_COUPLING_HALF_LAYER_AT
-    c : SPLINE_COUPLING_LAYER
-'''
+"""Keras layers for spline-based normalising-flow couplings.
+
+Conditioner networks generate rational-quadratic spline parameters for
+periodic and ordinary variables. Half layers transform one mask partition;
+full coupling layers compose complementary half layers so every non-auxiliary
+variable can be transformed. Forward and inverse methods return the transformed
+tensor and a per-sample summed log-absolute Jacobian determinant.
+"""
 
 import numpy as np
 import tensorflow as tf
@@ -17,6 +16,12 @@ from .rqs import *
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class MLP(tf.keras.layers.Layer):
+    """Dense multilayer perceptron with one or more output heads.
+
+    The layer always returns a list—one tensor for every requested output
+    dimension—even when there is only one output head.
+    """
+
     def __init__(self,
                  
                  dims_outputs        : list,
@@ -27,6 +32,12 @@ class MLP(tf.keras.layers.Layer):
                  output_bias_initializer   = 'zeros',
 
                  **kwargs):
+        """Construct shared hidden layers and independent dense output heads.
+
+        ``dims_hidden`` and ``dims_outputs`` specify layer widths. Output
+        activations and kernel/bias initializers may be single values applied
+        to every head or one value per head.
+        """
         super().__init__(**kwargs)
         ''' Multilayer Perceptron (MLP)
 
@@ -69,7 +80,16 @@ class MLP(tf.keras.layers.Layer):
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
-get_pos_encoding_ = lambda pos, C=6, dim_embedding=3 : np.array([np.sin(pos/(C**(2*i/dim_embedding))) for i in range(1,dim_embedding+1)] + [np.cos(pos/(C**(2*i/dim_embedding))) for i in range(1,dim_embedding+1)])
+def get_pos_encoding_(pos, C=6, dim_embedding=3):
+    """Return sinusoidal position features for one molecule index.
+
+    The output contains ``dim_embedding`` sine values followed by the same
+    number of cosine values, with frequencies scaled geometrically by ``C``.
+    """
+    return np.array(
+        [np.sin(pos / (C ** (2 * i / dim_embedding))) for i in range(1, dim_embedding + 1)]
+        + [np.cos(pos / (C ** (2 * i / dim_embedding))) for i in range(1, dim_embedding + 1)]
+    )
 
 class AT_MLP(tf.keras.layers.Layer):
     '''
@@ -86,6 +106,13 @@ class AT_MLP(tf.keras.layers.Layer):
                  name = 'AT_MLP',                 # name passed down to trainable weights for indexing later (optional)
                  mask_self = True,                # if True only pairs of different molecules are coupled
                 ):
+        """Construct multi-head key, query, and value conditioner networks.
+
+        Inputs are expected as ``(batch, n_mol, input_dim)``. ``one_hot_kqv``
+        controls addition of sinusoidal molecule-index features to each of the
+        key/query/value networks. ``mask_self`` removes diagonal attention for
+        multi-molecule systems.
+        """
         super().__init__()
 
         A = embedding_dim
@@ -145,12 +172,27 @@ class AT_MLP(tf.keras.layers.Layer):
         else:              self.v_ = lambda x : self._v_(x)[0]
 
     def one_hot_extend_(self, x):
+        """Append the fixed position encoding to each molecule's features."""
         return tf.stack([tf.concat([x[:,i,:],[self.pos_emb[i]]*x.shape[0]], axis=-1) for i in range(self.n_mol)],axis=-2)
 
     def call(self,
              x,    # input with shape (m, n_mol, dim_input) ; m is batch_size
              flow_mask = None,
              ):
+        """Apply positive normalised attention across molecules.
+
+        Parameters
+        ----------
+        x : tensorflow.Tensor, shape (batch, n_mol, input_dim)
+            Per-molecule input features.
+        flow_mask : tensor, shape (n_mol,), optional
+            Multiplicative mask for participating molecules.
+
+        Returns
+        -------
+        tensorflow.Tensor, shape (batch, n_mol, output_dim)
+            Multi-head values summed over source molecules and heads.
+        """
         if flow_mask is None: flow_mask = self.flow_mask_unmasked # (n_mol,)
         else: pass # not tested
 
@@ -175,7 +217,14 @@ class AT_MLP(tf.keras.layers.Layer):
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class SPLINE_COUPLING_helper:
+    """Shared masking and transformation logic for spline half layers.
+
+    Subclasses call :meth:`init_` and provide ``MLP_``, a conditioner mapping
+    the conditioning variables to periodic and ordinary spline parameters.
+    """
+
     def __init__(self,):
+        """Create an unconfigured helper; subclasses must call :meth:`init_`."""
         ''
     def init_(self,
               periodic_mask : list,
@@ -309,6 +358,7 @@ class SPLINE_COUPLING_helper:
         PI = np.pi
 
         def cos_sin_(x, nk:int=1):
+            """Encode scaled periodic values with ``nk`` Fourier harmonics."""
             x*=PI
             output = []
             for k in range(1,nk+1):
@@ -317,6 +367,7 @@ class SPLINE_COUPLING_helper:
             return tf.concat(output, axis = -1)
 
         def cos_sin_1_(x):
+            """Encode scaled periodic values with one cosine/sine pair."""
             x*=PI
             return tf.concat( [tf.cos(x), tf.sin(x)], axis = -1)
 
@@ -498,9 +549,11 @@ class SPLINE_COUPLING_helper:
         return y, ladJ
     
     def forward_(self, x, dont_mask=False):
+        """Transform ``x`` forward and return values plus summed log-Jacobian."""
         return self.transform_(x, forward=True, dont_mask=dont_mask)
-    
+
     def inverse_(self, x, dont_mask=False):
+        """Invert the half-layer and return values plus inverse log-Jacobian."""
         return self.transform_(x, forward=False, dont_mask=dont_mask)
 
 class SPLINE_COUPLING_HALF_LAYER(tf.keras.layers.Layer,
@@ -535,6 +588,14 @@ class SPLINE_COUPLING_HALF_LAYER(tf.keras.layers.Layer,
                  ##
                  name = None,
                 ):
+        """Build a half coupling layer with a standard dense conditioner.
+
+        ``periodic_mask`` identifies circular variables and ``cond_mask`` uses
+        one for transformed variables and zero for conditioner inputs.
+        ``identity_init`` zeroes the final kernels and chooses biases that make
+        the initial splines identities. Hidden widths default to the total
+        spline-parameter output size.
+        """
         super().__init__()
         self.init_(
         periodic_mask = periodic_mask,         
@@ -625,6 +686,13 @@ class SPLINE_COUPLING_HALF_LAYER_AT(tf.keras.layers.Layer,
 
                  name = None,
                 ):
+        """Build a spline half layer with inter-molecular self-attention.
+
+        ``flow_mask`` can freeze selected molecule/variable entries. Attention
+        is used only when ``n_mol > 1``; otherwise the decoder receives the
+        conditioning variables directly. ``add_residual`` chooses addition or
+        concatenation of attention features before decoding spline parameters.
+        """
         super().__init__()
         self.init_(
         periodic_mask = periodic_mask,         
@@ -769,6 +837,13 @@ class SPLINE_COUPLING_LAYER(tf.keras.layers.Layer):
                                                      'hidden_activation':tf.nn.silu,
                                                     }
                 ):
+        """Compose complementary spline half layers into one bijection.
+
+        ``cond_mask`` values mean: 1 transforms in layer A, 0 transforms in
+        layer B, and 2 remains auxiliary/conditioning-only in both. The chosen
+        ``half_layer_class`` receives shared spline settings plus
+        ``kwargs_for_given_half_layer_class``.
+        """
         super().__init__()
         self.custom_name = name 
         # name passed all the way down to any MLPs,
@@ -817,15 +892,17 @@ class SPLINE_COUPLING_LAYER(tf.keras.layers.Layer):
                         )
         
     def forward(self, x, dont_mask=False):
+        """Apply half layers A then B and sum their log-Jacobians."""
         ladJ = 0.0
         x, ladj = self.layer_A.forward_(x, dont_mask=dont_mask) ; ladJ += ladj
         x, ladj = self.layer_B.forward_(x, dont_mask=dont_mask) ; ladJ += ladj
         return x, ladJ
 
     def inverse(self, x, dont_mask=False):
+        """Invert half layers in reverse order and sum inverse log-Jacobians."""
         ladJ = 0.0
         x, ladj = self.layer_B.inverse_(x, dont_mask=dont_mask) ; ladJ += ladj
         x, ladj = self.layer_A.inverse_(x, dont_mask=dont_mask) ; ladJ += ladj
         return x, ladJ
 
-## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##

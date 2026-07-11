@@ -1,18 +1,12 @@
 
-''' model_helper.py
-    f : no_nans_
-    c : model_helper
-    f : pool_
-    f : tolBAR_
-    f : get_FE_estimates_
-    f : find_split_indices_
-    f : FE_of_model_
-    f : FE_of_model_curve_
-    f : get_phi_ij_
-    c : TRAINER 
-    
-    TODO: confirm TRAINER compatible with single molecule in vaccum in the same way as before
-'''
+"""Common model, persistence, training, and free-energy utilities.
+
+The model mixin wraps TensorFlow forward/inverse maps with NumPy-facing APIs,
+tracks Jacobians, and implements a versioned single-file persistence format.
+The estimator and trainer routines compare molecular-dynamics samples with
+generated samples using likelihood, exponential averaging, BAR, and MBAR
+quantities. Energies and free energies are reduced and expressed in ``kT``.
+"""
 
 from ..util_np import *
 from ..plotting import *
@@ -25,6 +19,7 @@ import inspect
 ## ## ## ##
 
 def no_nans_(grads:list):
+    """Return whether every supplied gradient tensor contains finite values."""
     _grads = grads # [x for x in grads if x is not None]
     if tf.reduce_sum([tf.reduce_sum(1.0 - tf.cast(tf.math.is_finite(x),dtype=tf.float32)) for x in _grads]) > 0.0:
         return False
@@ -32,7 +27,10 @@ def no_nans_(grads:list):
 
 
 class _BoundMethodRef:
+    """Serializable placeholder for an allow-listed bound method name."""
+
     def __init__(self, name: str):
+        """Store the method name for restoration after deserialization."""
         self.name = name
 
 
@@ -47,6 +45,12 @@ _ALLOWED_BOUND_METHODS = (
 )
 
 class model_helper:
+    """Mixin providing training and persistence around an invertible model.
+
+    Subclasses must implement ``sample_base_``, ``ln_base_``, ``forward_``, and
+    ``inverse_``. Forward/inverse functions return transformed values and
+    per-sample log-absolute Jacobian determinants.
+    """
     def __init__(self,):
         """the class which inherits these methods should have the following methods:
         
@@ -168,6 +172,7 @@ class model_helper:
 
     @staticmethod
     def _restore_bound_methods_(obj):
+        """Resolve serialized method placeholders and legacy strategy aliases."""
         for key, value in list(obj.__dict__.items()):
             if isinstance(value, _BoundMethodRef):
                 if hasattr(obj, value.name):
@@ -190,23 +195,35 @@ class model_helper:
         return obj
 
     def initialise_weights_(self,):
+        """Build Keras weights by sending one base sample through the inverse map."""
         # pass one sample through the model to initialise the sizes of all the trainable weight arrays
         self.all_parameters_trainable = True
         self.inverse(self.sample_base_(1))
         self.n_trainable_tensors = len(self.trainable_weights)
 
     def reset_optimiser_(self, optimiser_LR_decay:list):
+        """Replace the optimiser with a fresh Adam instance.
+
+        The two-element input is stored as learning rate and decay rate; the
+        current TensorFlow optimiser uses only the learning rate.
+        """
         # reset to a fresh instance of Adam
         self.learning_rate, self.rate_decay = optimiser_LR_decay
         self.optimizer = tf.keras.optimizers.Adam(learning_rate = self.learning_rate,) #decay = self.rate_decay)
         
     def ln_model_for_step_ML_(self, inputs:list):
+        """Return latent variables and model log density for one tensor batch."""
         # no numpy version of ln_model_
         outputs, ladJ = self.forward_(inputs)
         return outputs, self.ln_base_(outputs) + ladJ
 
     #@tf.function
     def step_ML_graph_(self, inputs_batch:list):
+        """Perform one maximum-likelihood gradient update.
+
+        Non-finite gradients are detected and skipped. Returns negative mean
+        log likelihood and a Boolean indicating whether the update was applied.
+        """
         # no numpy (tf compiled graph) train one training step (maximise likelihood on MD data)
         if self.all_parameters_trainable: variables = self.trainable_variables
         else: variables = self._trainable_variables
@@ -224,14 +241,21 @@ class model_helper:
 
     #@tf.function
     def forward_graph_(self, inputs:list):
+        """TensorFlow-graph-compatible wrapper around the subclass forward map."""
         # no numpy (tf compiled graph) forward
         return self.forward_(inputs)
     #@tf.function
     def inverse_graph_(self, inputs:list):
+        """TensorFlow-graph-compatible wrapper around the subclass inverse map."""
         # no numpy (tf compiled graph) inverse
         return self.inverse_(inputs)
     
     def initialise_graphs_(self, re_initialise:bool=False):
+        """Compile forward, inverse, and training-step methods with ``tf.function``.
+
+        With ``re_initialise=True``, existing instance wrappers are removed
+        before tracing again. Stable input shapes reduce expensive retracing.
+        """
         # faster than 'eager mode' when implemented in a way that does not involve retracing too many times
         # to reduce retracing:
         #     the shapes of inputs need to remain fixed
@@ -249,12 +273,20 @@ class model_helper:
     ############ numpy interface:
 
     def forward(self, r):
+        """Convert NumPy-like Cartesian input and evaluate the compiled forward map."""
         return self.forward_graph_(np2tf_(r))
 
     def inverse(self, inputs:list):
+        """Evaluate the compiled inverse map on base/model variables."""
         return self.inverse_graph_(inputs)
     
     def step_ML(self, r, u:np.ndarray=None, batch_size:int=1000):
+        """Train on a random coordinate minibatch and report loss estimates.
+
+        Sampling is without replacement. Returns ``(AVMD_T_f, AVMD_T_s)`` when
+        energies ``u`` are provided; without energies both entries are the
+        negative-log-likelihood loss.
+        """
         # prepare numpy input and train one training step (maximise likelihood on MD data)
         # r : (m,n_atoms,3) : MD data
         inds_rand = np.random.choice(r.shape[0], batch_size, replace=False)
@@ -268,12 +300,14 @@ class model_helper:
             return AVMD_T_f, AVMD_T_s
 
     def ln_model(self, r:list):
+        """Evaluate the normalised model log density ``ln q(r)``."""
         # evalaute ln_q(r) : normalised log probability of the datapoint (r) according to the model
         outputs, ladJrz = self.forward(np2tf_(r))
         ln_q = self.ln_base_(outputs) + ladJrz
         return np.array(ln_q)
         
     def sample_model(self, m:int):
+        """Generate ``m`` Cartesian samples and their model log densities."""
         # generate m random samples from the model
         z = self.sample_base_(m)
         r, ladJzr = self.inverse(z)
@@ -281,6 +315,7 @@ class model_helper:
         return np.array(r), np.array(ln_q)
     
     def print_model_size(self):
+        """Calculate, store, and print trainable parameter counts and shapes."""
         # for information; to check size of the model (# trainable parameters)
         ws = self.trainable_weights
         self.n_params = sum([np.prod(ws[i].shape) if 0 not in ws[i].shape else np.sum(ws[i].shape) for i in range(len(ws))])
@@ -358,6 +393,12 @@ class model_helper:
         return model
 
     def test_inverse_(self, r, graph=True):
+        """Measure coordinate and Jacobian round-trip errors in both directions.
+
+        The forward test maps validation coordinates ``r -> z -> r``; the
+        backward test maps fresh base samples ``z -> r -> z``. Returned nested
+        summaries contain coordinate mean/max and Jacobian mean/min/max errors.
+        """
         # r : Cartesian coordinates of a random validation batch
         
         # this function tests invertibility error of the model in both directions
@@ -405,6 +446,7 @@ class model_helper:
     ###############
 
     def index_transferable_parameters_(self,):
+        """Locate trainable tensors whose TensorFlow name contains ``TRANSFERABLE``."""
         self.inds_transferable_parameters = []
         for i in range(self.n_trainable_tensors):
             if 'TRANSFERABLE' in self.trainable_variables[i].name:
@@ -413,10 +455,12 @@ class model_helper:
         self.init_args_to_match_CM = ['TRANSFERABLE', self.n_layers, self.DIM_connection]
 
     def save_transferable_parameters_(self, path_and_name):
+        """Serialize transferable-model metadata and selected weights."""
         ws_CM = [self.trainable_variables[j] for j in self.inds_transferable_parameters]
         save_pickle_([self.init_args_to_match_CM, ws_CM], path_and_name)
 
     def load_transferable_parameters_(self, path_and_name):
+        """Load compatible transferable weights and rebuild compiled graphs."""
         args_to_match, ws_CM = load_pickle_(path_and_name)
         matching = all([x==y for x,y in zip(args_to_match, self.init_args_to_match_CM)])
         try: assert matching 
@@ -428,6 +472,7 @@ class model_helper:
         self.initialise_graphs_()
 
     def set_transferable_parameters_fixed_(self,):
+        """Exclude indexed transferable tensors from subsequent optimisation."""
         self.all_parameters_trainable = False
         self.inds_trainable_variables = list(set(np.arange(self.n_trainable_tensors)) - set(self.inds_transferable_parameters))
         self._trainable_variables = [self.trainable_variables[k] for k in self.inds_trainable_variables]
@@ -436,6 +481,7 @@ class model_helper:
         print('the transferable parameters were set: fixed')
         
     def set_transferable_parameters_trainable_(self,):
+        """Restore optimisation over every model trainable variable."""
         self.all_parameters_trainable = True
         try: del self._trainable_variables
         except: pass
@@ -447,6 +493,7 @@ class model_helper:
     ###########
 
     def initialise(self, ):
+        """Build weights, optimiser, compiled graphs, and transferability index."""
         self.initialise_weights_()
         self.reset_optimiser_(self.optimiser_LR_decay)
         self.initialise_graphs_()
@@ -497,6 +544,7 @@ def tolBAR_(incuA, incuB,
 
     '''
     def _BAR_(grid_f, incuA, incuB, wsA=None, wsB=None):
+        """Evaluate BAR equality error on a free-energy grid and select its minimum."""
         sigma_ = lambda x : (1.0+np.exp(-x))**(-1)
         errs = []
         for f in grid_f:
@@ -836,6 +884,12 @@ def get_phi_ij_(model,
     return phi_ij # (n_states,n_states,n)
 
 class TRAINER:
+    """Orchestrate multi-state likelihood training and periodic FE evaluation.
+
+    The trainer owns progress arrays, evaluation schedules, BAR/MBAR inputs,
+    convergence plots, and inversion diagnostics. It delegates actual gradient
+    updates and transformations to a compatible PGM model.
+    """
     def __init__( self,
                   model,
                   max_training_batches : int = 50000,
@@ -893,6 +947,7 @@ class TRAINER:
         print('')
 
     def print_(self, text):
+        """Update notebook display output or overwrite terminal progress text."""
         if not self.running_in_notebook: print(text, end='\r')
         else: self.dh.update(text)
 
@@ -937,6 +992,14 @@ class TRAINER:
                 # disk space:
                 save_generated_configurations_anyway = False
               ):
+        """Run model-training batches with scheduled free-energy diagnostics.
+
+        One coordinate/energy dataset pair is required per model state. Optional
+        weights support biased MD data, and potential-energy callables enable
+        generated-sample BAR/MBAR estimates. The method mutates training state,
+        may save estimator inputs and plots progress, and returns ``None``.
+        ``n_batches`` must fit within the arrays allocated at construction.
+        """
         if verbose_divided_by_n_mol: n_mol = int(self.n_mol)
         else: n_mol = 1
         if type(f_halfwindow_visualisation) in [int, float]: f_halfwindow_visualisation = [f_halfwindow_visualisation]*2
@@ -1063,6 +1126,7 @@ class TRAINER:
 
             if self.count_strided>0 and self.running_in_notebook and verbose and evaluate_main and list_potential_energy_functions[0] is not None:
                 def plot_this_():
+                    """Plot likelihood and BAR histories for evaluated energies."""
                     fig,ax = plt.subplots(1,2, figsize=(10,5))
 
                     show_AVMD_T_f = np.array(self.AVMD_T_f)/n_mol
@@ -1103,6 +1167,7 @@ class TRAINER:
                 plots = [[plot, color] for plot, color in zip([1,4],['black','blue'])]
 
                 def plot_this_():
+                    """Plot likelihood histories when generated energies are absent."""
                     fig,ax = plt.subplots(1,1, figsize=(5,5))
 
                     show_AVMD_T_f = np.array(self.AVMD_T_f)/n_mol
@@ -1130,6 +1195,7 @@ class TRAINER:
             elif self.running_in_notebook and verbose:
 
                 def plot_this_():
+                    """Plot training negative-log-likelihood history only."""
                     fig,ax = plt.subplots(1,1, figsize=(5,5))
 
                     show_AVMD_T_f = np.array(self.AVMD_T_f)/n_mol
@@ -1157,17 +1223,21 @@ class TRAINER:
 
     @property
     def estimates(self,):
+        """Free-energy diagnostic tensor truncated to completed evaluations."""
         return np.array(self._estimates[:,:self.count_strided])
     
     @property
     def evaluation_grid(self,):
+        """Training-batch indices at which completed evaluations occurred."""
         return np.array(self._evaluation_grid[:self.count_strided])
     
     @property
     def AVMD_T_f(self,):
+        """Training-set likelihood-derived estimates through the current batch."""
         return np.array(self._AVMD_T_f[:self.count])
     
     def save_the_above_(self, name : str):
+        """Serialize accumulated FE curves, diagnostics, and training time."""
         save_pickle_([
                       self.FEs,
                       self.SEs,
@@ -1178,11 +1248,18 @@ class TRAINER:
                       ], name)
         
     def save_inv_test_results_(self, name:str):
+        """Serialize inversion-test histories for every state."""
         save_pickle_(self.inv_test_results, name)
 
 ## ##
 
 def plot_inv_test_res_(inv_test_result, mean_range=[True,True], forward_inverse=[True,True], plot_during_training=True):
+    """Print and optionally plot Jacobian round-trip error histories.
+
+    ``mean_range`` selects mean and min/max summaries; ``forward_inverse``
+    selects Cartesian-to-base and base-to-Cartesian round trips. Reported
+    numbers compare averages over the first and last ten recorded evaluations.
+    """
     if mean_range[0]:
         if forward_inverse[0]:
             # [2] results

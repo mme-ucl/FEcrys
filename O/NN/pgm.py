@@ -1,20 +1,12 @@
 
-''' pgm.py
+"""Probabilistic generative models for molecular crystals and molecules.
 
-    c : POSITIONS_FLOW_LAYER
-    c : C2P_connector_v1
-    c : CONFORMER_FLOW_LAYER
-    c : P3_version_SingleComponent_map_LITE
-    f : load_P3_PGMcrys
-    c : model_helper_PGMcrys_v1
-    c : PGMcrys_v1          # good (whole P3)
-    c : C2P_connector_v2
-    c : C2P_connector_v2_PI # further work area
-    c : PGMcrys_v2          # good (similar to PGMcrys_v1 but self.n_params/self.n_mol is smaller)
-
-    TODO: !! add back the general model for a single molecule in vaccum
-    TODO: ! add back both P2 models (ice), including the Moebius model (good in non-crystaline systems)
-'''
+The active models compose a physical coordinate representation with alternating
+rational-quadratic spline couplings. Position-to-conformation and
+conformation-to-position connector networks exchange conditioning information.
+Multiple thermodynamic or metastable states can share one model through a
+scalar state encoding selected by ``crystal_index``.
+"""
 
 from .model_helper import *
 from .spline_layer import *
@@ -43,6 +35,12 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
                  knot_slope_range = [0.001, 50.0],
                  n_P2C = None, # in M_{/mol} n_P2C = n_mol
                  ):
+        """Construct one positional spline layer and its P-to-C connector.
+
+        The position flow has ``3*(n_mol-1)`` translation-invariant variables.
+        ``aux`` features condition its spline without themselves being
+        transformed. ``layer_index`` selects a coupling mask.
+        """
         super().__init__()
         self.n_mol = n_mol
         self.layer_index = layer_index
@@ -89,6 +87,7 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
                             )
 
     def forward_(self, input, aux):
+        """Transform positional variables conditioned on auxiliary features."""
         # input  : (m, 1, 3*(n_mol-1))
         x = tf.concat([input, aux],axis=-1)
         x, ladJ = self.bijector.forward(x)
@@ -98,6 +97,7 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
         return output, ladJ
 
     def inverse_(self, input, aux):
+        """Invert positional variables with the same auxiliary features."""
         # input  : (m, 1, 3*(n_mol-1))
         x = tf.concat([input,aux],axis=-1)
         x, ladJ = self.bijector.inverse(x)
@@ -107,6 +107,7 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
         return output, ladJ
     
     def convert_to_aux_(self, input):
+        """Encode flat positional variables into per-conformer auxiliary vectors."""
         # input     : (m, 1, 3n + 3(n-1))
         mlp_input = input[:,0]
         # mlp_input : (m, 3n + 3(n-1))
@@ -116,17 +117,22 @@ class POSITIONS_FLOW_LAYER(tf.keras.layers.Layer):
         return mlp_output
 
     def convert_to_flow_(self, pos):
+        """Insert the singleton molecule-like axis expected by the position flow."""
         # input  : (m, 3*(n_mol-1))
         # output : (m, 1, 3*(n_mol-1))
         return pos[:,tf.newaxis]
     
     def convert_from_flow_(self, pos):
+        """Remove the singleton axis from positional flow variables."""
         # input  : (m, 1, 3*(n_mol-1))
         # output : (m, 3*(n_mol-1))
         return pos[:,0]
 
 class C2P_connector_v1(tf.keras.layers.Layer):
+    """Encode conformational variables into one flat C-to-P feature vector."""
+
     def __init__(self, **kwargs):
+        """Store connector metadata and construct its dense network."""
         super().__init__()
         [setattr(self, key, value) for key, value in kwargs.items()]
         '''
@@ -139,6 +145,7 @@ class C2P_connector_v1(tf.keras.layers.Layer):
                                     name = None, # not transferable, PGMcrys_v1 overall not transferable
                                 )
     def __call__(self, input):
+        """Fourier-encode periodic inputs, flatten molecules, and return features."""
         # ^ input : (m, n_mol, dim_flow)
         x_P = tf.gather(input, self.inds_P, axis=-1) * PI
         x_O = tf.gather(input, self.inds_O, axis=-1)
@@ -176,8 +183,14 @@ class CONFORMER_FLOW_LAYER(tf.keras.layers.Layer):
                  ##
                  custom_coupling_mask = None, 
                  n_hidden_connection = 1,
-                 connector_type = C2P_connector_v1,
+                connector_type = C2P_connector_v1,
             ):
+        """Construct one conformational spline and optional C-to-P connector.
+
+        ``periodic_mask`` defines circular coordinates, ``layer_index`` or
+        ``custom_coupling_mask`` selects transformed marginals, and auxiliary
+        P-to-C features are conditioning-only dimensions.
+        """
         super().__init__()
         self.periodic_mask = np.array(periodic_mask).flatten()
         self.dim_flow = len(self.periodic_mask)
@@ -238,6 +251,7 @@ class CONFORMER_FLOW_LAYER(tf.keras.layers.Layer):
         else: pass
 
     def forward_(self, input, aux):
+        """Transform conformation variables conditioned on ``aux``."""
         # input : (m, n_mol, dim_flow)
         # aux   : (m, n_mol, DIM_connection)
         X = tf.concat([input,aux], axis=-1)
@@ -248,6 +262,7 @@ class CONFORMER_FLOW_LAYER(tf.keras.layers.Layer):
         return output, ladJ
     
     def inverse_(self, input, aux):
+        """Invert conformation variables conditioned on ``aux``."""
         # input : (m, n_mol, dim_flow)
         # aux   : (m, n_mol, DIM_connection)
         Y = tf.concat([input,aux], axis=-1)
@@ -259,6 +274,7 @@ class CONFORMER_FLOW_LAYER(tf.keras.layers.Layer):
     
     '''
     def convert_to_aux_(self, input):
+        """Encode conformational variables for conditioning a position layer."""
         x_P = tf.gather(input, self.inds_P, axis=-1) * PI
         x_O = tf.gather(input, self.inds_O, axis=-1)
         mlp_input = tf.concat([tf.cos(x_P), tf.sin(x_P), x_O], axis=-1)
@@ -267,6 +283,7 @@ class CONFORMER_FLOW_LAYER(tf.keras.layers.Layer):
     '''
 
     def convert_to_aux_(self, input):
+        """Encode conformational variables for conditioning a position layer."""
         return self.connector(input)
     
 ###########################
@@ -280,9 +297,10 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
     this class fixes the errors that would otherwise appear if loading those models with current code.
     '''
     
-    def __init__(self, 
+    def __init__(self,
                  ic_map_OLD_version,
                  ):
+        """Adapt a saved paper-era coordinate map to the current model API."""
         self.__dict__.update(ic_map_OLD_version.__dict__) # all attributes useful to have
 
         if self.PDB_single_mol[:4] == './MM':
@@ -331,6 +349,7 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
 
     ## old v. reshaping
     def permute_unitcell_tf_(self,r):
+        """Apply the legacy unit-cell molecule permutation to coordinates."""
         return reshape_to_atoms_tf_(    tf.gather(  reshape_to_molecules_tf_(r,
                                                     n_atoms_in_molecule=self.n_atoms_mol,
                                                     n_molecules=self.n_mol), 
@@ -338,6 +357,7 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
                                     n_atoms_in_molecule=self.n_atoms_mol,
                                     n_molecules=self.n_mol)
     def unpermute_unitcell_tf_(self,r):
+        """Undo the legacy unit-cell molecule permutation."""
         return reshape_to_atoms_tf_(    tf.gather(  reshape_to_molecules_tf_(r,
                                                     n_atoms_in_molecule=self.n_atoms_mol,
                                                     n_molecules=self.n_mol), 
@@ -346,39 +366,47 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
                                     n_molecules=self.n_mol)
 
     def forward_reshape_cells_tf_(self, x):
+        """Fold legacy unit cells into the batch axis."""
         n = self.n_molecules_unitcell
         return tf.concat([x[:,i*n:(i+1)*n] for i in range(self.n_unitcells)], axis=0)
     
     def inverse_reshape_cells_tf_(self, x):
+        """Restore a separate legacy unit-cell axis from the batch axis."""
         m = x.shape[0] // self.n_unitcells
         return tf.stack([x[i*m:(i+1)*m] for i in range(self.n_unitcells)], axis=1)
 
     def inverse_reshape_cells_tf_cat_(self, x):
+        """Restore legacy unit cells by concatenating them on the molecule axis."""
         m = x.shape[0] // self.n_unitcells
         return tf.concat([x[i*m:(i+1)*m] for i in range(self.n_unitcells)], axis=1)
     
     ##
     def ln_base_C_(self, z):
+        """Return the saved legacy conformational base log density."""
         # this number will be in the imported ic_map
         return self.ln_base_flowing
     
     def ln_base_P_(self, z):
+        """Return the saved legacy positional base log density."""
         # same
         return self.ln_base_P
 
     def sample_base_C_(self, m):
+        """Sample legacy conformational variables uniformly on [-1, 1]."""
         # some chosen marginal variables could be kept harmonic in the older version; depreciated 
         # !! could add back in new version for keeping bond lengths constant in constrained data
         # as in old v. this requires X_C to be split and joined into flowing and non_flowing variables past coupling layers
         return tf.clip_by_value(tf.random.uniform(shape=[m, self.n_unitcells, self.n_flowing], minval=-1.0, maxval=1.0), -1.0, 1.0)
   
     def sample_base_P_(self, m):
+        """Sample legacy positional variables uniformly on [-1, 1]."""
         # this is same
         return tf.clip_by_value(tf.random.uniform(shape=[m, 3*(self.n_mol-1)], minval=-1.0,  maxval=1.0), -1.0, 1.0)
     
     ##
 
     def forward_(self, r):
+        """Apply the paper-era coordinate representation and Jacobian bookkeeping."""
         # r : (m, N, 3)
         ladJ = 0.0
         r = self.permute_unitcell_tf_(r)
@@ -424,6 +452,7 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
         return variables, ladJ
 
     def inverse_(self, variables_in):
+        """Invert paper-era representation variables to Cartesian coordinates."""
         ladJ = 0.0
         xO , X = variables_in
 
@@ -481,6 +510,12 @@ class P3_version_SingleComponent_map_LITE(SingleComponent_map):
         return r, ladJ
 
 def load_P3_PGMcrys(path_and_name, class_of_the_model):
+    """Load a paper-era PGMcrys artifact through its compatibility map.
+
+    The legacy pickle contains initialisation arguments and weights. Historical
+    architecture constants are validated, attention-head count is inferred
+    from the filename convention, and weights are assigned to a current model.
+    """
     init_args, ws = load_pickle_(path_and_name)
     ic_maps_OLD_version, n_layers, optimiser_LR_decay, DIM_connection = init_args
     if str(type(ic_maps_OLD_version)) not in ["<class 'list'>","<class 'tensorflow.python.training.tracking.data_structures.ListWrapper'>"]: 
@@ -512,10 +547,14 @@ def load_P3_PGMcrys(path_and_name, class_of_the_model):
     return model
 
 class model_helper_PGMcrys_v1:
+    """State-indexed representation, training, and sampling mixin for PGM models."""
+
     def __init__(self,):
+        """Create a stateless mixin instance."""
         ''
 
     def _forward_represenation_(self, r, crystal_index=0):
+        """Map Cartesian coordinates through the selected state's representation."""
         # relevant ic_map indexed to transform r -> x
         ladJ = 0.0
         X, ladj_rep = self.ic_maps[crystal_index].forward_(r)
@@ -523,6 +562,7 @@ class model_helper_PGMcrys_v1:
         return X, ladJ
     
     def forward_(self, r, crystal_index=0):
+        """Apply representation then trainable coupling: ``r -> x -> z``."""
         # complete trasformation r -> z
         ladJ = 0.0
         X, ladj = self._forward_represenation_(r, crystal_index=crystal_index) ; ladJ += ladj
@@ -530,6 +570,7 @@ class model_helper_PGMcrys_v1:
         return Z, ladJ
 
     def _inverse_represenation_(self, X, crystal_index=0):
+        """Invert representation variables with the selected state's map."""
         # relevant ic_map indexed  to transform x -> r
         ladJ = 0.0
         r, ladj_rep = self.ic_maps[crystal_index].inverse_(X)
@@ -537,6 +578,7 @@ class model_helper_PGMcrys_v1:
         return r, ladJ
 
     def inverse_(self, Z, crystal_index=0):
+        """Apply inverse coupling then inverse representation: ``z -> x -> r``."""
          # complete trasformation z -> r
         ladJ = 0.0
         X, ladj = self._inverse_coupling_(Z, crystal_index=crystal_index)      ; ladJ += ladj
@@ -547,6 +589,7 @@ class model_helper_PGMcrys_v1:
 
     #@tf.function
     def step_ML_graph_(self, r_and_crystal_index:list=0):
+        """Perform one state-conditioned maximum-likelihood gradient update."""
         # no numpy (tf compiled graph) train one training step (maximise likelihood on MD data)
         r, crystal_index = r_and_crystal_index
         if self.all_parameters_trainable: variables = self.trainable_variables
@@ -567,6 +610,7 @@ class model_helper_PGMcrys_v1:
         return loss, no_nans
 
     def step_ML(self, r, crystal_index:int=0, u=None, batch_size:int=1000):
+        """Train on a random state-specific minibatch and return ``<u + ln q>``."""
         # prepare numpy input and train one training step (maximise likelihood on MD data)
         # r : (m,n_atoms,3) : MD data
         inds_rand = np.random.choice(r.shape[0], batch_size, replace=False)
@@ -580,27 +624,33 @@ class model_helper_PGMcrys_v1:
 
     #@tf.function
     def forward_graph_(self, r, crystal_index=0):
+        """Graph-compatible state-indexed forward wrapper."""
         # no numpy (tf compiled graph) forward
         return self.forward_(r, crystal_index=crystal_index)
     
     #@tf.function
     def inverse_graph_(self, z, crystal_index=0):
+        """Graph-compatible state-indexed inverse wrapper."""
         # no numpy (tf compiled graph) inverse
         return self.inverse_(z, crystal_index=crystal_index)
     
     def forward(self, r, crystal_index:int = 0):
+        """Convert input to float tensor and run the compiled forward map."""
         return self.forward_graph_(np2tf_(r), crystal_index=crystal_index)
 
     def inverse(self, z, crystal_index:int = 0):
+        """Run the compiled inverse map for one state."""
         return self.inverse_graph_(z, crystal_index=crystal_index)
 
     def ln_model(self, r, crystal_index=0):
+        """Evaluate normalised log density ``ln q(r)`` for one state."""
         # evalaute ln_q(r) : normalised log probability of the datapoint (r) according to the model
         outputs, ladJrz = self.forward(np2tf_(r), crystal_index=crystal_index)
         ln_q = self.ln_base_(outputs) + ladJrz
         return np.array(ln_q)
         
     def sample_model(self, m:int, crystal_index:int = 0):
+        """Generate ``m`` state-specific Cartesian samples and log densities."""
         # generate m random samples from the model
         z = self.sample_base_(m)
         r, ladJzr = self.inverse(z, crystal_index=crystal_index)
@@ -647,6 +697,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
     ''' !! : molecule should have >3 atoms (also true in ic_map) '''
     @staticmethod
     def load_model(path_and_name : str, VERSION='NEW'):
+        """Load a current single-file model or a paper-era legacy artifact."""
         if VERSION == 'NEW':
             return PGMcrys_v1._load_model_(path_and_name, PGMcrys_v1)
         else:
@@ -661,6 +712,14 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                  identity_init = False,
                  initialise = True, # for debugging in eager mode
                  ):
+        """Build a position/conformation flow shared across crystal states.
+
+        ``ic_maps`` supplies one compatible coordinate map per state. Each
+        layer alternates conditioned position and conformation splines.
+        ``DIM_connection`` controls exchanged feature width, ``n_att_heads``
+        selects dense versus attention conformer conditioners, and
+        ``identity_init`` starts spline transforms at identity when true.
+        """
         super().__init__()
         self.init_args = {  'ic_maps' : ic_maps,
                             'n_layers' : n_layers,
@@ -821,6 +880,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
     ##
 
     def _forward_coupling_(self, X, crystal_index=0):
+        """Apply alternating C-to-P and P-to-C spline couplings forward."""
         # trainable trasformation x -> z, conditioned on crystal_index
         ladJ = 0.0
         x_P, X_C = X
@@ -842,6 +902,7 @@ class PGMcrys_v1(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
         return Z, ladJ
     
     def _inverse_coupling_(self, Z, crystal_index=0):
+        """Invert alternating couplings in exact reverse order."""
          # trainable trasformation z -> x, conditioned on crystal_index
         ladJ = 0.0
         x_P, X_C = Z
@@ -868,6 +929,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
     ''' molecule should have >3 atoms'''
     @staticmethod
     def load_model(path_and_name : str):
+        """Load an isolated-molecule model from the current artifact format."""
         return PGMmol._load_model_(path_and_name, PGMmol)
     
     def __init__(self,
@@ -878,6 +940,13 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                  n_att_heads = None,    # not used.
                  initialise = True,
                 ):
+        """Build a conformation-only flow for one isolated molecule.
+
+        One compatible ``SingleMolecule_map`` may be supplied per metastable
+        state. Translation and global rotation are absent, so only conformer
+        coupling layers are created. ``DIM_connection`` and ``n_att_heads`` are
+        retained for API compatibility and unused.
+        """
         super().__init__()
         self.init_args = {  'ic_maps' : ic_maps,
                             'n_layers' : n_layers,
@@ -957,6 +1026,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
         else: pass
 
     def get_extension_(self, m, crystal_index):
+        """Return the broadcast scalar embedding for a molecular state."""
         # 'crystal_index' (here index of metastable state of single molecule in vaccum)
 
         number = self.crystal_encodings[crystal_index]
@@ -966,6 +1036,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
         return extension # 'crystal embeddings', zero dimensional if training on just 1 state
 
     def _forward_coupling_(self, X, crystal_index=0):
+        """Transform isolated-molecule internal variables to the base space."""
         # trainable trasformation x -> z, conditioned on 'crystal_index' (here index of metastable state of single molecule in vaccum)
         # X : (m,1,3*(N-2)) ; all DOFs of a single molecule
 
@@ -980,6 +1051,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
         return Z, ladJ
     
     def _inverse_coupling_(self, Z, crystal_index=0):
+        """Invert isolated-molecule coupling layers in reverse order."""
          # trainable trasformation z -> x, conditioned on 'crystal_index' (here index of metastable state of single molecule in vaccum)
         # Z : (m,1,3*(N-2)) ; all DOFs of a single molecule
         ladJ = 0.0

@@ -24,6 +24,13 @@ perturbation](https://doi.org/10.1103/PhysRevE.65.046122).
 - [`requirements.txt`](requirements.txt): pip-installable Python dependencies
 - [`cmp_gpu.yml`](cmp_gpu.yml): alternative GPU environment specification
 
+## Architecture documentation
+
+The [interactive Figure 1 code map](docs/figure-1-code-map.html) connects the
+normalising-flow architecture in the [accompanying manuscript](https://chemrxiv.org/doi/full/10.26434/chemrxiv-2025-92x2f/v4)  to the modules,
+classes, and functions that implement each stage. Select any component to see
+its responsibility, data shape, relationships, and source location.
+
 ## Requirements
 
 - Linux (tested on Ubuntu 20.04/24.04, RHEL 8+, CentOS Stream 9, Fedora 38+,

@@ -1,3 +1,11 @@
+"""Variable-cell (NPT) coordinate maps, flow model, and training interfaces.
+
+An NPT microstate is carried as ``rb`` with shape ``(batch, N + 3, 3)``:
+particle coordinates followed by three lower-triangular box vectors. The model
+extends positional flow variables with six cell degrees of freedom. This path
+is experimental and should be validated carefully for each system.
+"""
+
 from ..interface import *
 
 ''' 
@@ -56,15 +64,18 @@ NB:
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 def rb_to_r_b_(rb):
+    """Split combined ``rb`` states into coordinates and box vectors."""
     # reshape as atoms.
     r = rb[:,:-3]
     b = rb[:,-3:]
     return r, b
 
 def r_b_to_rb_tf_(r,b):
+    """Concatenate TensorFlow coordinates and boxes along the atom axis."""
     return tf.concat([r,b], axis=1)
 
 def r_b_to_rb_np_(r,b):
+    """Concatenate NumPy coordinates and boxes along the atom axis."""
     return np.concatenate([r,b], axis=1)
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
@@ -95,8 +106,9 @@ def box_forward_np_(b):
 class SingleComponent_map_rb(SingleComponent_map):
     ''' !! : molecule must have >3 atoms to use this M_{IC} layer '''
     def __init__(self,
-                 PDB_single_mol: str,   
+                 PDB_single_mol: str,
                 ):
+        """Create an uninitialised variable-cell map for one molecule type."""
         super().__init__(PDB_single_mol)
         self.VERSION = 'NEW'
         
@@ -152,6 +164,12 @@ class SingleComponent_map_rb(SingleComponent_map):
                    whiten_setting = 0,    # 0 : no whitening, 1 : whitening only positions, 2 : whitening positions and box
                    # 0 or 2 better than 1, 2 slightly better overall. [0,2 treat all 1D DOFs of the x^{P} array in the same way]
                    ):
+        """Fit NPT position, box, internal, and rotational transformations.
+
+        One molecular anchor removes translation. Remaining fractional
+        positions are periodic; ``whiten_setting`` selects no whitening,
+        positions-only whitening, or joint position/box whitening.
+        """
         self.focused = True
         assert len(rb_dataset.shape) == 3
 
@@ -255,10 +273,12 @@ class SingleComponent_map_rb(SingleComponent_map):
         self.set_periodic_mask_()
 
     def sample_base_P_(self, m):
+        """Sample reduced positions and six box variables uniformly on [-1, 1]."""
         # p_{0} (base distribution) positions, and box:
         return tf.clip_by_value(tf.random.uniform(shape=[m, 3*(self.n_mol_supercell-1) + 6], minval=-1.0,  maxval=1.0), -1.0, 1.0)
     
     def white_setting_0_(self, inputs, forward=True):
+        """Scale box variables without whitening positions."""
         ladj = 0.0
         if forward:
             xO, h = inputs
@@ -278,6 +298,7 @@ class SingleComponent_map_rb(SingleComponent_map):
             return xO, h, ladj
 
     def white_setting_1_(self, inputs, forward=True):
+        """Whiten positions separately while only scaling box variables."""
         ladj = 0.0
         if forward:
             xO, h = inputs
@@ -306,6 +327,7 @@ class SingleComponent_map_rb(SingleComponent_map):
             return xO, h, ladj
 
     def white_setting_2_(self, inputs, forward=True):
+        """Jointly whiten and scale concatenated position and box variables."""
         ladj = 0.0
         if forward:
             xO, h = inputs
@@ -335,6 +357,7 @@ class SingleComponent_map_rb(SingleComponent_map):
 
     ##
     def forward_rb_(self, rb):
+        """Map combined coordinates/boxes to NPT flow variables and Jacobian."""
 
         # rb : (m,N+3,3)
 
@@ -396,6 +419,7 @@ class SingleComponent_map_rb(SingleComponent_map):
         return variables, ladJ
     
     def inverse_rb_(self, variables_in):
+        """Reconstruct combined coordinates/boxes from NPT flow variables."""
 
         ladJ = 0.0
 
@@ -451,16 +475,19 @@ class SingleComponent_map_rb(SingleComponent_map):
         return r_b_to_rb_tf_(r, b), ladJ
 
     def xO_reshape_(self, x, forward=True):
+        """Insert or remove the dummy anchor while preserving six box DOFs."""
         print('!! not here')
         return None
 
     @property
     def flow_mask_xO(self,):
+        """Mask the dummy anchor and allow all physical position/box variables."""
         print('!! not here')
         return None
 
     @property
     def flow_mask_X(self,):
+        """All-ones mask for molecular internal and rotational variables."""
         # all intramolecular DOFs are relevant (conformations and rotations)
         # (1, n_mol, n_DOF_mol) of ones
         mask = np.ones([1, self.n_mol, self.n_DOF_mol]).astype(np.int32)
@@ -472,6 +499,7 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
     ''' !! : molecule should have >3 atoms (also true in ic_map) '''
     @staticmethod
     def load_model(path_and_name : str, VERSION='blank'):
+        """Load a variable-cell model from the current artifact format."""
         return PGMcrys_v1_rb._load_model_(path_and_name, PGMcrys_v1_rb)
 
     def __init__(self,
@@ -482,6 +510,12 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
                  n_att_heads = 4,
                  initialise = True, # for debugging in eager mode
                  ):
+        """Build an NPT PGM with alternating position-box/conformer flows.
+
+        ``ic_maps`` provides one compatible variable-cell representation per
+        state. Six box degrees of freedom extend the positional layer. Remaining
+        architecture arguments mirror ``PGMcrys_v1``.
+        """
         super().__init__()
         self.init_args = {  'ic_maps' : ic_maps,
                             'n_layers' : n_layers,
@@ -609,6 +643,7 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
         else: pass
 
     def get_C2P_P2C_extensions_(self, m, crystal_index):
+        """Broadcast the selected state encoding for both coupling directions."""
         # same as v1.
 
         number = self.crystal_encodings[crystal_index]
@@ -624,6 +659,7 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
     ##
 
     def _forward_coupling_(self, X, crystal_index=0):
+        """Apply alternating position-box and conformer couplings forward."""
         ladJ = 0.0
         x_P, X_C = X
         X_P = self.layers_P[0].convert_to_flow_(x_P)
@@ -644,6 +680,7 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
         return Z, ladJ
     
     def _inverse_coupling_(self, Z, crystal_index=0):
+        """Invert NPT couplings in exact reverse order."""
         ladJ = 0.0
         x_P, X_C = Z
         X_P = self.layers_P[-1].convert_to_flow_(x_P)
@@ -666,12 +703,14 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
     ##
 
     def _forward_represenation_(self, rb, crystal_index=0):
+        """Apply the selected state's combined coordinate-box representation."""
         ladJ = 0.0
         X, ladj_rep = self.ic_maps[crystal_index].forward_rb_(rb)
         ladJ += ladj_rep
         return X, ladJ
     
     def _inverse_represenation_(self, X, crystal_index=0):
+        """Invert representation variables to the combined ``rb`` state."""
         ladJ = 0.0
         rb, ladj_rep = self.ic_maps[crystal_index].inverse_rb_(X)
         ladJ += ladj_rep
@@ -682,12 +721,15 @@ class PGMcrys_v1_rb(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper
 ####################################################################################################
 
 class NN_interface_sc_rb(NN_interface_helper):
+    """Prepare one NPT dataset and coordinate map for model training."""
+
     def __init__(self,
                  name : str,
                  path_dataset : str,
                  fraction_training : float = 0.8, # 0 << x < 1
                  training : bool = True,
                  ):
+        """Load metadata and optionally import one variable-cell MD dataset."""
         super().__init__()
         self.name = name + '_SC_' # ...
         self.path_dataset = path_dataset 
@@ -712,6 +754,12 @@ class NN_interface_sc_rb(NN_interface_helper):
             print(f'This MD dataset contains {len(self.u)} datapoints')
 
     def reduced_enthalpy_from_reduced_energies_and_boxes_(self, reduced_energies, boxes):
+        """Convert reduced potential energies to NPT reduced enthalpies.
+
+        Adds isotropic ``PV/(kT)`` and the variable-cell measure/Jacobian term
+        used by this implementation. Inputs contain one energy and box per
+        frame; output has shape ``(n_frames, 1)``.
+        """
         # enthalpy: see O/MM/Tx.py
 
         CONST_kB = 1e-3*8.31446261815324         # kilojoule/(kelvin*mole)
@@ -731,6 +779,7 @@ class NN_interface_sc_rb(NN_interface_helper):
         return enthalpies.reshape([-1,1])  
 
     def u_(self, rb):
+        """Evaluate the reduced NPT enthalpy of combined coordinate-box states."""
         r, h = rb_to_r_b_(rb)
 
         assert len(h.shape) == 3
@@ -748,30 +797,32 @@ class NN_interface_sc_rb(NN_interface_helper):
         return self.reduced_enthalpy_from_reduced_energies_and_boxes_(u_reduced, boxes=h) # should be the same for _h
 
     def import_MD_dataset_(self,):
-            self.Ts = 'NO'
+        """Load saved NPT simulation data and construct aligned ``rb``/enthalpy arrays."""
+        self.Ts = 'NO'
 
-            simulation_data = load_pickle_(self.path_dataset)
-            self.sc = SingleComponent(**simulation_data['args_initialise_object'])
-            self.sc.initialise_system_(**simulation_data['args_initialise_system'])
-            self.sc.initialise_simulation_(**simulation_data['args_initialise_simulation'])
-            assert self.sc.n_DOF in [3*(self.sc.N - 1), 3*self.sc.N]
+        simulation_data = load_pickle_(self.path_dataset)
+        self.sc = SingleComponent(**simulation_data['args_initialise_object'])
+        self.sc.initialise_system_(**simulation_data['args_initialise_system'])
+        self.sc.initialise_simulation_(**simulation_data['args_initialise_simulation'])
+        assert self.sc.n_DOF in [3*(self.sc.N - 1), 3*self.sc.N]
 
-            self.T = self.sc.T # Kelvin
-            self.P = self.sc.P # atm
-        
-            _r = simulation_data['MD dataset']['xyz'].astype(np.float32)
-            b = simulation_data['MD dataset']['b'].astype(np.float32)
-            u = simulation_data['MD dataset']['u']
+        self.T = self.sc.T # Kelvin
+        self.P = self.sc.P # atm
 
-            self.u = self.reduced_enthalpy_from_reduced_energies_and_boxes_(u, boxes=b)
-            self.u_mean = self.u.mean()
+        _r = simulation_data['MD dataset']['xyz'].astype(np.float32)
+        b = simulation_data['MD dataset']['b'].astype(np.float32)
+        u = simulation_data['MD dataset']['u']
 
-            self.r = r_b_to_rb_np_(_r,b)
+        self.u = self.reduced_enthalpy_from_reduced_energies_and_boxes_(u, boxes=b)
+        self.u_mean = self.u.mean()
 
-            assert len(self.r) == len(self.u)
-            self.n_training = int(self.u.shape[0]*self.fraction_training)
+        self.r = r_b_to_rb_np_(_r,b)
+
+        assert len(self.r) == len(self.u)
+        self.n_training = int(self.u.shape[0]*self.fraction_training)
 
     def truncate_data_(self, m=None):
+        """Keep ``m`` balanced samples, discard temporary split arrays, and reset indices."""
         m_initial = len(self.u)
 
         self.set_training_validation_split_(n_training=m)
@@ -804,6 +855,7 @@ class NN_interface_sc_rb(NN_interface_helper):
                          inds_rand=None,
                          check_PES = True,
                          ):
+        """Remove translation, create a train/validation split, and check energies."""
         self.r = self.ic_map.remove_COM_from_data_(self.r)
         self.set_training_validation_split_(n_training=self.n_training, inds_rand=inds_rand)
         if check_PES: self.check_PES_matching_dataset_()
@@ -813,6 +865,7 @@ class NN_interface_sc_rb(NN_interface_helper):
                          n_mol_unitcell : int = 1, # !! important in this new version
                          whiten_setting = 2,
                         ):
+        """Fit the NPT representation and print a small inversion diagnostic."""
         self.n_mol_unitcell = n_mol_unitcell
 
         self.ic_map.initalise_(rb_dataset = self.r,
@@ -843,6 +896,7 @@ class NN_interface_sc_rb(NN_interface_helper):
     # set_model not here and the rest not here.
 
 def adjust_ranges_(nn):
+    """Expand bond/angle scaler ranges to common bounds across all states."""
     # can use after step 3 in NN_interface_sc_multimap
     n_states = nn.n_crystals
     for atr in ['Focused_Bonds', 'Focused_Angles']: 
@@ -857,6 +911,8 @@ def adjust_ranges_(nn):
             getattr(nn.nns[k].ic_map, atr).centres = Centres
 
 class NN_interface_sc_multimap_rb(NN_interface_helper):
+    """Coordinate multi-state NPT preprocessing, training, and FE analysis."""
+
     def __init__(self,
                  name : str,
                  paths_datasets : list,
@@ -864,6 +920,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                  running_in_notebook : bool = False,
                  training : bool = True,
                  ):
+        """Create one single-state NPT interface per supplied dataset."""
         super().__init__()
         self.name = name + '_SC_' # ...
         assert type(paths_datasets) == list
@@ -884,27 +941,32 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                     ) for i in range(self.n_crystals)]
 
     def save_inds_rand_(self,):
+        """Save each state's train/validation permutation under a distinct key."""
         for k in range(self.n_crystals):
             self.nns[k].save_inds_rand_(key='_crystal_index='+str(k))
         #[nn.save_inds_rand_() for nn in self.nns]
 
     def load_inds_rand_(self,):
+        """Restore every state's saved train/validation permutation."""
         for k in range(self.n_crystals):
             self.nns[k].load_inds_rand_(key='_crystal_index='+str(k))
         #[nn.load_inds_rand_() for nn in self.nns]
 
     def set_ic_map_step1(self, ind_root_atom=11, option=None):
+        """Configure common internal-coordinate anchor choices for all states."""
         self.ind_root_atom = ind_root_atom
         self.option = option
         [nn.set_ic_map_step1(ind_root_atom=self.ind_root_atom, option=self.option) for nn in self.nns];
 
     def set_ic_map_step2(self, check_PES=True):
+        """Remove translation and split every state's dataset."""
         [nn.set_ic_map_step2(inds_rand=None, check_PES=check_PES) for nn in self.nns];
 
     def set_ic_map_step3(self,
                          n_mol_unitcells : list = None, # !! important in this new version
                          whiten_setting = 2,
                         ):
+        """Fit one NPT map per state using state-specific unit-cell sizes."""
         if n_mol_unitcells is None:
             print(
             f'''
@@ -937,6 +999,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                   initialise = True, # for debugging in eager mode
                   test_inverse = True,
                   ):
+        """Construct the shared NPT model and optionally test each state map."""
         self.model = self.model_class(
                                     ic_maps = [nn.ic_map for nn in self.nns],
                                     n_layers = n_layers,
@@ -955,6 +1018,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
         else: pass
 
     def set_trainer(self, n_batches_between_evaluations = 50):
+        """Create the shared training orchestrator and evaluation schedule."""
         self.trainer = TRAINER(model = self.model,
                                max_training_batches = 50000,
                                n_batches_between_evaluations = n_batches_between_evaluations,
@@ -962,6 +1026,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                                )
         
     def u_(self, r, k):
+        """Evaluate combined-state reduced enthalpy with state ``k``'s system."""
         return self.nns[k].u_(r)
 
     def train(self,
@@ -979,6 +1044,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
               evaluate_main = True,
               training_batch_size = 1000, # 1000 was always used
               ):
+        """Train all NPT states and optionally save BAR/MBAR diagnostics."""
         
         if save_BAR: name_save_BAR_inputs = str(self.name_save_BAR_inputs)
         else: name_save_BAR_inputs = None
@@ -1048,6 +1114,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
         else: pass
 
     def load_misc_(self,):
+        """Restore training histories and propagate state-specific result views."""
         self._FEs, self._SDs, self.estimates, self.evaluation_grid, self.AVMD_f_T_all, self.training_time = load_pickle_(self.name_save_misc)
         self.n_estimates = self.evaluation_grid.shape[0]
         for k in range(self.n_crystals):
@@ -1062,16 +1129,20 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
             nn.SDs = FE_of_model_curve_(nn.estimates[0,:,1], (nn.estimates[0,:,7]-nn.FEs)**2)**0.5
 
     def load_energies_during_training_(self):
+        """Load saved generated/MD energy histories for every state."""
         [self.nns[k].load_energies_during_training_(index_of_state=k) for k in range(self.n_crystals)];
 
     def plot_energies_during_training_(self, crystal_index=0, **kwargs):
+        """Plot energy-overlap diagnostics for one state."""
         self.nns[crystal_index].plot_energies_during_training_(**kwargs)
 
     def solve_BAR_using_pymbar_(self, rerun=False):
+        """Solve saved two-state BAR inputs independently for every state."""
         for k in range(self.n_crystals):
             self.nns[k].solve_BAR_using_pymbar_(rerun=rerun, index_of_state=k, key='_crystal_index='+str(k))
 
     def plot_result_(self, crystal_index=0, **kwargs):
+        """Plot final free-energy estimates for one state."""
         self.nns[crystal_index].plot_result_(**kwargs)
         
 
@@ -1079,6 +1150,7 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
                                  n_bootstraps = 0, # default in MBAR class https://pymbar.readthedocs.io/en/latest/mbar.html
                                  uncertainty_method = None, # can set 'bootstrap' if n_bootstraps not None
                                  save_output = True):
+        """Solve saved cross-state MBAR inputs over all evaluation batches."""
         # from energies that were saved during training
         
         n_states = int(self.n_crystals)
@@ -1138,14 +1210,17 @@ class NN_interface_sc_multimap_rb(NN_interface_helper):
             #self.set_final_result_()
 
     def sample_model_(self, m, crystal_index=0):
+        """Generate full evaluation-sized batches up to requested count ``m``."""
         n_draws = m//self.evaluation_batch_size
         return np.concatenate([self.model.sample_model(self.evaluation_batch_size, crystal_index=crystal_index)[0] for i in range(n_draws)],axis=0)
 
     def save_samples_(self, m:int=20000):
+        """Generate and pickle samples for every state."""
         for crystal_index in range(self.n_crystals):
             save_pickle_(self.sample_model_(m, crystal_index=crystal_index), self.name_save_samples+'_crystal_index='+str(crystal_index))
 
     def load_samples_(self, crystal_index=None):
+        """Load samples for one state or all states into ``samples_from_model``."""
         if crystal_index is None:
             self.samples_from_model = []
             for crystal_index in range(self.n_crystals):

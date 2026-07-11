@@ -1,8 +1,13 @@
 
-''' representation_layers.py
-    c : SC_helper           ; has redundant methods
-    TODO: ! add back support for the ice case
-'''
+"""Invertible coordinate representations for molecular flow models.
+
+The maps separate molecular translation, rotation, and internal coordinates;
+scale them to model domains; and track log-absolute Jacobian determinants.
+Coordinate tensors use ``(batch, molecule, atom, xyz)`` when molecule and atom
+axes are explicit. The current implementation targets single-component systems
+and molecules with more than three atoms unless a specialised class says
+otherwise.
+"""
 
 import numpy as np
 from rdkit import Chem
@@ -21,6 +26,12 @@ class SC_helper:
     def __init__(self,
                  PDB_single_mol: str, # .pdb file of single molecule in vacuum
                 ):
+        """Load a single-molecule topology and derive atom metadata.
+
+        The PDB must contain explicit hydrogens. RDKit atom indices, masses,
+        heavy/hydrogen masks, adjacency, and atom degrees are cached for later
+        coordinate construction.
+        """
         self.PDB_single_mol = str(PDB_single_mol)
         self.mol = Chem.MolFromPDBFile(self.PDB_single_mol, removeHs = False)
         for i, a in enumerate(self.mol.GetAtoms()): a.SetAtomMapNum(i)
@@ -117,6 +128,12 @@ class SC_helper:
         else: print('no further atoms were observed in the PDB file')
 
     def get_r_shape_(self, r):
+        """Infer a supported coordinate layout and molecule count.
+
+        Returns ``(shape_name, n_mol)`` where the name is ``single_frame``,
+        ``flat``, ``atoms``, or ``molecules``. Shapes must be compatible with
+        ``n_atoms_mol`` and three Cartesian components.
+        """
         shape = r.shape
         if len(shape) == 2:
             try:
@@ -139,6 +156,11 @@ class SC_helper:
         return shape_in, n_mol
 
     def r_reshape_(self, r, shape_out='molecules', numpy=True):
+        """Convert coordinates between flat, atom, and molecule layouts.
+
+        ``numpy`` selects NumPy or TensorFlow reshape helpers. Coordinate order
+        and values are unchanged; a single-frame input receives a batch axis.
+        """
         r_shape, n_mol = self.get_r_shape_(r)
 
         if numpy:
@@ -168,6 +190,12 @@ class SC_helper:
             else: assert shape_out in ['molecules','atoms','flat']
 
     def b_reshape_m_(self, b, m=1, numpy=True, verbose=False):
+        """Broadcast or validate periodic boxes for ``m`` coordinate frames.
+
+        A vector-like box representation is stacked, while a single ``(3, 3)``
+        box with an explicit leading axis is repeated for NVT data. NumPy or
+        TensorFlow output is selected by ``numpy``.
+        """
         shape = b.shape
         len_shape = len(shape)
         if numpy:
@@ -195,6 +223,13 @@ class SC_helper:
         return b
 
     def wrap_(self, r, b, b_inv = None, output_shape=None, numpy=True):
+        """Wrap each molecule's atoms independently into the primary cell.
+
+        Coordinates are transformed to fractional space, reduced modulo one,
+        and transformed back. Returns ``(wrapped_coordinates, [b, b_inv])``;
+        the input layout is preserved unless ``output_shape`` is requested.
+        This does not preserve whole molecules across boundaries.
+        """
     
         if output_shape is None:
             r_shape_in = self.get_r_shape_(r)[0]
@@ -219,6 +254,12 @@ class SC_helper:
                 return self.r_reshape_(r_wrapped, shape_out=output_shape, numpy=numpy), [b, b_inv]
 
     def unwrap_molecules_np_(self, r, b, output_shape=None):
+        """Reconstruct whole molecules using the Z-matrix bond tree.
+
+        Starting from the root atom, each atom is placed in the nearest
+        periodic image of its already reconstructed reference atom. Output
+        layout defaults to the input layout.
+        """
         # tested properly how many times: 1
 
         if output_shape is None:
@@ -250,6 +291,7 @@ class SC_helper:
                 return self.r_reshape_(r_out, shape_out=output_shape, numpy=numpy)
 
     def no_jump_molecules_np_(self, r, b):
+        """Remove whole-molecule jumps from a trajectory using the anchor atom."""
         numpy = True
         r = self.r_reshape_(r, shape_out='atoms', numpy=numpy)
         b = self.b_reshape_m_(b, m=r.shape[0], numpy=numpy, verbose=True)
@@ -257,6 +299,7 @@ class SC_helper:
         return tidy_crystal_xyz_(r, b, n_atoms_mol=self.n_atoms_mol, ind_rO=self.inds_atoms_CB[0])
     
     def unwrap_np_(self, r, b, output_shape=None):
+        """Make molecules whole, then remove their frame-to-frame PBC jumps."""
         numpy = True
         if output_shape is None:
             r_shape_in = self.get_r_shape_(r)[0]
@@ -280,10 +323,16 @@ class SingleComponent_map(SC_helper):
     def __init__(self,
                  PDB_single_mol: str,
                 ):
+        """Create an uninitialised crystal coordinate map for one molecule type."""
         super().__init__(PDB_single_mol)
         self.VERSION = 'NEW'
         
     def remove_COM_from_data_(self, r):
+        """Subtract the mean molecular-anchor position from every frame.
+
+        This translation removal ignores periodic boundaries and returns atom
+        layout ``(batch, N, 3)`` as float32.
+        """
         # carefull with np.float32 when averaging a constant
         # b : (3,3)
         r = np.array(r).astype(np.float32)
@@ -300,12 +349,14 @@ class SingleComponent_map(SC_helper):
     ## ## ## ##
 
     def _forward_(self, r):
+        """Convert Cartesian molecules into internal and rigid-body variables."""
         r = reshape_to_molecules_tf_(r, n_molecules=self.n_mol, n_atoms_in_molecule=self.n_atoms_mol)
         X_IC, ladJ_IC = IC_forward_(r, self.ABCD_IC)
         X_CB, ladJ_CB = CB_forward_(tf.gather(r, self.inds_atoms_CB, axis=-2))
         return X_IC, X_CB, ladJ_IC, ladJ_CB
 
     def _inverse_(self, X_IC, X_CB):
+        """Reconstruct atom-layout Cartesian coordinates and map Jacobians."""
         r_CB, ladJ_CB = CB_inverse_(X_CB)
         r,    ladJ_IC = IC_inverse_(X_IC, r_CB, ABCD_IC_inverse=self.ABCD_IC_inverse, inds_unpermute_atoms=self.inds_unpermute_atoms)
         r = reshape_to_atoms_tf_(r, n_molecules=self.n_mol, n_atoms_in_molecule=self.n_atoms_mol)
@@ -314,6 +365,7 @@ class SingleComponent_map(SC_helper):
     ## ## ## ##
 
     def _first_times_crystal_(self, shape):
+        """Infer and cache crystal molecule, atom, and degree-of-freedom counts."""
         if len(shape) == 3:
             self.n_mol = shape[1] // self.n_atoms_mol
             assert self.n_mol == shape[1] / self.n_atoms_mol
@@ -328,6 +380,11 @@ class SingleComponent_map(SC_helper):
         self.n_mol_supercell = self.n_mol
         
     def _forward_init_(self, r, batch_size = 10000):
+        """Transform an initialisation dataset in batches using eager tensors.
+
+        Returns internal coordinates, rigid-body components, and their two
+        Jacobian terms as NumPy arrays.
+        """
         shape = r.shape ; m = shape[0]
         self._first_times_crystal_(shape)
         
@@ -368,8 +425,14 @@ class SingleComponent_map(SC_helper):
     def reshape_to_unitcells_(self, x,
                               combined_unitcells_with_batch_axis=False,
                               forward = True,
-                              numpy = False,
+                             numpy = False,
                              ):
+        """Split or merge the supercell molecule axis into unit-cell blocks.
+
+        When ``combined_unitcells_with_batch_axis`` is true, the unit-cell axis
+        is folded into the batch; otherwise it remains explicit. ``forward``
+        selects splitting versus reconstruction.
+        """
         if numpy: tf_of_np = np
         else:  tf_of_np = tf
         # (m, n_mol_supercell, D) 
@@ -399,6 +462,14 @@ class SingleComponent_map(SC_helper):
                    focused = True,
                    assert_no_jumping_molecules = True,
                    ):
+        """Fit coordinate scalings and base-space metadata from a trajectory.
+
+        Parameters define the Cartesian dataset, fixed box or per-frame boxes,
+        batching, molecules per crystallographic unit cell, translation-removal
+        transform, and whether focused marginal scaling is used. The historical
+        method spelling is retained. This method mutates the map and returns
+        ``None``.
+        """
         # r_dataset : (m,N,3)
         # b0        : (3,3) or (m,3,3)
 
@@ -477,6 +548,7 @@ class SingleComponent_map(SC_helper):
         self.set_periodic_mask_()
 
     def set_periodic_mask_(self,):
+        """Assemble the per-molecule periodic-variable mask in model order."""
 
         self.periodic_mask = np.concatenate([
                             self.Focused_Bonds.mask_periodic[:,0],      # all zero
@@ -487,6 +559,7 @@ class SingleComponent_map(SC_helper):
 
     @property
     def flexible_torsions(self,):
+        """Internal-coordinate rows classified as fully periodic torsions."""
         flexible_torsions = self.ABCD_IC[np.where(self.Focused_Torsions.mask_periodic.flatten()>0.5)[0]]
         if flexible_torsions.shape[0] > 0:
             print(f'{len(flexible_torsions)} fully flexible torsions in the initialisation dataset are:')
@@ -519,31 +592,43 @@ class SingleComponent_map(SC_helper):
 
 
     def ln_base_C_(self, z):
+        """Return the constant log density for conformation/rotation base variables."""
         # ln(1/(2**(n_DOFs conformations & rotations))) 
         return self.ln_base_C
     
     def ln_base_P_(self, z):
+        """Return the constant log density for translational base variables."""
         # ln(1/(2**(n_DOFs positions))) 
         return self.ln_base_P
 
     def ln_base_(self,inputs):
+        """Return the sum of positional and conformational base log densities."""
         return self.ln_base_P_(inputs[0]) + self.ln_base_C_(inputs[1])
 
     def sample_base_C_(self, m):
+        """Sample ``m`` conformation/rotation vectors uniformly on [-1, 1]."""
         # p_{0} (base distribution) conformations & rotations:
         return tf.clip_by_value(tf.random.uniform(shape=[m, self.n_mol_supercell, self.n_DOF_mol], minval=-1.0, maxval=1.0), -1.0, 1.0)
   
     def sample_base_P_(self, m):
+        """Sample ``m`` translation vectors uniformly on [-1, 1]."""
         # p_{0} (base distribution) positions:
         return tf.clip_by_value(tf.random.uniform(shape=[m, 3*(self.n_mol_supercell-1)], minval=-1.0,  maxval=1.0), -1.0, 1.0)
     
     def sample_base_(self, m):
+        """Sample positional and conformation/rotation base variables."""
         # p_{0} (base distribution) as a whole:
         return  [self.sample_base_P_(m), self.sample_base_C_(m)]
     
     ##
     
     def forward_(self, r):
+        """Map Cartesian crystal coordinates to scaled flow variables.
+
+        Returns ``[xO, X]`` and a ``(batch, 1)``-compatible log-Jacobian.
+        ``xO`` contains translation variables (or raw anchors for variable-box
+        data); ``X`` contains bonds, angles, torsions, and rotations.
+        """
         # r : (m, N, 3)
         ladJ = 0.0
         ######################################################
@@ -638,10 +723,12 @@ class SingleComponent_map(SC_helper):
         return variables, ladJ
     
     def sample_nvt_h_(self, m):
+        """Repeat the fixed NVT box representation ``m`` times."""
         # delta
         return tf.stack([self.h0_constant]*m)
 
     def inverse_(self, variables_in):
+        """Reconstruct Cartesian coordinates from translation/internal variables."""
         # variables_in:
         # xO : (m, 3*(n_mol-1))
         # X  : (m, n_mol, self.n_DOF_mol) # X_IC
@@ -707,6 +794,7 @@ class SingleComponent_map(SC_helper):
         return r, ladJ
 
     def xO_reshape_(self, x, forward=True):
+        """Insert or remove the dummy fixed translation used by PGMcrys v2."""
         # PGMcrys_v2 only
         if forward:
             # x : (m, 3*(n_mol-1))
@@ -727,6 +815,7 @@ class SingleComponent_map(SC_helper):
 
     @property
     def flow_mask_xO(self,):
+        """Translation flow mask with the dummy first molecule fixed to zero."""
         # since one atom is effectively removed from the crystal system due to translational invariance
         # mask for transformations of positions where there is one dummy atoms present only for shape
         # 1 = transform, 0 = keep constant (identity map)
@@ -736,6 +825,7 @@ class SingleComponent_map(SC_helper):
 
     @property
     def flow_mask_X(self,):
+        """All-ones mask for molecular internal and rotational variables."""
         # all intramolecular DOFs are relevant (conformations and rotations)
         # (1, n_mol, n_DOF_mol) of ones
         mask = np.ones([1, self.n_mol ,self.n_DOF_mol]).astype(np.int32)
@@ -746,20 +836,23 @@ class SingleComponent_map(SC_helper):
 class SingleMolecule_map(SingleComponent_map):
     ''' !! : molecule must have >3 atoms to use this M_{IC} layer '''
     def __init__(self,
-                 PDB_single_mol: str,   
+                 PDB_single_mol: str,
                 ):
+        """Create a coordinate map specialised to one isolated molecule."""
         super().__init__(PDB_single_mol)
         self.VERSION = 'NEW'
         
     ## ## ## ##
 
     def _forward_(self, r):
+        """Extract internal coordinates and rotation-free three-atom geometry."""
         r = reshape_to_molecules_tf_(r, n_molecules=self.n_mol, n_atoms_in_molecule=self.n_atoms_mol)
         X_IC, ladJ_IC = IC_forward_(r, self.ABCD_IC)
         X_CB, ladJ_CB = CB_single_molecule_forward_(tf.gather(r, self.inds_atoms_CB, axis=-2))
         return X_IC, X_CB, ladJ_IC, ladJ_CB
 
     def _inverse_(self, X_IC, X_CB):
+        """Reconstruct an isolated molecule from internal and anchor geometry."""
         r_CB, ladJ_CB = CB_single_molecule_inverse_(X_CB)
         r,    ladJ_IC = IC_inverse_(X_IC, r_CB, ABCD_IC_inverse=self.ABCD_IC_inverse, inds_unpermute_atoms=self.inds_unpermute_atoms)
         r = reshape_to_atoms_tf_(r, n_molecules=self.n_mol, n_atoms_in_molecule=self.n_atoms_mol)
@@ -768,6 +861,7 @@ class SingleMolecule_map(SingleComponent_map):
     ## ## ## ##
     
     def _forward_init_(self, r, batch_size = 10000):
+        """Batch-transform an isolated-molecule dataset for scaler fitting."""
         shape = r.shape ;  m = shape[0]
         self._first_times_crystal_(shape)
 
@@ -809,6 +903,12 @@ class SingleMolecule_map(SingleComponent_map):
                    COM_remover = None,    # not used 
                    focused = True,
                    ):
+        """Fit isolated-molecule bond, angle, and torsion transformations.
+
+        Box, unit-cell, and translation-removal arguments are accepted only for
+        API compatibility and are unused. The dataset must contain exactly one
+        molecule per frame.
+        """
         # r_dataset : (m,N,3)
 
         X_IC, X_CB = self._forward_init_(r_dataset, batch_size=batch_size)[:2]
@@ -859,6 +959,7 @@ class SingleMolecule_map(SingleComponent_map):
         self.set_periodic_mask_()
 
     def set_periodic_mask_(self,):
+        """Assemble periodic flags for isolated-molecule internal variables."""
 
         self.periodic_mask = np.concatenate([
                             self.Focused_Bonds.mask_periodic[:,0],      # all zero
@@ -893,12 +994,17 @@ class SingleMolecule_map(SingleComponent_map):
     '''
 
     def sample_base_P_(self, m):
+        """Return ``None`` because isolated-molecule translations are removed."""
         # p_{0} (base distribution) positions:
         return None
     
     ##
     
     def forward_(self, r):
+        """Map isolated Cartesian coordinates to scaled internal variables.
+
+        Returns ``[None, X]`` plus the complete coordinate/scaling log-Jacobian.
+        """
         # r : (m, N, 3)
         ladJ = 0.0
         ######################################################
@@ -961,6 +1067,7 @@ class SingleMolecule_map(SingleComponent_map):
         return variables, ladJ
     
     def inverse_(self, variables_in):
+        """Reconstruct isolated Cartesian coordinates from ``[None, X]``."""
         # variables_in:
         # X : (m, n_mol, self.n_DOF_mol) ; n_mol = 1
         ladJ = 0.0
@@ -1024,8 +1131,9 @@ class SingleComponent_map_r(SingleComponent_map):
     ''' !! : molecule must have >3 atoms to use this M_{IC} layer '''
     ''' this is same as SingleCompoment_map but whole molecules can jump PBC in the perodic box '''
     def __init__(self,
-                 PDB_single_mol: str,   
+                 PDB_single_mol: str,
                 ):
+        """Create an NVT map that permits whole molecules to cross boundaries."""
         super().__init__(PDB_single_mol)
         self.VERSION = 'NEW'
         
@@ -1045,6 +1153,13 @@ class SingleComponent_map_r(SingleComponent_map):
                    focused = 'blank',
                    whiten_setting = 0, # 0 : no whitening, 1 : whitening only positions.
                    ):
+        """Fit an NVT periodic-position representation and inherited internals.
+
+        ``b0`` is treated as one fixed box; if a box trajectory is supplied,
+        only its first box is used. Translation invariance removes one molecular
+        anchor. ``whiten_setting=1`` additionally whitens the remaining scaled
+        fractional positions.
+        """
         # r_dataset : (m,N,3)
         # b0        : (3,3)
 
@@ -1113,9 +1228,11 @@ class SingleComponent_map_r(SingleComponent_map):
             self.white_ = self.white_setting_1_
 
     def white_setting_0_(self, xO, forward=True):
+        """Identity positional whitening with zero log-Jacobian."""
         return xO, 0.0
 
     def white_setting_1_(self, xO, forward=True):
+        """Apply or invert fitted positional whitening and range scaling."""
         # xO \in [-1,1] # (m, (n_mol-1)*3)
         ladj = 0.0
         if forward:
@@ -1146,6 +1263,7 @@ class SingleComponent_map_r(SingleComponent_map):
             return xO, ladj
 
     def forward_(self, r):
+        """Map NVT coordinates to periodic translations and internal variables."""
         variables, ladJ = super().forward_(r)
         rO , X = variables
 
@@ -1179,6 +1297,7 @@ class SingleComponent_map_r(SingleComponent_map):
         return [xO, X], ladJ
 
     def inverse_(self, variables):
+        """Invert periodic translations and internals into NVT coordinates."""
 
         ladJ = 0.0
         xO, X = variables

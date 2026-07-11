@@ -1,7 +1,12 @@
 
-'''
-REF : https://github.com/wutobias/r2z
-'''
+"""Convert molecular Cartesian coordinates to and from Z-matrices.
+
+This unit-aware implementation is adapted from the ``wutobias/r2z`` project.
+It uses RDKit molecular graphs to choose a deterministic atom order and Pint
+quantities to make length and angle units explicit. Internal lengths are
+nanometres and internal angles are radians; formatted Z-matrices use angstroms
+and degrees for compatibility with common quantum-chemistry programs.
+"""
 
 import itertools
 from rdkit import Chem
@@ -14,11 +19,17 @@ Q_ = ureg.Quantity
 get_element = Chem.GetPeriodicTable().GetElementSymbol
 
 def pts_to_bond(A, B):
+    """Return the distance between two Pint coordinate vectors in nanometres."""
     AB   = (B-A).to(ureg.nanometer).magnitude
     dist = np.linalg.norm(AB)
     return dist*ureg.nanometer
 
 def pts_to_angle(A, B, C):
+    """Return the A-B-C angle as a Pint quantity in radians.
+
+    Point ``B`` is the vertex. Inputs must be length-valued three-component
+    Pint quantities convertible to nanometres.
+    """
     BA  = (A-B).to(ureg.nanometer).magnitude
     BC  = (C-B).to(ureg.nanometer).magnitude
     BA /= np.linalg.norm(BA)
@@ -27,6 +38,11 @@ def pts_to_angle(A, B, C):
     return ang*ureg.radian
 
 def pts_to_dihedral(A, B, C, D):
+    """Return the signed A-B-C-D dihedral angle in radians.
+
+    The sign is determined by the orientation of the two plane normals about
+    the B-C bond. Degenerate collinear inputs can produce undefined values.
+    """
     BA  = (A-B).to(ureg.nanometer).magnitude
     BC  = (C-B).to(ureg.nanometer).magnitude
     CD  = (C-D).to(ureg.nanometer).magnitude
@@ -46,12 +62,34 @@ def pts_to_dihedral(A, B, C, D):
     return dih*ureg.radian
 
 class ZMatrix(object):
+    """Build and apply a graph-derived molecular Z-matrix definition.
+
+    Parameters
+    ----------
+    rdmol : rdkit.Chem.Mol
+        Connected molecular graph used to determine neighbours and symmetry
+        ranks. A conformer is not required for defining the Z-matrix.
+    root_atm_idx : int, default=0
+        RDKit atom index from which graph traversal begins.
+
+    Attributes
+    ----------
+    ordered_atom_list : list of int
+        RDKit atom indices in Z-matrix construction order.
+    z : dict
+        Mapping from Z-order row to RDKit atom indices. Each row contains the
+        placed atom followed by its bond, angle, and dihedral reference atoms
+        when those references exist.
+    zz : dict
+        Equivalent mapping expressed entirely in Z-order indices.
+    """
 
     ### Note, internally units are nanometer for length and cart coordinates
     ### and radians for angles. However, the output of the zmatrix is degree
     ### instead of radian, since most QC programs use it.
 
     def __init__(self, rdmol, root_atm_idx=0):
+        """Derive atom ordering and reference rows from an RDKit molecule."""
 
         if not root_atm_idx < rdmol.GetNumAtoms():
             raise ValueError("root_atm_idx must be 0<root_atm_idx<N_atms")
@@ -68,12 +106,15 @@ class ZMatrix(object):
         self.zzit()
 
     def z2a(self, z_idx):
+        """Map a Z-matrix row index to its RDKit atom index."""
         return self.ordered_atom_list[z_idx]
 
     def a2z(self, atm_idx):
+        """Map an RDKit atom index to its Z-matrix row index."""
         return self.ordered_atom_list.index(atm_idx)
 
     def zzit(self):
+        """Rebuild ``zz`` by converting all reference atoms to Z-order indices."""
 
         self.zz = dict()
         for z_idx, atm_idxs in self.z.items():
@@ -81,6 +122,7 @@ class ZMatrix(object):
         return True
 
     def get_neighbor_idxs(self, atm_idx):
+        """Yield bonded neighbour indices ordered by RDKit canonical rank."""
 
         atm            = self.rdmol.GetAtomWithIdx(atm_idx)
         idx_rank_list  = list()
@@ -91,6 +133,12 @@ class ZMatrix(object):
             yield idx_rank[1]
 
     def get_path_length(self, atm_idx1, atm_idx2, maxlength=100):
+        """Return the shortest bond-path length between two atoms.
+
+        Returns ``-1`` when no path is found before ``maxlength``. A path from
+        an atom to itself has length zero and directly bonded atoms have length
+        one.
+        """
 
         if maxlength < 0:
             raise ValueError("maxlength must >0")
@@ -110,6 +158,13 @@ class ZMatrix(object):
         return path_length
 
     def get_shortest_paths(self, atm_idx1, atm_idx2, query_pool=list(), maxattempts=100):
+        """Enumerate candidate shortest bond paths between two atoms.
+
+        ``query_pool`` optionally restricts permitted intermediate atoms and
+        ``maxattempts`` limits tested permutations. Returns a list of atom-index
+        paths, including both endpoints. The empty list means no path was
+        constructed under the supplied restrictions.
+        """
 
         if maxattempts < 0:
             raise ValueError("maxattempts must >0")
@@ -151,6 +206,11 @@ class ZMatrix(object):
 
 
     def get_k_nearest_neighbors(self, atm_idx, k=3):
+        """Return unique atoms reachable within at most ``k`` bonds.
+
+        With ``k=0`` the result contains only ``atm_idx``. For positive ``k``
+        the source atom itself is excluded.
+        """
 
         if k < 0:
             raise ValueError("k must be >0")
@@ -176,6 +236,14 @@ class ZMatrix(object):
         return neighbor_list
 
     def add_atom(self, atm_idx):
+        """Append one atom and choose its Z-matrix reference atoms.
+
+        Existing atoms are ignored and return ``False``. For a new atom the
+        method favours reference patterns from symmetry-equivalent atoms, then
+        chemically connected paths, and finally any geometrically valid set.
+        Returns whether a row was successfully added and mutates ``z``,
+        ``ordered_atom_list``, and atom counters.
+        """
 
         ### Check if we can add atom
         if atm_idx in self.ordered_atom_list:
@@ -268,6 +336,11 @@ class ZMatrix(object):
         return False
 
     def order_atoms(self, atm_idx):
+        """Recursively traverse neighbours and populate the Z-matrix ordering.
+
+        Terminal atoms are postponed until at least four atoms have been
+        placed where possible, providing non-degenerate reference choices.
+        """
 
         add_later = list()
         for atm_nghbr_idx in self.get_neighbor_idxs(atm_idx):
@@ -285,6 +358,7 @@ class ZMatrix(object):
             self.add_atom(atm_nghbr_idx)
 
     def is_dead_end(self, atm_idx):
+        """Return whether an atom has fewer than two bonded neighbours."""
 
         if len(list(self.get_neighbor_idxs(atm_idx))) < 2:
             return True
@@ -292,6 +366,7 @@ class ZMatrix(object):
             return False
 
     def is_neighbor_of(self, atm_idx1, atm_idx2):
+        """Return whether two RDKit atoms share a bond."""
 
         for atm_nghbr_idx in self.get_neighbor_idxs(atm_idx1):
             if atm_nghbr_idx == atm_idx2:
@@ -301,6 +376,31 @@ class ZMatrix(object):
     def build_cart_crds(self, z_crds, virtual_bond=None, virtual_angles=None,
                                       virtual_dihedrals=None, attach_crds=None,
                                       z_order=False):
+        """Reconstruct Cartesian coordinates from internal coordinates.
+
+        Parameters
+        ----------
+        z_crds : mapping or sequence
+            One row per Z-matrix atom. Rows after the root contain bond length,
+            then angle, then dihedral as these become defined; entries must be
+            Pint quantities.
+        virtual_bond, virtual_angles, virtual_dihedrals : Pint quantities, optional
+            Reference geometry used to place the first three atoms.
+        attach_crds : Pint quantity, shape (3, 3), optional
+            Three virtual Cartesian reference points in columns.
+        z_order : bool, default=False
+            Return rows in Z-matrix order instead of original RDKit atom order.
+
+        Returns
+        -------
+        pint.Quantity, shape (n_atoms, 3)
+            Cartesian coordinates in nanometres.
+
+        Notes
+        -----
+        Placement uses the Natural Extension Reference Frame algorithm. An
+        exception is raised if a row refers to an atom not yet placed.
+        """
 
         ### We use the Natural Extension Reference Frame algorithm.
         ### See DOI 10.1002/jcc.20237 and 10.1002/jcc.25772
@@ -382,6 +482,11 @@ class ZMatrix(object):
         return cart_crds
 
     def build_pretty_zcrds(self, crds):
+        """Format Cartesian coordinates as a conventional Z-matrix string.
+
+        Atom labels come from RDKit. References are one-based, bond lengths are
+        printed in angstroms, and angles/dihedrals in degrees.
+        """
 
         z_crds_dict = self.build_z_crds(crds)
         z_string    = []
@@ -401,6 +506,20 @@ class ZMatrix(object):
         return "\n".join(z_string)
 
     def build_z_crds(self, crds):
+        """Convert Cartesian coordinates into unit-aware Z-matrix values.
+
+        Parameters
+        ----------
+        crds : Pint quantity, shape (n_atoms, 3)
+            Coordinates indexed in the original RDKit atom order.
+
+        Returns
+        -------
+        dict
+            Mapping from Z row to lists of Pint quantities. Bond lengths are in
+            nanometres; angles and dihedrals are in degrees. The root row stores
+            its Cartesian position because it has no internal references.
+        """
 
         z_crds_dict = dict()
         for z_idx, atm_idxs in self.z.items():

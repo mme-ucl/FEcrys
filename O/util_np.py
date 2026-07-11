@@ -1,27 +1,12 @@
+"""General NumPy utilities used throughout FECrys.
+
+The module contains array-shape conversions, molecular-geometry calculations,
+trajectory processing, serialization helpers, and small numerical routines.
+Unless stated otherwise, coordinate arrays use a final Cartesian axis of
+length three and preserve any leading batch dimensions.
+"""
+
 from . import DIR_main
-
-''' util_np.py
-
-saving/loading python variables and objects:
-    f : save_pickle_
-    f : load_pickle_
-
-numpy array reshaping (single component systems only):
-    f : reshape_to_molecules_np_
-    f : reshape_to_atoms_np_
-    f : reshape_to_flat_np_
-
-misc:
-    f : cumulative_average_
-    f : sta_array_
-    f : half_way_
-    f : take_random_
-    f : joint_grid_from_marginal_grids_
-
-no-jump (molecules already whole):
-    f : tidy_crystal_xyz_
-
-'''
 import sys
 
 import os
@@ -46,6 +31,25 @@ import textwrap
 ## ## 
 
 def inject_methods_from_another_class_(target_instance, source_class, include_properties=False):
+    """Attach methods from a class to one existing object.
+
+    Parameters
+    ----------
+    target_instance : object
+        Object that will receive the methods. The object's class is not
+        otherwise changed.
+    source_class : type
+        Class whose public callables are bound to ``target_instance``.
+    include_properties : bool, default=False
+        If true, also copy property and descriptor objects to the target's
+        class. This affects every instance of the target class.
+
+    Notes
+    -----
+    Names beginning with ``__`` are ignored. Existing attributes with the same
+    names are overwritten. The operation mutates ``target_instance`` in place
+    and returns ``None``.
+    """
     import types
     for name, item in source_class.__dict__.items():
         
@@ -63,75 +67,154 @@ def inject_methods_from_another_class_(target_instance, source_class, include_pr
 ## ## 
 
 def save_pickle_(x, name, verbose=True):
-    ''' save any python variable, or instance of an object as a pickled file with name
-    '''
+    """Serialize a Python object to a pickle file.
+
+    Parameters
+    ----------
+    x : object
+        Object to serialize.
+    name : str or path-like
+        Destination filename. Parent directories must already exist.
+    verbose : bool, default=True
+        Print the destination after a successful write.
+
+    Notes
+    -----
+    The destination is overwritten. Pickle files must only be loaded from
+    trusted sources because unpickling can execute arbitrary code.
+    """
     with open(name, "wb") as f: pickle.dump(x, f)
     if verbose: print('saved',name)
     else: pass
     
 def load_pickle_(name):
-    ''' load the pickled file with name back into python
-    '''
+    """Deserialize and return an object from a trusted pickle file.
+
+    Parameters
+    ----------
+    name : str or path-like
+        Pickle file to read.
+
+    Returns
+    -------
+    object
+        The object stored in ``name``.
+    """
     with open(name, "rb") as f: x = pickle.load(f) ; return x
 
 ## ## 
 
 def reshape_to_molecules_np_(r, n_molecules, n_atoms_in_molecule):
-    '''
-    Output: (m, n_mol, n_atoms_mol, 3) array 
-    '''
+    """View batched coordinates as separate molecules.
+
+    Parameters
+    ----------
+    r : numpy.ndarray
+        Coordinates with the number of frames on axis 0 and a compatible
+        total number of Cartesian values in the remaining axes.
+    n_molecules : int
+        Number of molecules per frame.
+    n_atoms_in_molecule : int
+        Number of atoms in each molecule.
+
+    Returns
+    -------
+    numpy.ndarray
+        Reshaped coordinates with shape ``(n_frames, n_molecules,
+        n_atoms_in_molecule, 3)``. No coordinate values are changed.
+    """
     n_frames = r.shape[0]
     return r.reshape([n_frames, n_molecules, n_atoms_in_molecule, 3])
 
 def reshape_to_atoms_np_(r, n_molecules, n_atoms_in_molecule):
-    '''
-    Output: (m, n_mol * n_atoms_mol, 3) = (m,N,3) array 
-    '''
+    """View batched coordinates as one atom array per frame.
+
+    Returns an array of shape ``(n_frames, n_molecules *
+    n_atoms_in_molecule, 3)`` without changing coordinate values. The input
+    must contain exactly the required number of elements.
+    """
     n_frames = r.shape[0]
     return r.reshape([n_frames, n_molecules*n_atoms_in_molecule, 3])
     
 def reshape_to_flat_np_(r, n_molecules, n_atoms_in_molecule):
-    '''
-    Output: (m, n_mol * n_atoms_mol * 3) array 
-    '''
+    """Flatten all molecular Cartesian coordinates within each frame.
+
+    Returns an array of shape ``(n_frames, n_molecules *
+    n_atoms_in_molecule * 3)``. The operation only changes the view/shape of
+    the data.
+    """
     n_frames = r.shape[0]
     return r.reshape([n_frames, n_molecules*n_atoms_in_molecule*3])
 
 ## ## 
 
-cumulative_average_ = lambda x,axis=None : np.cumsum(x,axis=axis) / np.cumsum(np.ones_like(x),axis=axis)
+def cumulative_average_(x, axis=None):
+    """Return the running arithmetic mean of an array along ``axis``.
 
-sta_array_ = lambda x : (x-x.min())/(x.max()-x.min())
+    With ``axis=None`` the input is flattened, following ``numpy.cumsum``.
+    The output has the same shape as the cumulative sum and entry *i* is the
+    mean up to and including entry *i*.
+    """
+    return np.cumsum(x, axis=axis) / np.cumsum(np.ones_like(x), axis=axis)
+
+
+def sta_array_(x):
+    """Min-max scale an array to the interval [0, 1].
+
+    A constant input has zero range and therefore produces NaNs through NumPy
+    division; callers should handle that case explicitly when it is possible.
+    """
+    return (x - x.min()) / (x.max() - x.min())
 
 cdist_ = sp.spatial.distance.cdist
 
 def half_way_(a,c):
-    '''
-    output: number between a and c
-    '''
+    """Return the midpoint of two scalar values, independent of their order."""
     ac = sorted([a,c])
     b = min(ac) + 0.5*(max(ac) - min(ac))
     return b
 
 def take_random_(x, m=20000):
-    '''
-    output: uniformly taken random m values from first axis of x (len(x) >= m)
-    '''
+    """Sample rows uniformly without replacement from the first axis.
+
+    Parameters
+    ----------
+    x : numpy.ndarray
+        Values to sample; axis 0 identifies observations.
+    m : int, default=20000
+        Maximum number of observations to return.
+
+    Returns
+    -------
+    numpy.ndarray
+        ``min(m, len(x))`` randomly ordered observations. The global NumPy
+        random state controls reproducibility.
+    """
     return x[np.random.choice(x.shape[0],min([m,x.shape[0]]),replace=False)]
 
 def find_split_indices_(u, split_where:int, tol=0.00001, verbose=True):
-    ''' training : validation split where both sets have same average potential energy within tol
-    Inputs:
-        u : (m,1) array of potential energies during MD sampling
-        split_where : int, how many samples wanted in the training set
-        tol : how similar should average energy of training set be to the average energy of the validation set
-    Outputs:
-        inds_rand or None: run multiple times until returns not None, or increase tol
-            inds_rand : permutation of u (i.e., u[inds_rand]),
-            where the first split_where points/samples are belong to the training set,
-            and the rest of the array (i.e., u[inds_rand][split_where:]) validation set.
-            Use this permuation on any other array relevant for training: r, u, w, b
-    '''
+    """Find a random train/validation split with balanced mean energies.
+
+    Parameters
+    ----------
+    u : array-like, shape (n_samples, ...)
+        Potential energies sampled during molecular dynamics. The mean is
+        computed over all supplied values.
+    split_where : int
+        Number of samples assigned to the training prefix.
+    tol : float, default=1e-5
+        Maximum absolute difference allowed between each subset mean and the
+        mean of the complete dataset.
+    verbose : bool, default=True
+        Report whether a suitable permutation was found.
+
+    Returns
+    -------
+    numpy.ndarray or None
+        A permutation of sample indices, or ``None`` if none of 1,000 random
+        attempts meets the tolerance. Apply the same permutation to every
+        aligned array; the first ``split_where`` entries form the training set.
+    """
     u = np.array(u)
     n = u.shape[0]
     target = u.mean()
@@ -148,18 +231,27 @@ def find_split_indices_(u, split_where:int, tol=0.00001, verbose=True):
     return None
 
 def joint_grid_from_marginal_grids_(*marginal_grids, flatten_output=True):
-    
-    ''' like np.meshgrid but easier to use 
-    Inputs:
-        *marginal_grids : more than one flat arrays, these are usually grids made by np.linspace
-            dim = number of input grids
-        flatten_output : bool affecting shape of the output array
-    Outputs:
-        if flatten_output:
-            joint_grid : (N, dim) ; N = bins[1]*...*bins[dim]
-        else:
-            joint_grid : (dim, bins[1], ..., bins[dim])
-    '''
+    """Construct the Cartesian product of one-dimensional marginal grids.
+
+    Parameters
+    ----------
+    *marginal_grids : array-like
+        One one-dimensional coordinate grid per dimension.
+    flatten_output : bool, default=True
+        Return a point table when true; retain the tensor grid when false.
+
+    Returns
+    -------
+    numpy.ndarray
+        Shape ``(prod(n_bins), n_dimensions)`` when flattened, otherwise
+        ``(n_dimensions, *n_bins)``.
+
+    Notes
+    -----
+    This is a convenience alternative to ``numpy.meshgrid``. The implementation
+    currently supports at most the number of dimensions encoded by its einsum
+    labels.
+    """
 
     list_marginal_grids = list(marginal_grids)
     letters = 'jklmnopqrst'
@@ -189,29 +281,37 @@ def joint_grid_from_marginal_grids_(*marginal_grids, flatten_output=True):
     return joint_grid
 
 def tidy_crystal_xyz_(r, b, n_atoms_mol, ind_rO, batch_size=1000):
-    ''' makes molecules not jump in Cartesian space
+    """Remove periodic jumps from a single-component crystal trajectory.
 
-    !! may not work well in unstable systems such as very small cells
+    Parameters
+    ----------
+    r : numpy.ndarray, shape (n_frames, n_atoms, 3) or (n_atoms, 3)
+        Cartesian coordinates. Each molecule must already be whole.
+    b : numpy.ndarray, shape (n_frames, 3, 3) or (3, 3)
+        Periodic box vectors stored by row. A single box is broadcast across
+        frames.
+    n_atoms_mol : int
+        Number of atoms in each molecule; all molecules must have this size.
+    ind_rO : int
+        Within-molecule index of a slowly moving reference atom used to track
+        each molecule through the periodic boundaries.
+    batch_size : int, default=1000
+        Number of frames processed together during initial wrapping.
 
-    Inputs:
-        r : (n_frames, N_atoms, 3) 
-            array of coordinates (must be a single component system)
-            molecules must be already whole (true by default in any openmm trajectories)
-            (if molecules not whole see the method in SC_helper.unwrap_molecule, run that first)
+    Returns
+    -------
+    numpy.ndarray, shape (n_frames, n_atoms, 3)
+        Coordinates with molecular reference atoms unwrapped continuously and
+        their global mean position removed. Molecular packing—and therefore
+        periodic potential energy—should be unchanged.
 
-        b : (n_frames, 3, 3)
-            array of simulation boxes
-        ind_rO : int
-            index of any atom in a molecule that has slow dynamics relative to the cell
-        batch_size : int
-            to reuduce memory cost when running on large trajectory
-    Outputs:
-        r : (n_frames, N_atoms, 3)
-            array of coordinates with PBC wrapping where molecules are not jumping
-            Importantly: outputs are expected to evaluate to the same energy as the inputs (same packing as input)
-
-    '''
+    Notes
+    -----
+    The method assumes a stable crystal and may be unreliable for very small
+    or unstable cells. Unwrap broken molecules before calling this function.
+    """
     def check_shape_(x):
+        """Convert coordinates to an array with an explicit frame axis."""
         x = np.array(x)
         shape = len(x.shape)
         assert shape in [2,3]
@@ -226,6 +326,7 @@ def tidy_crystal_xyz_(r, b, n_atoms_mol, ind_rO, batch_size=1000):
     if len(b.shape) == 2: b = np.array([b]*n_frames)
     else: assert b.shape[0] == n_frames
     def wrap_points_(R, box):
+        """Wrap Cartesian points into their corresponding periodic boxes."""
         # R   : (... 3), shaped as molecules
         # box : (...,3, 3) # rows
         st = 'oabi,oij->oabj'
@@ -255,6 +356,7 @@ def tidy_crystal_xyz_(r, b, n_atoms_mol, ind_rO, batch_size=1000):
     this should give lattice looking like the first frame throughout a crystaline trajectory
     '''
     def dot_(Ri, mat):
+        """Apply one 3-by-3 matrix to the final axis of each point."""
         st = 'abi,ij->abj'
         return np.einsum(st, Ri, mat)
 
@@ -279,7 +381,25 @@ def tidy_crystal_xyz_(r, b, n_atoms_mol, ind_rO, batch_size=1000):
 ## ## 
 
 def get_torsion_np_(r, inds_4_atoms):
-    ''' REF: https://github.com/noegroup/bgflow '''
+    """Calculate signed dihedral angles for four indexed atoms.
+
+    Parameters
+    ----------
+    r : numpy.ndarray, shape (..., n_atoms, 3)
+        Cartesian coordinates.
+    inds_4_atoms : sequence of four int
+        Atom indices ``(A, B, C, D)`` defining the A-B-C-D torsion.
+
+    Returns
+    -------
+    numpy.ndarray, shape (..., 1)
+        Signed angles in radians in the interval ``[-pi, pi]``.
+
+    Notes
+    -----
+    Vector norms are clipped below at ``1e-8`` for numerical stability. The
+    formulation is adapted from the bgflow project.
+    """
     # r            : (..., # atoms, 3)
     # inds_4_atoms : (4,)
     
@@ -321,7 +441,12 @@ def get_torsion_np_(r, inds_4_atoms):
     return phi # (...,1)
 
 def get_angle_np_(R, inds_3_atoms):
-    ''' bond angle '''
+    """Calculate bond angles for three indexed atoms.
+
+    ``inds_3_atoms`` defines A-B-C, with B as the vertex. Returns radians with
+    shape ``(..., 1)``; values are clipped away from exactly 0 and pi for
+    numerical stability.
+    """
     # R            : (..., # atoms, 3)
     # inds_3_atoms : (3,)
 
@@ -348,7 +473,20 @@ def get_angle_np_(R, inds_3_atoms):
     return theta # (...,1)
 
 def get_distance_np_(R, inds_2_atoms):
-    ''' bond distance '''
+    """Calculate Euclidean distances between two indexed atoms.
+
+    Parameters
+    ----------
+    R : numpy.ndarray, shape (..., n_atoms, 3)
+        Cartesian coordinates in any consistent length unit.
+    inds_2_atoms : sequence of two int
+        Indices of the atom pair.
+
+    Returns
+    -------
+    numpy.ndarray, shape (..., 1)
+        Pair distances in the input coordinate unit, clipped below at ``1e-8``.
+    """
     # R            : (..., # atoms, 3)
     # inds_2_atoms : (2,)
     A,B = inds_2_atoms
@@ -366,6 +504,12 @@ def get_distance_np_(R, inds_2_atoms):
 ## ## 
 
 def color_text_(text, p='_R'):
+    """Wrap text in ANSI terminal formatting codes.
+
+    ``p`` selects a colour by its initial (for example ``'r'`` for red), an
+    uppercase selector requests bold text, and an underscore requests
+    underlining. The returned string includes a final reset code.
+    """
     # REF: https://stackoverflow.com/questions/8924173/how-can-i-print-bold-text-in-python
     selection = ''
     if '_' in p: selection += '\033[4m'
@@ -382,11 +526,30 @@ def color_text_(text, p='_R'):
 ## ## 
 
 class TestConverged_1D:
+    """Heuristic convergence diagnostic for a one-dimensional time series.
+
+    The diagnostic compares the cumulative mean with its own cumulative mean,
+    normalises the discrepancy by a running variance, and declares convergence
+    when the final scaled error is no greater than ``tol``. It is a visual and
+    exploratory heuristic, not a statistical hypothesis test.
+    """
+
     def __init__(self,
                  x,
                  tol = 0.2,
                  verbose = True,
                 ):
+        """Calculate the convergence trace for ``x``.
+
+        Parameters
+        ----------
+        x : array-like
+            Scalar observations in time order; the input is flattened.
+        tol : float, default=0.2
+            Maximum final diagnostic value considered converged.
+        verbose : bool, default=True
+            Print the final convergence decision.
+        """
         self.tol = tol
         
         x = np.array(x).flatten()
@@ -407,14 +570,17 @@ class TestConverged_1D:
         self.x = np.array(x)
 
     def __call__(self):
+        """Return whether the final diagnostic value meets the tolerance."""
         return self.err[-1] <= self.tol
 
     @property
     def where(self):
+        """Indices at which the diagnostic is no greater than ``tol``."""
         return np.where(self.err <= self.tol)[0]
     
     @property
     def recommend_cut_from(self,):
+        """Estimate and return an index after which the series is converged."""
         # index of frame after which the quantity may be converged
         idx = len(self.x) - len(TestConverged_1D(np.flip(self.x), tol=self.tol, verbose=False).where)
         if TestConverged_1D(self.x[idx:], tol=self.tol, verbose=False)():
@@ -423,6 +589,12 @@ class TestConverged_1D:
         return idx
     
     def show_(self, window=1, centre=False, show_x = True, color='black'):
+        """Plot observations and their cumulative mean.
+
+        Parameters control the y-axis half-width, centring about the final
+        mean, visibility of raw observations, and plot colour. The plot is
+        drawn on Matplotlib's current axes and the method returns ``None``.
+        """
         # scatter is faster than plot
         import matplotlib.pyplot as plt
         mean = self.MU[-1]
@@ -443,14 +615,16 @@ class TestConverged_1D:
 ## ## 
 
 def K_to_C_(K):
+    """Convert an absolute temperature from kelvin to degrees Celsius."""
     return K - 273.15
 
 def C_to_K_(C):
+    """Convert a temperature from degrees Celsius to kelvin."""
     return C + 273.15
 
 ## ## 
 
-def ADAM_np_(grad_, 
+def ADAM_np_(grad_,
             x0, 
             constraint_ = lambda x : x,
             max_itter = 1e20,
@@ -458,6 +632,40 @@ def ADAM_np_(grad_,
             betas=[0.7,0.999], 
             tol=1e-4,
             ):
+    """Minimise an objective using gradients and an Adam-like update.
+
+    Parameters
+    ----------
+    grad_ : callable
+        Function mapping the current parameter array to an equally shaped
+        gradient array.
+    x0 : numpy.ndarray
+        Initial parameters. Updates preserve this shape.
+    constraint_ : callable, optional
+        Projection or transformation applied after every update.
+    max_itter : int or float, default=1e20
+        Maximum number of updates (the historical spelling is retained).
+    alpha : float, default=0.005
+        Step-size multiplier.
+    betas : sequence of two float, default=(0.7, 0.999)
+        Exponential decay factors for first and second gradient moments.
+    tol : float, default=1e-4
+        Stop when the largest absolute gradient component is at most this
+        value.
+
+    Returns
+    -------
+    x : numpy.ndarray
+        Final constrained parameter values.
+    n_iterations : float
+        Number of updates performed.
+
+    Notes
+    -----
+    Unlike canonical Adam, this implementation does not apply bias correction
+    to the moment estimates. No objective value or convergence flag is
+    returned.
+    """
 
     beta1, beta2 = betas 
     one_minus_beta1 = 1.0-beta1

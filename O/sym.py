@@ -1,3 +1,12 @@
+"""Symmetry-based relabelling and augmentation of molecular trajectories.
+
+The routines permute chemically equivalent atom indices or crystallographically
+equivalent unit-cell blocks without changing the represented physical state.
+They are preprocessing tools for models that are not intrinsically invariant
+to these permutations. Coordinate values are generally preserved or translated
+by periodic lattice vectors; atom ordering is what changes.
+"""
+
 from .NN.representation_layers import *
 from .plotting import *
 from .MM.sc_system import *
@@ -5,6 +14,22 @@ from .MM.sc_system import *
 ## ## ## ## 
 
 def cluster_symmetric_torsion_(x, symmetry_order:int=1, offset=np.pi):
+    """Assign periodic angles to symmetry-equivalent angular sectors.
+
+    Parameters
+    ----------
+    x : array-like
+        Angles in radians; flattened before classification.
+    symmetry_order : int, default=1
+        Number of equally spaced sectors across ``[-pi, pi)``.
+    offset : float, default=pi
+        Phase controlling the sector boundaries.
+
+    Returns
+    -------
+    numpy.ndarray
+        Integer sector labels from zero to ``symmetry_order - 1``.
+    """
     x = np.array(x).flatten()
     assert symmetry_order >= 1
     n = symmetry_order
@@ -62,6 +87,12 @@ class DatasetSymmetryReduction:
         save_pickle_(dataset, path_dataset_sym)
 
     def check_energy_(self, m=None):
+        """Re-evaluate processed frames and report maximum energy deviation.
+
+        At most the first ``m`` frames are checked. The new reduced energies
+        are stored as ``u_sym`` and compared against the original simulation
+        energies, which should agree up to numerical precision.
+        """
         self.u_sym = self.sc.u_(self.r[:m], b=self.sc.boxes[:m])
         print('np.abs(self.u_sym - self.sc.u).max():', np.abs(self.u_sym - self.sc.u[:m]).max())
 
@@ -72,6 +103,15 @@ class DatasetSymmetryReduction:
                  n_atoms_mol=None,
                  PDB_single_mol=None,
                  ):
+        """Load or directly configure a trajectory for symmetry reduction.
+
+        Supplying ``path_dataset`` reconstructs ``SingleComponent`` metadata,
+        coordinates, boxes, molecule counts, and the single-molecule topology.
+        For direct construction, ``r``, ``n_mol``, ``n_atoms_mol``, and
+        ``PDB_single_mol`` must be supplied; current code also expects boxes to
+        be available through the dataset path. The working coordinates ``r``
+        are a copy of immutable baseline ``r_init``.
+        """
         
         if path_dataset is None: pass
         else:
@@ -129,18 +169,26 @@ class DatasetSymmetryReduction:
                                       ]
 
     def restart_(self,):
+        """Reset working coordinates to the original trajectory copy."""
         self.r = np.array(self.r_init)
         self.n_frames = len(self.r)
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
     def set_ABCD_(self, ind_root_atom, option:int=None):
+        """Define internal-coordinate references and the molecular anchor atom."""
         self.ind_rO = ind_root_atom
         self.ic_map.set_ABCD_(ind_root_atom=self.ind_rO, option=option)
 
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
     def cluster_symmetric_torsion_(self, phi, symmetry_order:int, offset=np.pi):
+        """Return all cyclic permutations of torsion-sector assignments.
+
+        ``phi`` must contain one value per frame. The result has shape
+        ``(n_frames, symmetry_order)`` and each row is a permutation of sector
+        labels used to canonicalise equivalent atoms.
+        """
         C = [cluster_symmetric_torsion_(phi, symmetry_order=symmetry_order, offset=offset)]
         for _ in range(symmetry_order-1): 
             C.append(np.mod(C[-1]+1, symmetry_order))
@@ -149,6 +197,7 @@ class DatasetSymmetryReduction:
     ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
     
     def _prepare_sort_methyl_(self,):
+        """Find methyl groups and cache their three hydrogen torsion rows."""
         methyl_group_smarts = "[CH3]"
         methyl_pattern = Chem.MolFromSmarts(methyl_group_smarts)
         matches = self.ic_map.mol.GetSubstructMatches(methyl_pattern)
@@ -164,6 +213,12 @@ class DatasetSymmetryReduction:
         print('# methyl groups:', self.n_methyl_groups)
 
     def _sort_methyl_(self, ind_methyl, ind_mol, lookup_index=0, offset=np.pi):
+        """Relabel one methyl group's hydrogens across all frames.
+
+        ``lookup_index`` selects one of four deterministic canonicalisation
+        tables. A negative value applies a random cyclic rotation per frame.
+        Coordinates in ``self.r`` are mutated in place.
+        """
         inds_torsions_0 = np.array(self.inds_torsions_ch3[ind_methyl][0])
         inds_torsions_1 = np.array(self.inds_torsions_ch3[ind_methyl][1])
         inds_torsions_2 = np.array(self.inds_torsions_ch3[ind_methyl][2])
@@ -200,6 +255,12 @@ class DatasetSymmetryReduction:
             [self._sort_methyl_(i, j, lookup_index = lookup_inds[j]) for j in range(self.n_mol)];
     '''
     def sort_methyl_(self, lookup_indices=[0,3], offsets=[np.pi]):
+        """Canonicalise every detected methyl group in every molecule.
+
+        Lookup patterns may be shared by all methyl groups or supplied per
+        group; offsets are radians and follow the same grouping. The operation
+        only permutes equivalent hydrogen coordinates in ``self.r``.
+        """
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_methyl_()
 
@@ -219,6 +280,7 @@ class DatasetSymmetryReduction:
             [self._sort_methyl_(i, j, lookup_index = lookup_inds[j], offset=offsets[i]) for j in range(self.n_mol)];
     
     def plot_methyl_(self, axes_off=True, figsize=(6,6)):
+        """Plot three hydrogen-torsion distributions for each methyl group."""
         if hasattr(self, 'n_methyl_groups'): pass
         else: self._prepare_sort_methyl_()
 
@@ -250,6 +312,7 @@ class DatasetSymmetryReduction:
     ## ##
 
     def _prepare_sort_trimethyl_(self,):
+        """Find tert-butyl-like trimethyl groups and cache atom partitions."""
         trimethyl_group_smarts = "CC(C)(C)C"
         trimethyl_pattern = Chem.MolFromSmarts(trimethyl_group_smarts)
         matches = self.ic_map.mol.GetSubstructMatches(trimethyl_pattern)
@@ -287,6 +350,12 @@ class DatasetSymmetryReduction:
         print('# trimethyl groups:', self.n_trimethyl_groups)
 
     def _sort_trimethyl_(self, ind_trimethyl, ind_mol, lookup_index=0, offset=0):
+        """Relabel three methyl branches of one trimethyl group.
+
+        Each branch carbon and its three attached hydrogens move together.
+        Deterministic lookup tables are used for non-negative ``lookup_index``;
+        a negative index chooses a random cyclic branch rotation per frame.
+        """
 
         occurrence = ind_trimethyl
         i = ind_mol
@@ -345,6 +414,7 @@ class DatasetSymmetryReduction:
                 self.r[frame, inds_h2, :] = np.take(r_h2_in[frame], permutation, axis=0)
         
     def sort_trimethyl_(self, lookup_indices=[0,3], offset=0):
+        """Canonicalise all detected trimethyl branch permutations in place."""
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_trimethyl_()
 
@@ -356,6 +426,7 @@ class DatasetSymmetryReduction:
             [self._sort_trimethyl_(i, j, lookup_index = lookup_indices[j], offset=offset) for j in range(self.n_mol)];
 
     def plot_trimethyl_(self, mask_0=True, axes_off=True, figsize=(2,10)):
+        """Plot branch-torsion distributions for detected trimethyl groups."""
         if hasattr(self, 'n_trimethyl_groups'): pass
         else: self._prepare_sort_trimethyl_()
 
@@ -416,6 +487,12 @@ class DatasetSymmetryReduction:
     ## reshuffle indices of two selected atoms:
 
     def sort_n2_(self, inds_AB:list, lookup_indices:list=[-1], offset=0):
+        """Relabel a user-selected pair of symmetry-equivalent atoms.
+
+        The two atoms must share the same B-C-D internal-coordinate references.
+        ``lookup_indices`` selects identity/swap canonicalisation per molecule;
+        ``-1`` randomises the pair independently in each frame.
+        """
 
         print(f'args provided: inds_AB={inds_AB}, lookup_indices={lookup_indices}, offset={offset}')
 
@@ -427,6 +504,7 @@ class DatasetSymmetryReduction:
         [self._sort_n2_(inds_A, inds_B, j, lookup_index=lookup_indices[j], offset=offset) for j in range(self.n_mol)];
 
     def _sort_n2_(self, inds_A, inds_B, ind_mol, lookup_index=0, offset=0):
+        """Apply one two-atom relabelling rule to a single molecule."""
         inds_torsions_0 = inds_A
         inds_torsions_1 = inds_B
 
@@ -451,6 +529,7 @@ class DatasetSymmetryReduction:
                 self.r[frame,inds_X_j,:] = np.take(self.r[frame,inds_X_j,:], permutation, axis=0)
 
     def plot_n2_(self, inds_AB:list, axes_off=True, figsize=(6,6)):
+        """Plot torsion distributions for a selected equivalent-atom pair."""
 
         inds_A, inds_B = self.ic_map.ABCD_IC[[np.where(self.ic_map.ABCD_IC[:,0]==ind)[0][0] for ind in inds_AB]]
         assert [inds_A[i]==inds_B[i] for i in [1,2,3]] and inds_A[0]!=inds_B[0]
@@ -552,6 +631,14 @@ class DatasetSymmetryReduction:
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class PermuteUnitcell_SingleComponent:
+    """Randomly translate and relabel equivalent unit-cell blocks.
+
+    This augmentation targets single-component supercells containing repeated
+    crystallographic unit cells. A random unit-cell origin is chosen per frame,
+    and translated blocks are assigned back to reference sites using a minimum
+    distance linear assignment. Whole molecules remain intact.
+    """
+
     def put_in_box_m_(self, r, b):
         # r : (m,N,3)
         # b : (m,3,3)
@@ -610,7 +697,7 @@ class PermuteUnitcell_SingleComponent:
         d_sq = np.min(ds_sq, axis=0)                                         # (N,N)
         return d_sq
 
-    def __init__(self, 
+    def __init__(self,
                  n_atoms_mol,
                  n_mol,
                  n_mol_unitcell,
@@ -618,6 +705,13 @@ class PermuteUnitcell_SingleComponent:
                  ind_rO,
                  n_images_search = 1,
                  ):
+        """Configure unit-cell dimensions and periodic image search.
+
+        ``n_mol_unitcell`` is the number of molecules per crystallographic unit
+        cell and must divide ``n_mol``. ``ind_rO`` is the within-molecule anchor
+        atom. ``n_images_search`` controls the lattice-image cube used for
+        general-cell minimum distances.
+        """
         self.n_atoms_mol = n_atoms_mol
         self.n_mol = n_mol
         self.n_mol_unitcell = n_mol_unitcell
@@ -639,10 +733,16 @@ class PermuteUnitcell_SingleComponent:
    
         ## ## ## ## 
 
-    def __call__(self, 
+    def __call__(self,
                     r, # (m,N,3)
                     b, # (m,3,3)
                     ):
+        """Augment every trajectory frame and return a new coordinate array.
+
+        ``r`` and ``b`` must contain the same number of frames. Coordinates
+        have shape ``(m, N, 3)`` and boxes ``(m, 3, 3)``. When only one unit
+        cell is present, the original ``r`` object is returned unchanged.
+        """
         if self.n_unitcells > 1:
             output = []
             m = len(r)
@@ -660,7 +760,14 @@ class PermuteUnitcell_SingleComponent:
                                         r,   # (N,3)
                                         box, # (3,3)
                                     ):
+        """Randomly translate and reassign unit-cell blocks in one frame.
+
+        The returned ``(N, 3)`` array is wrapped relative to molecular anchor
+        atoms. Translation by lattice vectors and block relabelling preserve
+        the periodic physical configuration.
+        """
         def wrap_(r, b):
+            """Wrap Cartesian points into the primary cell of ``b``."""
             s = np.einsum('...i,ij->...j', r, np.linalg.inv(b))
             _r = np.einsum('...i,ij->...j', np.mod(s, 1.0), b)
             return _r

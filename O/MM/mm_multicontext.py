@@ -1,8 +1,10 @@
-'''
+"""Evaluate batches of configurations in parallel OpenMM contexts.
 
-REF: https://github.com/noegroup/bgflow
-
-'''
+Each worker process owns one OpenMM ``Context`` and receives configurations
+through multiprocessing queues. The implementation is derived from bgflow's
+OpenMM bridge. Inputs and returned values are plain NumPy-compatible arrays;
+the units expected at this boundary are documented on :meth:`MultiContext.evaluate`.
+"""
 
 import warnings
 import multiprocessing as mp
@@ -13,10 +15,10 @@ import pickle
 ##
 
 class MultiContext:
-    """A container for multiple OpenMM Contexts that are operated by different worker processes.
+    """Manage OpenMM contexts running in independent worker processes.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     n_workers : int
         The number of workers which operate one context each.
     system : openmm.System
@@ -30,7 +32,12 @@ class MultiContext:
     """
 
     def __init__(self, n_workers, system, integrator, platform_name, platform_properties={}):
-        """Set up workers and queues."""
+        """Store context configuration and create empty task/result queues.
+
+        Workers are started lazily on the first call to :meth:`evaluate`.
+        Each worker receives a pickle-cloned integrator because an OpenMM
+        integrator can belong to only one context.
+        """
         self._n_workers = n_workers
         self._system = system
         self._integrator = integrator
@@ -52,7 +59,11 @@ class MultiContext:
             pass
 
     def _reinitialize(self):
-        """Reinitialize the MultiContext"""
+        """Replace queues and start a fresh set of worker processes.
+
+        Existing workers first receive a soft-termination sentinel. The method
+        mutates this object in place and returns ``None``.
+        """
         self.terminate()
         # recreate objects
         self._task_queue = mp.Queue()
@@ -97,8 +108,8 @@ class MultiContext:
             Whether to return positions.
         evaluate_path_probability_ratio : bool, optional
             Whether to compute the log path probability ratio. Makes only sense for PathProbabilityIntegrator instances.
-        _err_handling : str, optional
-            How to handle infinite energies (one of {"warning", "ignore", "exception"}).
+        err_handling : {"warning", "ignore", "exception"}, default="warning"
+            How each worker handles an exception while evaluating a state.
         n_simulation_steps : int, optional
             If > 0, perform a number of simulation steps and compute energy and forces for the resulting state.
 
@@ -112,6 +123,13 @@ class MultiContext:
             The positions in units of nm; its shape is (len(positions), num_particles, 3)
         log_path_probability_ratio : np.ndarray or None
             The logarithmic path probability ratios; its shape  is (len(positions), )
+
+        Notes
+        -----
+        Results are reordered to match the input batch after parallel
+        evaluation. Although ``n_simulation_steps`` and path-probability
+        evaluation are part of the API, the current worker does not advance
+        the integrator and returns a path-probability ratio of zero.
         """
         assert box_vectors is None or len(box_vectors) == len(positions), \
             "box_vectors and positions have to be the same length"
@@ -138,11 +156,15 @@ class MultiContext:
         )
 
     def is_alive(self):
-        """Whether all workers are alive."""
+        """Return true when at least one worker exists and all are alive."""
         return all(worker.is_alive() for worker in self._workers) and len(self._workers) > 0
 
     def terminate(self):
-        """Terminate the workers."""
+        """Request soft termination of every worker.
+
+        One ``None`` sentinel is placed on the shared task queue per worker.
+        The method does not join the processes or wait for their termination.
+        """
         # soft termination
         for _ in self._workers:
             self._task_queue.put(None)
@@ -151,13 +173,14 @@ class MultiContext:
         #    worker.terminate()
 
     def __del__(self):
+        """Request worker termination when this manager is garbage-collected."""
         self.terminate()
 
     class Worker(mp.Process):
-        """A worker process that computes energies in its own context.
+        """Process that evaluates queued states in one OpenMM context.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         task_queue : multiprocessing.Queue
             The queue that the MultiContext pushes tasks to.
         result_queue : multiprocessing.Queue
@@ -173,6 +196,12 @@ class MultiContext:
         """
 
         def __init__(self, task_queue, result_queue, system, integrator, platform_name, platform_properties):
+            """Store queues and serializable OpenMM context configuration.
+
+            The actual OpenMM ``Context`` is deliberately created by
+            :meth:`run` after the process starts. Creating CPU contexts in the
+            parent process can deadlock on some platforms.
+            """
             super(MultiContext.Worker, self).__init__()
             self._task_queue = task_queue
             self._result_queue = result_queue
@@ -183,9 +212,13 @@ class MultiContext:
             self._openmm_context = None
 
         def run(self):
-            """Run the process: set positions and compute energies and forces.
-            Positions and box vectors are received from the task_queue in units of nanometers.
-            Energies and forces are pushed to the result_queue in units of kJ/mole and kJ/mole/nm, respectively.
+            """Consume tasks and return requested OpenMM state quantities.
+
+            Positions and box vectors are received in nanometres. Energies,
+            forces, and positions are returned in kJ/mol, kJ/(mol nm), and nm,
+            respectively. A ``None`` task stops the loop. Evaluation errors are
+            warned, ignored, or re-raised according to each task's
+            ``err_handling`` value.
             """
             try:
                 from openmm import unit
