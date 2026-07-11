@@ -62,11 +62,13 @@ CONST_kB = 1e-3*8.31446261815324 # kilojoule/(kelvin*mole)
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
 def get_force_by_name_(system, name:str):
+    """Return the OpenMM force whose concrete class name equals ``name``."""
     forces = {system.getForce(index).__class__.__name__: system.getForce(
         index) for index in range(system.getNumForces())}
     return forces[name]
 
 def update_HarmonicBondForce_(_force, _lam, deepcopy=True):
+    """Scale every harmonic bond force constant by ``_lam``."""
     if deepcopy: force = copy.deepcopy(_force)
     else: force = _force
     for i in range(force.getNumBonds()):
@@ -78,6 +80,7 @@ def update_HarmonicBondForce_(_force, _lam, deepcopy=True):
     return force
 
 def update_HarmonicAngleForce_(_force, _lam, deepcopy=True):
+    """Scale every harmonic angle force constant by ``_lam``."""
     if deepcopy: force = copy.deepcopy(_force)
     else: force = _force
     for i in range(force.getNumAngles()):
@@ -89,6 +92,7 @@ def update_HarmonicAngleForce_(_force, _lam, deepcopy=True):
     return force
 
 def update_PeriodicTorsionForce_(_force, _lam, deepcopy=True):
+    """Scale every periodic-torsion energy coefficient by ``_lam``."""
     if deepcopy: force = copy.deepcopy(_force)
     else: force = _force
     unit_of_item_to_scale = unit.kilojoule/unit.mole
@@ -121,6 +125,12 @@ def update_RBTorsionForce_(_force, _lam, deepcopy=False):
     return force
 
 def update_NonbondedForce_(_force, _lam, deepcopy=True):
+    """Scale Lennard-Jones and electrostatic energies by ``_lam``.
+
+    Particle epsilon values scale linearly and charges by ``sqrt(_lam)``;
+    exception epsilon and charge-product values scale linearly. The input is
+    copied by default and mutated only when ``deepcopy=False``.
+    """
     if deepcopy: force = copy.deepcopy(_force)
     else: force = _force
         
@@ -150,6 +160,11 @@ def update_NonbondedForce_(_force, _lam, deepcopy=True):
     return force
 
 def update_CustomNonbondedForce_(_force, _lam, deepcopy=True):
+    """Scale a supported custom nonbonded force by ``_lam``.
+
+    Forces exposing the global parameter ``ecm_lambda`` are scaled through that
+    parameter; older epsilon/sigma forces are scaled per particle.
+    """
     if deepcopy: force = copy.deepcopy(_force)
     else: force = _force
 
@@ -249,22 +264,34 @@ def put_lambda_into_system_(system,
 #            setattr(self, name, types.MethodType(method, self))
 
 class MM_system_helper:
+    """Shared OpenMM context, evaluation, trajectory, and export utilities."""
+
     def __init__(self,):
+        """Initialise drift and ensemble-state flags."""
         self.reduce_drift = False
         self.NPT = False # switches to permanently True when barostat added, stays true if barostat removed.
 
     def inject_methods_from_another_class_(self, class_to_inject_methods_from, **kwargs):
+        """Bind methods and optional properties from another class to this instance."""
         inject_methods_from_another_class_(self, class_to_inject_methods_from, **kwargs)
 
     def corrections_to_ff_(self, verbose):
+        """Default no-op hook for force-field-specific system corrections."""
         if verbose: print('no corrections to self.system')
         else: pass
     
     @property
     def _system_mass_(self,):
+        """numpy.ndarray: OpenMM particle masses in daltons."""
         return np.array([self.system.getParticleMass(i)._value for i in range(self.system.getNumParticles())])
 
     def define_mu_(self, index_atom=None):
+        """Define masses and normalised weights used for COM removal.
+
+        ``index_atom=None`` uses physical mass fractions. An integer produces a
+        one-hot fixed-atom reference; a non-integer index selection is repeated
+        across molecules and mass-weighted.
+        """
         # run this again after/if fixing one atom
         self._mass_ = self._system_mass_[:,np.newaxis] 
         self._mass_system_ = self._mass_.sum() # daltons
@@ -284,57 +311,69 @@ class MM_system_helper:
         else: pass
 
     def _set_b_(self, b):
+        """Set a ``(3, 3)`` periodic box matrix in nanometres."""
         assert b.shape == (3,3)
         self.simulation.context.setPeriodicBoxVectors(*b)
 
     def _set_r_(self, r):
+        """Set ``(N, 3)`` Cartesian positions in nanometres."""
         assert r.shape == (self.N,3)
         self.simulation.context.setPositions(r)
 
     def _set_v_(self, v):
+        """Set ``(N, 3)`` velocities in nanometres per picosecond."""
         assert v.shape == (self.N,3)
         self.simulation.context.setVelocities(v)
 
     def forward_atom_index_(self, inds):
+        """Map public indices to OpenMM indices; identity in the base helper."""
         return inds
     
     def inverse_atom_index_(self, inds):
+        """Map OpenMM indices to public indices; identity in the base helper."""
         return inds
 
     @property
     def _current_r_(self,):
+        """numpy.ndarray: Current positions in nanometres."""
         # positions
         # unit = nanometer
         return self.simulation.context.getState(getPositions=True).getPositions(asNumpy=True)._value
     
     @property
     def _current_COM_(self,):
+        """numpy.ndarray: Current weighted centre of mass shaped ``(1, 3)``."""
         # global centre of mass (1,3)
         return (self._current_r_*self._mu_).sum(axis=-2,keepdims=True)
     
     def _recenter_simulation_(self,):
+        """Translate the current structure so its configured COM is zero."""
         self._set_r_(self._current_r_ - self._current_COM_)
     
     @property
     def _current_v_(self,):
+        """numpy.ndarray: Current velocities in nanometres per picosecond."""
         # velocities
         # unit = nanometer/picosecond
         return self.simulation.context.getState(getVelocities=True).getVelocities(asNumpy=True)._value
     
     @property
     def _current_p_(self,):
+        """numpy.ndarray: Current momenta in dalton nanometres per picosecond."""
         # momenta
         # unit = nanometer*dalton/picosecond
         return self._current_v_*self._mass_
     
     @property
     def _current_K_(self,):
+        """float: Current kinetic energy in kJ/mol."""
         # kinetic energy
         # unit = kilojoule/mole
         return self.simulation.context.getState(getEnergy=True).getKineticEnergy()._value
     
     @property
     def _current_T_(self,):
+        """float: Instantaneous kinetic temperature in kelvin."""
         # temperature
         # unit = Kelvin
         # self.n_DOF <= 3.*self.N
@@ -342,35 +381,41 @@ class MM_system_helper:
     
     @property
     def _current_U_(self,):
+        """float: Current potential energy in kJ/mol."""
         # potential energy 
         # unit = kilojoule/mole
         return self.simulation.context.getState(getEnergy=True).getPotentialEnergy()._value
     
     @property
     def _current_u_(self,):
+         """float: Current reduced potential energy ``beta * U``."""
          # reduced potential energy 
          return self._current_U_ * self.beta
     
     @property
     def _current_F_(self,):
+        """numpy.ndarray: Current forces in kJ mol⁻¹ nm⁻¹."""
         # forces
         # unit = kilojoule/(nanometer*mole) ; [F = -∇U]
         return self.simulation.context.getState(getForces=True).getForces(asNumpy=True)._value
     
     @property
     def _current_b_(self,):
+        """numpy.ndarray: Current row-vector box matrix in nanometres."""
         # box (3,3)
         # unit = nanometer                  ; [box vectors are rows]
         return self.simulation.context.getState().getPeriodicBoxVectors(asNumpy=True)._value
     
     @property
     def _current_V_(self,):
+        """float: Current box volume in nm³."""
         # volume
         # unit = nanometer**3
         return np.linalg.det(self._current_b_)
     
     @property
     def _current_rho_(self,):
+        """float: Current mass density in g/cm³."""
         # density
 
         # one_dalton_in_grams = 1.66053906660e-24
@@ -388,6 +433,7 @@ class MM_system_helper:
     '''
 
     def _add_barostat_to_system_(self,):
+        """Add the configured isotropic, anisotropic, or flexible barostat."""
         if self.barostat_type == 0:
             self.system.addForce(mm.MonteCarloBarostat(self.P*unit.atmosphere,
                                                        self.T*unit.kelvin,
@@ -411,6 +457,7 @@ class MM_system_helper:
         else: print('!! barostat_type can only be one of: 0,1,2')
 
     def _remove_barostat_from_system_(self,):
+        """Remove every recognised Monte Carlo barostat from the system."""
         a = 0
         for x in self.system.getForces():
             if isinstance(x, mm.MonteCarloBarostat) or isinstance(x, mm.MonteCarloAnisotropicBarostat) or isinstance(x,mm.MonteCarloFlexibleBarostat): 
@@ -430,6 +477,7 @@ class MM_system_helper:
     '''
 
     def initialise_integrator_(self, integrator_class, collision_rate = 1):
+        """Construct a supported integrator at the configured T and timestep."""
 
         if integrator_class in [mm.LangevinMiddleIntegrator]:
             print('setting integrator to:',integrator_class.__name__,'with collistion rate:',collision_rate,'/ps')
@@ -456,12 +504,14 @@ class MM_system_helper:
 
 
     def _list_forces_(self):
+        """Print all OpenMM force names in system order."""
         print('')
         for x in self.system.getForces():
             print(x.getName())
         print('')
         
     def turn_ON_nonbonded_SwitchingFunction(self, factor=0.95):
+        """Enable switching for all standard/custom nonbonded forces."""
         for x in self.system.getForces():
             if isinstance(x, mm.NonbondedForce) or isinstance(x, mm.CustomNonbondedForce):
                 x.setUseSwitchingFunction(True)
@@ -469,6 +519,7 @@ class MM_system_helper:
             else: pass
 
     def adjust_EwaldErrorTolerance(self, tol, verbose=True):
+        """Set Ewald error tolerance on every standard nonbonded force."""
         for x in self.system.getForces():
             if isinstance(x, mm.NonbondedForce):
                 default = x.getEwaldErrorTolerance()
@@ -478,6 +529,7 @@ class MM_system_helper:
             else: pass
 
     def _reset_temperature_(self, T : float):
+        """Update stored and integrator temperatures in kelvin."""
         self.T = T
         self.simulation.integrator.setTemperature(self.T*unit.kelvin)
 
@@ -485,6 +537,7 @@ class MM_system_helper:
 
     @property
     def _print_potential_enrrgy_contributions_(self):
+        """Placeholder for reporting force-group energy contributions."""
         print('not yet implemented')
  
     '''
@@ -516,6 +569,11 @@ class MM_system_helper:
     '''
 
     def _U_GPU_(self, r, b=None):
+        """Evaluate dimensional potential energies for a coordinate batch.
+
+        Returns ``(frames, 1)`` energies in kJ/mol and restores the original
+        context positions and box before returning.
+        """
         n_frames = r.shape[0]
 
         _r = np.array(self._current_r_)
@@ -538,12 +596,14 @@ class MM_system_helper:
         return U
 
     def u_GPU_(self, r, b=None):
+        """Evaluate batched reduced potential energies ``beta * U``."""
          # if b None : in NVT the last box it seen is assumed.
         return self._U_GPU_(np.array(r), b=b) * self.beta
     
     # minimisation:
 
     def F_GPU_(self, r, b=None):
+        """Evaluate batched forces in kJ mol⁻¹ nm⁻¹, restoring context state."""
         n_frames = r.shape[0]
 
         _r = np.array(self._current_r_)
@@ -566,6 +626,7 @@ class MM_system_helper:
         return F
 
     def minimise_(self, verbose=True):
+        """Minimise the current OpenMM context positions at fixed box."""
         if verbose: print('u before minimisation:',self._current_u_,'kT')
         else: pass
         self.simulation.minimizeEnergy()
@@ -581,6 +642,7 @@ class MM_system_helper:
             r : single frame (N,3) or trajectory (m,N,3) after minimising in fixed box(es)
         '''
         def check_shape_(x):
+            """Normalise one frame or a trajectory to a three-dimensional array."""
             x = np.array(x)
             shape = len(x.shape)
             assert shape in [2,3]
@@ -620,6 +682,12 @@ class MM_system_helper:
                   fixed_atom_index = None,
                   temperature_reduced = True,
                   ):
+        """Estimate the Cartesian Hessian by central differences of forces.
+
+        ``dr`` is in nanometres. A fixed atom's three coordinates are omitted;
+        by default the returned matrix is multiplied by ``beta`` and therefore
+        has reduced units of nm⁻².
+        """
         if temperature_reduced:
             assert self.beta > 1e-6, f'temperature {1/(self.beta*CONST_kB)} K is too low'
             temp_rescale = float(self.beta)
@@ -728,6 +796,7 @@ class MM_system_helper:
     # simulation:
 
     def set_arrays_blank_(self,):
+        """Reset trajectory buffers, frame count, and measured integration time."""
         self._xyz = [] # deque() from collections
         self._u = []
         self._temperature = []
@@ -739,6 +808,7 @@ class MM_system_helper:
         # self._v = []
 
     def save_frame_(self,):
+        """Append current coordinates, reduced energy, T, box, and COM."""
         self._xyz.append( self._current_r_ )          # nm
         self._u.append( self._current_u_ )            #  kT
         self._temperature.append( self._current_T_  ) # K
@@ -750,6 +820,7 @@ class MM_system_helper:
         # self._v.append(self._current_v_)
 
     def run_simulation_(self, n_saves, stride_save_frame:int=100, verbose_info : str = ''):
+        """Advance OpenMM and save ``n_saves`` frames at the requested stride."""
         self.stride_save_frame = stride_save_frame
         for i in range(n_saves):
             t_start = time.time()
@@ -774,40 +845,48 @@ class MM_system_helper:
 
     @property
     def xyz(self,):
+        """numpy.ndarray or None: Saved coordinates in nanometres."""
         if len(self._xyz) > 0: return np.array(self._xyz)
         else:                  return None
 
     @property
     def velicities(self,):
+        """numpy.ndarray or None: Saved velocities; historical spelling retained."""
         if len(self._v) > 0: return np.array(self._v)
         else:                return None
 
     @property
     def COMs(self,):
+        """numpy.ndarray or None: Saved weighted centres of mass in nanometres."""
         if len(self._COMs) > 0: return np.array(self._COMs)
         else:                   return None      
 
     @property
     def boxes(self,):
+        """numpy.ndarray or None: Saved box matrices in nanometres."""
         if len(self._boxes) > 0: return np.array(self._boxes)
         else:                    return None      
 
     @property
     def u(self,):
+        """numpy.ndarray or None: Saved reduced energies shaped ``(frames, 1)``."""
         if len(self._u) > 0: return np.array(self._u)[:,np.newaxis]
         else:                return None
 
     @property
     def temperature(self,verbose=True):
+        """numpy.ndarray or None: Saved instantaneous temperatures in kelvin."""
         if len(self._temperature) > 0: return np.array(self._temperature)
         else:                          return None
 
     @property
     def dt(self,):
+        """float: Integration timestep in picoseconds."""
         return self.timestep_ps # ps
 
     @property
     def timescale(self,):
+        """float or None: Sampled trajectory duration in nanoseconds."""
         u = self.u
         if u is None:
             print('! timescale : simulation has not started')
@@ -820,12 +899,15 @@ class MM_system_helper:
 
     @property
     def average_temperature(self,):
+        """float: Mean saved temperature in kelvin."""
         return np.array(self.temperature).mean()
     @property
     def average_energy(self,):
+        """float: Mean saved reduced potential energy."""
         return np.array(self.u).mean()
     @property
     def average_volume(self,):
+        """float: Mean saved box volume in nm³."""
         return np.linalg.det(np.array(self.boxes)).mean()
     
     # plotting:
@@ -835,6 +917,7 @@ class MM_system_helper:
         plot_simulation_info_(self, figsize=figsize)
 
     def plot_temperature_(self, window : float=None):
+        """Plot instantaneous and cumulative-average temperatures."""
         Ts = np.array(self.temperature).flatten()
         av_Ts = np.cumsum(Ts) / np.cumsum(np.ones_like(Ts))
         Ts_mean = Ts.mean()
@@ -847,10 +930,12 @@ class MM_system_helper:
         
     @property
     def temperature_plot(self,):
+        """Print mean temperature and create the default temperature plot."""
         print('average temperature:', self.average_temperature)
         self.plot_temperature_()
 
     def plot_energy_(self, window : float=None):
+        """Plot instantaneous and cumulative-average reduced energies."""
         us = np.array(self.u).flatten()
         av_us = np.cumsum(us) / np.cumsum(np.ones_like(us))
         us_mean = us.mean()
@@ -862,10 +947,12 @@ class MM_system_helper:
 
     @property
     def energy_plot(self,):
+        """Print mean energy and create the default energy plot."""
         print('average potential energy:', self.average_energy)
         self.plot_energy_()
 
     def plot_volume_(self, window : float=None):
+        """Plot instantaneous and cumulative-average volumes in nm³."""
         Vs = np.linalg.det(np.array(self.boxes)).flatten()
         av_Vs = np.cumsum(Vs) / np.cumsum(np.ones_like(Vs))
         Vs_mean = Vs.mean()
@@ -877,17 +964,20 @@ class MM_system_helper:
 
     @property
     def volume_plot(self,):
+        """Print initial/mean volume and create the default volume plot."""
         print('initial volume:', np.linalg.det(self.b0))
         print('average volume:', self.average_volume)
         self.plot_volume_()
 
     @property
     def box_lengths_plot(self,):
+        """Plot diagonal box lengths and the minimum cutoff-compatible length."""
         # x,y,z components of box vectors a,b,c respectively
         [plt.plot(self.boxes[:,i,i]) for i in range(3)]
         plt.plot([0,self.n_frames_saved],[self.PME_cutoff*2]*2, color='black', linestyle='--')
         
     def index_frame_average_box_othorhombic_case_(self,):
+        """Return frames closest to mean orthorhombic shape and volume."""
         # can use if barostat chosen was 0 or 1. [TODO: implement general case (include angles) as for form II]
         a,b,c = [self.boxes[:,i,i] for i in range(3)]
         self._sq_distance_from_average_shape = (a-a.mean())**2 + (b-b.mean())**2 + (c-c.mean())**2
@@ -896,6 +986,7 @@ class MM_system_helper:
     
     @property
     def box_shapes(self,):
+        """Return initial and, when available, sampled cell lengths/angles."""
         if self.boxes is None:
             return cell_lengths_and_angles_(self.b0)
         else: 
@@ -903,6 +994,7 @@ class MM_system_helper:
 
     @property
     def partial_charges_mol(self,):
+        """numpy.ndarray: First molecule's partial charges in elementary charge."""
         if self.FF_name == 'TIP4P': n_atoms_mol = 4
         else:                       n_atoms_mol = int(self.n_atoms_mol)
 
@@ -939,6 +1031,7 @@ class MM_system_helper:
         else: return output
         
     def load_structures_with_mdtraj_(self, r, b=None):
+        """Create an MDTraj trajectory from coordinates and optional boxes."""
         # r : (N,3) or (m,N,3)
         # b : None or (m,3,3)
         shape = r.shape
@@ -966,6 +1059,7 @@ class MM_system_helper:
         return tr
 
     def save_gro_(self, r, name:str, b=None):
+        """Save coordinates and per-frame boxes in GROMACS GRO format."""
         # saves box for each frams.
         if name[-4:] == '.gro': pass
         else: name += '.gro'
@@ -973,6 +1067,7 @@ class MM_system_helper:
         print('saved:',name)
 
     def save_pdb_(self, r, name:str, b=None):
+        """Save coordinates as a PDB trajectory using MDTraj."""
         # save_pdb does not save box for each frams ?
         if name[-4:] == '.pdb': pass
         else: name += '.pdb'
@@ -980,6 +1075,7 @@ class MM_system_helper:
         print('saved:',name)
 
     def save_xtc_(self, r, name:str, b=None, save_reference=True):
+        """Save an XTC trajectory and optionally a first-frame reference PDB."""
         # saves box for each frams.
         if name[-4:] == '.xtc': pass
         else: name += '.xtc'
@@ -1117,6 +1213,7 @@ def cell_lengths_and_angles_(b, radians=False):
     norm_ = lambda x : np.linalg.norm(x, axis=-1, keepdims=True)
     unit_ = lambda x : x / norm_(x)
     def get_angle_(v1,v2, radians=True):
+        """Return clipped vector angles in radians or degrees."""
         angle = np.arccos(np.clip(np.sum(unit_(v1)*unit_(v2), axis=-1), -1.0, 1.0))
         if radians: return angle
         else: return angle*180/np.pi
@@ -1138,6 +1235,7 @@ def cell_lengths_and_angles_(b, radians=False):
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 def save_gro_as_pdb_(GRO:str, PDB:str=None):
+    """Convert a GRO file to PDB using MDTraj, with MDAnalysis fallback."""
     path_and_file = GRO[:-4]
     if PDB is None: PDB = path_and_file+'.pdb'
     else: pass
@@ -1153,9 +1251,11 @@ def save_gro_as_pdb_(GRO:str, PDB:str=None):
     print('saved',PDB,'using',used)
 
 def PDB_to_xyz_(PDB:str):
+    """Return the first PDB frame as ``(N, 3)`` coordinates in nanometres."""
     return mdtraj.load(PDB,PDB).xyz[0]
 
 def PDB_to_box_(PDB:str):
+    """Return the first PDB frame's ``(3, 3)`` box in nanometres."""
     return mdtraj.load(PDB,PDB).unitcell_vectors[0]
 
 def box_to_lengths_angles_(b):
@@ -1173,6 +1273,12 @@ def get_index_average_box_automatic_(boxes,
                                      rules =  ['av']*3 + ['max_prob']*3, # 'max_prob' for angles incase that type of disconnection present
                                      verbose = False,
                                     ):
+    """Select the sampled box closest to marginal representative values.
+
+    Each length/angle marginal is summarised by its mean, mode, or minimum as
+    specified by ``rules``. Standardised six-dimensional distance identifies the
+    nearest actual frame; ``verbose`` also plots the marginal histograms.
+    """
 
     set_of_rules = {'max_prob': lambda h, ax : ax[np.argmax(h)],            # not the best incase n_bins not best
                     'av'   : lambda h, ax : (ax*h).sum(),                   # the most correct
@@ -1192,6 +1298,7 @@ def get_index_average_box_automatic_(boxes,
     x = box_to_lengths_angles_(boxes)
     
     def peak_finder_(x, i):
+        """Summarise marginal ``i`` using its configured histogram rule."""
         h,ax = np.histogram(x, bins=n_bins, density=True)
         h /= h.sum()
         ax = ax[1:]-0.5*(ax[1]-ax[0])
@@ -1208,6 +1315,7 @@ def get_index_average_box_automatic_(boxes,
     index = np.argmin(err)
     
     def plot_box_lengths_angles_histograms_(boxes, b0 = None, b1=None):
+        """Plot sampled cell marginals with input and selected boxes."""
         cell_NPT = cell_lengths_and_angles_(boxes)
         if b0 is None: b0 = np.array(boxes[0])
         else: b0 = np.array(b0).reshape([3,3])
@@ -1330,6 +1438,7 @@ def supercell_from_unitcell_(PDB_unitcell : str, # .pdb
         instance of mdtraj of the larger supercell for further modifications
     """
     def expand_mdtraj_(input_instance, n_copies):
+        """Stack ``n_copies`` identical MDTraj topologies."""
         output_instance = input_instance
         for _ in range(n_copies-1):
             output_instance = mdtraj.Trajectory.stack(output_instance,input_instance)
@@ -1499,6 +1608,7 @@ def reorder_atoms_unitcell_(PDB:str, PDB_ref:str, n_atoms_mol:int):
 
     '''
     def split_(PDB, n_atoms_mol, ref=False):
+        """Split a structure into temporary one-molecule PDB files."""
         path_name = PDB.split('/')
         path = path_name[:-1]
         
@@ -1522,6 +1632,7 @@ def reorder_atoms_unitcell_(PDB:str, PDB_ref:str, n_atoms_mol:int):
         return path_names_out, traj
 
     def expand_mdtraj_(input_instance, n_copies):
+        """Stack a molecular MDTraj object to rebuild the full cell."""
         output_instance = input_instance
         for _ in range(n_copies-1):
             output_instance = mdtraj.Trajectory.stack(output_instance,input_instance)
@@ -1599,6 +1710,7 @@ def change_box_(PDB, n_atoms_mol, make_orthorhombic=False, save_output=True, tra
     def wrap_points_1box_(Ri,  # (... 3), 
                           box, # (3, 3) # rows
                          ):
+        """Wrap points into one triclinic box through fractional coordinates."""
         string = '...l,lm->...m'
         return np.einsum(string, np.mod(np.einsum(string, Ri, np.linalg.inv(box)), 1.0), box)
     
@@ -1651,12 +1763,14 @@ def remove_clashes_(PDB_unitcell : str, tol = 0.001):
     def wrap_points_1box_(Ri,  # (... 3), 
                           box, # (3, 3) # rows
                          ):
+        """Wrap points into one box through fractional coordinates."""
         string = '...l,lm->...m'
         return np.einsum(string, np.mod(np.einsum(string, Ri, np.linalg.inv(box)), 1.0), box)
     
     def minimum_image_othorhombic_(r, # (m,N,3)
                                    b, # (m,3,3)
                                   ):
+        """Return orthorhombic minimum-image distances, masks, and vectors."""
     
         s = np.einsum('oik,okl->oil', r, np.linalg.inv(b))
     
@@ -1724,6 +1838,7 @@ def remove_clashes_(PDB_unitcell : str, tol = 0.001):
     return traj
 
 def rename_atoms_(PDB, n_atoms_mol):
+    """Compatibility placeholder for atom renaming; currently performs no edit."""
     print('no rename')
     '''
     elements = dict(zip(['C','O','N','H','F','S'], [0]*6))
@@ -1799,6 +1914,7 @@ def extract_subcell_from_supercell_(n_mol_in:int, n_atoms_mol:int,
 
     '''
     def check_shape_(x):
+        """Normalise a matrix or matrix batch to three axes."""
         x = np.array(x)
         shape = len(x.shape)
         assert shape in [2,3]
@@ -1806,6 +1922,7 @@ def extract_subcell_from_supercell_(n_mol_in:int, n_atoms_mol:int,
         else: x = x[np.newaxis,...]
         return x
     def dot_(Ri, mat):
+        """Apply one matrix per frame to batched atom vectors."""
         string = 'oai,oij->oaj'
         return np.einsum(string, Ri, mat)
 

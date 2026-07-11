@@ -62,6 +62,11 @@ def FE_lambda0_(n_bodies, N, V, T, k, mu):
     return f_0, contributions # units : kT
 
 class LAMBDA_0:
+    """Analytical Einstein-crystal reference state at coupling ``lambda=0``.
+
+    The object stores the reference centroid, harmonic spring constant, COM
+    convention, and analytical dimensionless free-energy contributions.
+    """
     def __init__(self,
                  n_bodies : int,
                  mu : np.ndarray,         # (N,)
@@ -109,6 +114,14 @@ class LAMBDA_0:
         return 0.5*self.k*((r[:,self.inds_valid,:] - self.R0)**2).sum(-1).sum(-1, keepdims=True) * self.beta # (m,1)
 
 class LAMBDA_SYSTEM:
+    """One simulated state along the Einstein-crystal coupling path.
+
+    The reduced potential is a linear coupling between the physical crystal and
+    a harmonic Einstein crystal: the physical force field is scaled by
+    ``lambda`` and the harmonic restraint by ``1 - lambda``. Translational
+    freedom is removed either globally or by fixing one atom.
+    """
+
     def __init__(self,
 
                  args_initialise_object,
@@ -122,6 +135,33 @@ class LAMBDA_SYSTEM:
                  stride_save_frame = 50,
                  remove_warmup = 200,
                  ):
+        """Construct and initialise one lambda-state simulation.
+
+        Parameters
+        ----------
+        args_initialise_object, args_initialise_system, args_initialise_simulation : dict
+            Arguments forwarded to the three :class:`SingleComponent` setup
+            stages. The simulation dictionary is modified to disable its first
+            minimisation.
+        COM_removal_by_fixing_one_atom_index_of_this_atom : int, optional
+            Physical atom index assigned zero mass. If omitted, OpenMM COM
+            removal and mass-weighted recentering are used. A non-integer,
+            non-``None`` value selects the custom constrained-COM integrator.
+        lam : float, optional
+            Coupling coordinate in the closed interval ``[0, 1]``.
+        k_EC : float, optional
+            Einstein-crystal spring constant in kJ mol⁻¹ nm⁻².
+        stride_save_frame : int, optional
+            Integration steps between saved trajectory frames.
+        remove_warmup : int, optional
+            Number of initial saved frames discarded as equilibration.
+
+        Notes
+        -----
+        The centroid ``r0`` is the recentered initial structure. At ``lambda=0``
+        an accompanying :class:`LAMBDA_0` provides the analytical reference free
+        energy. Reduced-energy evaluations are exposed through ``u_``.
+        """
 
         args_initialise_simulation['minimise'] = False
             
@@ -224,6 +264,7 @@ class LAMBDA_SYSTEM:
 
     @property
     def plot_check_harmonic(self):
+            """Plot the one-dimensional harmonic Boltzmann factor over the cutoff."""
             k = float(self.k_EC)
             PME_cutoff = float(self.args_initialise_system['PME_cutoff'])
             gaus_ = lambda x : np.exp(-0.5*k*(x**2))
@@ -233,6 +274,7 @@ class LAMBDA_SYSTEM:
             plt.plot([PME_cutoff]*2,[0,1], color='black')
 
     def reinitialise_simulation_(self,):
+        """Recreate the OpenMM context and reset positions to the EC centroid."""
         self.sc.initialise_simulation_(**self.args_initialise_simulation)
         self.sc.simulation.context.setPositions(self.r0)
 
@@ -244,9 +286,24 @@ class LAMBDA_SYSTEM:
         return _time
 
     def set_arrays_blank_(self,):
+        """Clear the underlying trajectory buffers."""
         self.sc.set_arrays_blank_()
 
     def run_simulation_(self, n_saves, verbose_info : str = ''):
+        """Sample this lambda state, removing warm-up data once.
+
+        Parameters
+        ----------
+        n_saves : int
+            Number of production frames to append after any equilibration.
+        verbose_info : str, optional
+            Additional text in the live simulation status.
+
+        Notes
+        -----
+        Non-fixed systems are recentered before sampling. On the first call,
+        ``remove_warmup`` frames are generated and discarded before production.
+        """
         
         if self.fixed_atom: pass 
         else: self.sc._recenter_simulation_()
@@ -275,19 +332,30 @@ class LAMBDA_SYSTEM:
 
     @property
     def xyz(self,):
+        """numpy.ndarray: Saved physical coordinates in nanometres."""
         return self.sc.xyz
 
     @property
     def u(self,):
+        """numpy.ndarray: Saved reduced potential energies, shaped ``(frames, 1)``."""
         return self.sc.u
 
     @property
     def temperature(self,):
+        """numpy.ndarray: Saved instantaneous temperatures shaped ``(frames, 1)``."""
         return self.sc.temperature[:,np.newaxis]
 
 ##
 
 class ECM_basic:
+    """Manage an Einstein-crystal coupling path and its BAR/MBAR analysis.
+
+    The workflow owns simulations and datasets at multiple lambda values,
+    caches every cross-potential evaluation, adaptively adds or samples states,
+    and combines the analytical lambda-zero free energy with numerical
+    free-energy differences to obtain the physical crystal free energy.
+    """
+
     def __init__(self,
                  name,
                  working_dir_folder_name : str, # 
@@ -297,6 +365,28 @@ class ECM_basic:
                  overwrite = False,
                  path_lambda_1_dataset = None
                 ):
+        """Initialise a coupling-path workflow and optionally restore saved data.
+
+        Parameters
+        ----------
+        name : str
+            Prefix identifying this polymorph or molecular system.
+        working_dir_folder_name : str
+            Directory containing per-lambda trajectory arrays and analysis logs.
+        ARGS_oss : list of dict
+            ``[object_args, system_args, simulation_args]`` used to construct
+            every :class:`LAMBDA_SYSTEM`.
+        k_EC : float, optional
+            Einstein-crystal spring constant in kJ mol⁻¹ nm⁻².
+        COM_removal_by_fixing_one_atom_index_of_this_atom : int, optional
+            Atom fixed to remove translation; otherwise global mass-weighted COM
+            removal is used.
+        overwrite : bool, optional
+            Skip automatic import of existing datasets and analysis results.
+        path_lambda_1_dataset : str, optional
+            External physical-state MD dataset used instead of new lambda-one
+            sampling.
+        """
         self.generic_name = name+'_'
         self.working_dir_folder_name = working_dir_folder_name
         self.ARGS_oss = ARGS_oss
@@ -352,42 +442,55 @@ class ECM_basic:
     ##
 
     def save_lambda_evaluations_(self,):
+        """Persist cached cross-potential evaluations for all lambda pairs."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         save_pickle_(self.lambda_evaluations, self.working_dir_folder_name+'/'+x+'_lambda_evaluations')
  
     def import_lambda_evaluations_(self,):
+        """Restore cached cross-potential evaluations from the working directory."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         self.lambda_evaluations = load_pickle_(self.working_dir_folder_name+'/'+x+'_lambda_evaluations')
         
     def save_BAR_results_(self,):
+        """Persist the chronological log of cumulative two-state BAR results."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         save_pickle_(self.log_BAR_results, self.working_dir_folder_name+'/'+x+'_log_of_BAR_results')
 
     def import_BAR_results_(self,):
+        """Restore the saved two-state BAR result log."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         self.log_BAR_results = load_pickle_(self.working_dir_folder_name+'/'+x+'_log_of_BAR_results')
 
     def save_mBAR_results_(self,):
+        """Persist the latest multistate BAR result log."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         save_pickle_(self.log_mBAR_results, self.working_dir_folder_name+'/'+x+'_log_of_mBAR_results')
 
     def import_mBAR_results_(self,):
+        """Restore the saved multistate BAR result log."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         self.log_mBAR_results = load_pickle_(self.working_dir_folder_name+'/'+x+'_log_of_mBAR_results')
          
     def save_usupervised_sample_sizes_(self,):
+        """Persist adaptive per-lambda sample-size targets.
+
+        The filename retains the historical ``usupervised`` spelling.
+        """
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         save_pickle_(self.lambda_sample_sizes, self.working_dir_folder_name+'/'+x+'_usupervised_sample_sizes')
 
     def import_usupervised_sample_sizes_(self,):
+        """Restore adaptive per-lambda sample-size targets."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         self.lambda_sample_sizes = load_pickle_(self.working_dir_folder_name+'/'+x+'_usupervised_sample_sizes')
          
     def save_inds_rand_lambda1_(self, m):
+        """Save representative physical-state indices for subset size ``m``."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         save_pickle_(self.inds_rand_lambda1, self.working_dir_folder_name+'/'+x+'_inds_rand_lambda1_'+str(m))
 
     def import_inds_rand_lambda1_(self, m):
+        """Load representative physical-state indices for subset size ``m``."""
         x = self.generic_name[:3]+'_'+self.generic_name[3:]
         self.inds_rand_lambda1 = load_pickle_(self.working_dir_folder_name+'/'+x+'_inds_rand_lambda1_'+str(m))
          
@@ -395,16 +498,34 @@ class ECM_basic:
 
     @property
     def lambdas(self,):
+        """list of float: Active coupling values in ascending order."""
         return np.sort(self._lambdas).tolist()
     
     @property
     def n_lambdas(self,):
+        """int: Number of active coupling states."""
         return len(self._lambdas)
     
     def lambda_exists_(self, lam):
+        """Return whether coupling value ``lam`` is active."""
         return lam in self._lambdas
 
     def add_lambda_(self, lam, verbose=True):
+        """Construct and register a coupling-state simulation.
+
+        Parameters
+        ----------
+        lam : float
+            Coupling value in ``[0, 1]``.
+        verbose : bool, optional
+            Explain when the state already exists.
+
+        Notes
+        -----
+        New coordinate, energy, temperature, and plotting entries are initialised
+        alongside the :class:`LAMBDA_SYSTEM`. The save stride corresponds to
+        approximately 0.1 ps under the configured integration timestep.
+        """
         lam = float(lam)
         if lam not in self._lambdas:
             self.lambda_systems[lam] = LAMBDA_SYSTEM(
@@ -431,6 +552,12 @@ class ECM_basic:
             else: pass
 
     def remove_lambda_(self, lam, verbose=True):
+        """Remove a state and invalidate cached evaluations involving it.
+
+        The in-memory trajectory metadata and colour are deleted. If a saved
+        evaluation cache exists, entries whose key contains ``lam`` are removed
+        from that file and the cache is reloaded.
+        """
         lam = float(lam)
         if lam in self._lambdas:
 
@@ -456,6 +583,19 @@ class ECM_basic:
             else: pass
 
     def is_converged_else_remove_all_unconverged_datasets_(self, remove=True):
+        """Check sampled-energy convergence for every lambda state.
+
+        Parameters
+        ----------
+        remove : bool, optional
+            Remove states failing :class:`TestConverged_1D`. An externally
+            supplied physical-state dataset is never allowed to be removed.
+
+        Returns
+        -------
+        bool
+            True only when all active self-potential energy series pass.
+        """
         converged = []
         for lam in self.lambdas:
             uii = self.lambda_evaluations[(lam, lam)]
@@ -480,6 +620,15 @@ class ECM_basic:
     ##
     
     def run_(self, lam : float, n_saves : int):
+        """Sample, save, and reload one lambda-state dataset.
+
+        Parameters
+        ----------
+        lam : float
+            State to run; it is constructed if absent.
+        n_saves : int
+            Number of production frames requested from its simulation.
+        """
         lam = float(lam)
         if lam not in self._lambdas: self.add_lambda_(lam)
         else: pass
@@ -493,6 +642,17 @@ class ECM_basic:
                                  m,
                                  average_temperature_error_allowed=2.0, # K
                                  ):
+        """Test whether the trailing cumulative temperatures remain near target.
+
+        Parameters
+        ----------
+        lam : float
+            Coupling state to inspect.
+        m : int
+            Number of final cumulative-average values required.
+        average_temperature_error_allowed : float, optional
+            Maximum absolute deviation from target temperature in kelvin.
+        """
         if self.lambda_exists_(lam):
             try:
                 averages = cumulative_average_(self.simulation_info_T[lam])
@@ -504,6 +664,11 @@ class ECM_basic:
         else: return False
 
     def run_to_get_m_coverged_(self, lam, m=5000, average_temperature_error_allowed=2.0):
+        """Sample in blocks until ``m`` temperature-converged frames are available.
+
+        Sampling stops after at most ``m`` newly requested frames. The outcome is
+        stored in ``lambda_dataset_converged[lam]``.
+        """
         self.add_lambda_(lam, verbose=False)
         increment_size = min([500,m])
         a = 0
@@ -519,6 +684,11 @@ class ECM_basic:
         self.lambda_dataset_converged[lam] = converged
 
     def lambda_sample_sizes_(self, lam=None, m=None):
+        """Get or set adaptive sample-size targets.
+
+        With ``m=None``, return the target for ``lam``. Otherwise set one state,
+        or all active states when ``lam=None``, to ``m``.
+        """
         if m is None: return self.lambda_sample_sizes[lam]
         else:
             if lam is None:
@@ -528,6 +698,12 @@ class ECM_basic:
                 self.lambda_sample_sizes[lam] = m
 
     def which_lambda_to_add_next_(self, max_dataset_size_per_lambda):
+        """Prioritise a new midpoint and existing states using BAR uncertainty.
+
+        Returns the midpoint of the adjacent pair with largest finite-adjusted
+        error, that pair itself, and existing lambdas ordered by accumulated
+        neighbouring error while below the sample-size ceiling.
+        """
 
         if len(self.lambda_pairs_SE_BAR) > 0 or len(self.lambda_pairs_SE_mBAR) > 0:
             if len(self.lambda_pairs_SE_BAR) > 0:
@@ -576,6 +752,30 @@ class ECM_basic:
                         re_evaluate = False,
                         rerun_questionable_data = False,
                         ):
+        """Adaptively sample lambda states until the BAR uncertainty target is met.
+
+        Parameters
+        ----------
+        batch_size_increments : int, optional
+            Frames added when creating or extending a state.
+        max_dataset_size_per_lambda : int, optional
+            Per-state sampling ceiling.
+        max_n_lambdas : int, optional
+            Maximum number of coupling states, including endpoints.
+        SE_tol_per_molecule : float, optional
+            Target standard error per molecule in reduced ``kT`` units.
+        re_evaluate : bool, optional
+            Clear cached cross-potential evaluations before BAR calculations.
+        rerun_questionable_data : bool, optional
+            Remove energy-series convergence failures and attempt resampling, up
+            to three adaptive passes.
+
+        Notes
+        -----
+        Endpoint datasets are filled first. New midpoint states are introduced
+        at the least-overlapping interval, after which sampling is added to
+        existing states in uncertainty-priority order.
+        """
         ################ BAR
 
         FE_method_ = self.rerun_cumulative_BAR_result_ #  arg: re_evaluate
@@ -600,6 +800,7 @@ class ECM_basic:
         SE_tol = self.lambda_systems[0.0].sc.n_mol*SE_tol_per_molecule
 
         def main_():
+            """Run one adaptive state-addition and sample-enrichment pass."""
             
             FE_method_(re_evaluate=re_evaluate)
 
@@ -650,6 +851,18 @@ class ECM_basic:
             else: print('good, add data seems converged')
 
     def save_simulations_(self, which_lambdas : list = None):
+        """Append newly sampled frames to per-lambda files.
+
+        Parameters
+        ----------
+        which_lambdas : list of float, optional
+            States to save; defaults to every active lambda.
+
+        Notes
+        -----
+        Coordinates, reduced energies, and temperatures are stored separately.
+        In-memory simulation buffers are cleared after a successful append.
+        """
         if which_lambdas is None: which_lambdas = self.lambdas
         else: pass
         for lam in which_lambdas:
@@ -676,6 +889,7 @@ class ECM_basic:
 
     @property
     def which_lambdas_exist_in_folder(self,):
+        """list of float or None: Lambda values inferred from saved filenames."""
         lambdas_exist_in_folder = []
         folder = self.working_dir_folder_name
         # try find datasets with generic_name part in file name in the working directory.
@@ -691,6 +905,22 @@ class ECM_basic:
         else: return None
 
     def load_dataset_(self, lam : float, verbose=False, custom_generic_name=None):
+        """Load coordinate, energy, and temperature arrays for one state.
+
+        Parameters
+        ----------
+        lam : float
+            Coupling value; its simulation object is added if absent.
+        verbose : bool, optional
+            Report when matching files cannot be found.
+        custom_generic_name : str, optional
+            Alternative filename prefix for importing compatible data.
+
+        Returns
+        -------
+        tuple
+            ``(xyz, u, T)`` arrays, or three ``None`` values when absent.
+        """
         lam = float(lam)
         if lam not in self._lambdas:
             self.add_lambda_(lam)
@@ -721,6 +951,15 @@ class ECM_basic:
             return [None]*3
 
     def load_lambda1_dataset_seperately_(self, m=None):
+        """Import the physical endpoint from a standard saved MD dataset.
+
+        Parameters
+        ----------
+        m : int, optional
+            Select a representative subset of this size. A cached permutation is
+            reused, or a new split is searched for whose subset and complement
+            have mean energies close to the full trajectory.
+        """
         dataset = load_pickle_(self.path_lambda_1_dataset)
         r = dataset['MD dataset']['xyz']
         u = dataset['MD dataset']['u']
@@ -732,6 +971,7 @@ class ECM_basic:
                 self.import_inds_rand_lambda1_(m)
             except:
                 def find_split_indices_(u, split_where, tol=0.00001):
+                    """Find a random permutation with representative energy means."""
                     u = np.array(u)
                     n = u.shape[0]
                     target = u.mean()
@@ -768,6 +1008,17 @@ class ECM_basic:
                      verbose=True,
                      custom_generic_name = None,
                      ):
+        """Load multiple per-lambda datasets into the workflow.
+
+        Parameters
+        ----------
+        which_lambdas : list of float or None
+            Coupling states to import; ``None`` uses currently active states.
+        verbose : bool, optional
+            Report how many datasets were located.
+        custom_generic_name : str, optional
+            Alternative filename prefix passed to :meth:`load_dataset_`.
+        """
         if which_lambdas is None: which_lambdas = self.lambdas
         else: pass
         n_found = 0
@@ -786,6 +1037,7 @@ class ECM_basic:
         else: pass
 
     def stat_amount_of_data(self, verbose=True):
+        """Record and optionally print the number of samples at each lambda."""
         self.lambda_numbers_of_samples = {}
         for lam in self.lambdas:
             self.lambda_numbers_of_samples[lam] = self.lambda_coordinates[lam].shape[0]
@@ -795,24 +1047,47 @@ class ECM_basic:
         else: pass
 
     def global_COM_remover_(self, r):
+        """Remove the mass-weighted global centre of mass from coordinates ``r``."""
         mu = np.array(self.lambda_systems[self._lambdas[0]].mu)
         return r - (r*mu).sum(-2, keepdims=True)
 
     def atom_based_COM_remover_(self, r):
+        """Translate coordinates so the configured fixed atom lies at the origin."""
         # one atom with mass of 0
         return r - r[...,self.ind_atom_fixed:self.ind_atom_fixed+1,:]
 
     def u_(self, r, lam):
+        """Evaluate a lambda potential on coordinates after translation removal.
+
+        Returns ``None`` if the requested lambda state has not been constructed.
+        """
         if self.lambda_exists_(lam):
             return self.lambda_systems[lam].u_(self.COM_remover_(r))
         else: return None
 
     def u_on_r_faster_helper_(self, lam_u, lam_r,  _from):
+        """Evaluate potential ``lam_u`` on unsolved samples from state ``lam_r``."""
         return self.u_(self.lambda_coordinates[lam_r][_from:],
                        lam_u,
                        )
 
     def u_on_r_faster_(self, lam_u, lam_r, m=None):
+        """Return cached cross-potential energies, evaluating only missing frames.
+
+        Parameters
+        ----------
+        lam_u : float
+            Lambda of the evaluated reduced potential.
+        lam_r : float
+            Lambda whose coordinate dataset supplies configurations.
+        m : int, optional
+            Return only the first ``m`` evaluations after updating the full cache.
+
+        Returns
+        -------
+        numpy.ndarray
+            Reduced energies shaped ``(frames, 1)``.
+        """
         # logging all u_{i}(r^{[j]}) evaluations so dont need to evaluate same structures twice
         N_AB = self.lambda_coordinates[lam_r].shape[0]
 
@@ -839,6 +1114,19 @@ class ECM_basic:
                        m=None,
                        figsize=(10,1.5),
                        separate=False):
+        """Plot cross-evaluated energy histograms for two lambda states.
+
+        Parameters
+        ----------
+        lam_i, lam_j : float
+            Coupling states whose mutual phase-space overlap is shown.
+        m : int, optional
+            Maximum samples used from each state.
+        figsize : tuple, optional
+            Matplotlib figure size.
+        separate : bool, optional
+            Place the two target-potential comparisons in separate figures.
+        """
         
         # potential i, structures sampled from potentials i and j respectively
         uii = self.u_on_r_faster_(lam_r=lam_i, lam_u=lam_i, m=m)
@@ -863,6 +1151,23 @@ class ECM_basic:
                                       m_i: int = None, m_j: int = None,
                                       verbose = True,
                                       ):
+        """Estimate a neighbouring-state free-energy difference with MBAR/BAR.
+
+        Parameters
+        ----------
+        lam_i, lam_j : float
+            Two sampled coupling states; results are stored under the lower value.
+        m_i, m_j : int, optional
+            Sample limits for the corresponding input states.
+        verbose : bool, optional
+            Print the dimensionless estimate and standard error.
+
+        Returns
+        -------
+        Delta_f, dDelta_f : float
+            Dimensionless free-energy difference from lower to higher lambda and
+            its PyMBAR standard error.
+        """
         # BAR 
         lam_lower = min([lam_i, lam_j])
         lam_higher = max([lam_i, lam_j])
@@ -922,6 +1227,20 @@ class ECM_basic:
         return Delta_f, dDelta_f
     
     def estimate_FE_using_mBAR_(self, re_evaluate=False):
+        """Estimate the endpoint free-energy difference using all states jointly.
+
+        Parameters
+        ----------
+        re_evaluate : bool, optional
+            Discard cached cross-potential energies before constructing the full
+            MBAR matrix.
+
+        Notes
+        -----
+        Stores pairwise free-energy and uncertainty matrices, the lambda-zero to
+        lambda-one result, neighbouring-pair errors, and a persistent analysis
+        log. The printed absolute value includes the analytical EC reference.
+        """
         assert self.lambda_exists_(0.0)
         assert self.lambda_exists_(1.0)
 
@@ -970,6 +1289,21 @@ class ECM_basic:
                      m : int=None,
                      verbose = True,
                      ):
+        """Estimate absolute crystal free energy by summing adjacent BAR windows.
+
+        Parameters
+        ----------
+        m : int, optional
+            Common sample limit per lambda state.
+        verbose : bool, optional
+            Print window and cumulative results.
+
+        Notes
+        -----
+        The analytical lambda-zero free energy is added to all adjacent
+        ``Delta_f`` values. Historical behaviour sums window standard errors
+        linearly rather than in quadrature.
+        """
         assert self.lambda_exists_(0.0)
         assert self.lambda_exists_(1.0)
 
@@ -1006,6 +1340,20 @@ class ECM_basic:
         self.save_lambda_evaluations_()
 
     def gather_BAR_info_(self, m_lambdas=None):
+        """Pack the current cumulative BAR result and sampling diagnostics.
+
+        Parameters
+        ----------
+        m_lambdas : dict, optional
+            Per-state prefix lengths used for cumulative-window analysis.
+
+        Returns
+        -------
+        list
+            Absolute FE and SE, numerical and analytical contributions, window
+            estimates/errors, a ``(n_lambda, 3)`` array of lambda/mean-energy/
+            mean-temperature, and per-state sample counts.
+        """
         lambdas = self.lambdas
         deltaFEs = np.zeros([self.n_lambdas])
         SEs = np.zeros([self.n_lambdas])
@@ -1043,6 +1391,19 @@ class ECM_basic:
                                      reruning_logs = False,
                                      save_evaluations = True,
                                      ):
+        """Recompute BAR convergence as progressively larger data prefixes.
+
+        Parameters
+        ----------
+        n_windows : int, optional
+            Number of equal-count cumulative checkpoints per state.
+        re_evaluate : bool, optional
+            Clear cached energy evaluations first.
+        reruning_logs : bool, optional
+            Clear previous BAR history before appending the checkpoints.
+        save_evaluations : bool, optional
+            Persist the updated cross-potential cache.
+        """
         
         assert self.lambda_exists_(0.0)
         assert self.lambda_exists_(1.0)
@@ -1104,6 +1465,12 @@ P3 settings:
 """
 
 def succinic_acid_ARGS_oss(form, cell, key='_'):
+    """Return standard 300 K NVT ECM setup dictionaries for succinic acid.
+
+    ``form`` and ``cell`` select the equilibrated PDB filename; ``key`` controls
+    the separator before ``cell``. The system contains 14 atoms per molecule and
+    uses GAFF with a 0.36 nm PME cutoff and 2 fs timestep.
+    """
     args_initialise_object = {
         'PDB' : DIR_main+'/MM/GAFF_sc/succinic_acid/succinic_acid_'+form+'_equilibrated'+key+'cell_'+cell+'.pdb',
         'n_atoms_mol': 14,
@@ -1132,6 +1499,11 @@ def succinic_acid_ARGS_oss(form, cell, key='_'):
     return ARGS_oss
 
 def veliparib_ARGS_oss(form, cell, key='_'):
+    """Return standard 300 K NVT ECM setup dictionaries for veliparib.
+
+    The generated configuration uses 34 atoms per molecule, GAFF, a 0.36 nm PME
+    cutoff, and a 0.5 fs integration timestep.
+    """
     args_initialise_object = {
         'PDB' : DIR_main+'/MM/GAFF_sc/veliparib/veliparib_'+form+'_equilibrated'+key+'cell_'+cell+'.pdb',
         'n_atoms_mol': 34,
@@ -1160,6 +1532,11 @@ def veliparib_ARGS_oss(form, cell, key='_'):
     return ARGS_oss
 
 def mivebresib_ARGS_oss(form, cell, key='_'):
+    """Return standard 300 K NVT ECM setup dictionaries for mivebresib.
+
+    The generated configuration uses 51 atoms per molecule, GAFF, a 0.36 nm PME
+    cutoff, and a 0.5 fs integration timestep.
+    """
     args_initialise_object = {
         'PDB' : DIR_main+'/MM/GAFF_sc/mivebresib/mivebresib_'+form+'_equilibrated'+key+'cell_'+cell+'.pdb',
         'n_atoms_mol': 51,

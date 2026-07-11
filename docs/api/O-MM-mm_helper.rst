@@ -61,49 +61,65 @@ Classes and functions
 
    def get_force_by_name_(system, name: str)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return the OpenMM force whose concrete class name equals ``name``.
 
 
 ``update_HarmonicBondForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L69>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L70>`__
 
 .. code-block:: python
 
    def update_HarmonicBondForce_(_force, _lam, deepcopy=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Scale every harmonic bond force constant by ``_lam``.
 
 
 ``update_HarmonicAngleForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L80>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L82>`__
 
 .. code-block:: python
 
    def update_HarmonicAngleForce_(_force, _lam, deepcopy=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Scale every harmonic angle force constant by ``_lam``.
 
 
 ``update_PeriodicTorsionForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L91>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L94>`__
 
 .. code-block:: python
 
    def update_PeriodicTorsionForce_(_force, _lam, deepcopy=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Scale every periodic-torsion energy coefficient by ``_lam``.
 
 
 ``update_RBTorsionForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L103>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L107>`__
 
 .. code-block:: python
 
@@ -119,31 +135,46 @@ Classes and functions
 ``update_NonbondedForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L123>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L127>`__
 
 .. code-block:: python
 
    def update_NonbondedForce_(_force, _lam, deepcopy=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Scale Lennard-Jones and electrostatic energies by ``_lam``.
+
+   Particle epsilon values scale linearly and charges by ``sqrt(_lam)``;
+   exception epsilon and charge-product values scale linearly. The input is
+   copied by default and mutated only when ``deepcopy=False``.
 
 
 ``update_CustomNonbondedForce_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L152>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L162>`__
 
 .. code-block:: python
 
    def update_CustomNonbondedForce_(_force, _lam, deepcopy=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Scale a supported custom nonbonded force by ``_lam``.
+
+   Forces exposing the global parameter ``ecm_lambda`` are scaled through that
+   parameter; older epsilon/sigma forces are scaled per particle.
 
 
 ``put_lambda_into_system_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L175>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L190>`__
 
 .. code-block:: python
 
@@ -161,439 +192,590 @@ Classes and functions
 ``MM_system_helper`` (class)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L251>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L266>`__
 
 .. code-block:: python
 
    class MM_system_helper()
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Shared OpenMM context, evaluation, trajectory, and export utilities.
 
 
 ``MM_system_helper.__init__`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L252>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L269>`__
 
 .. code-block:: python
 
    def __init__(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Initialise drift and ensemble-state flags.
 
 
 ``MM_system_helper.inject_methods_from_another_class_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L256>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L274>`__
 
 .. code-block:: python
 
    def inject_methods_from_another_class_(self, class_to_inject_methods_from, **kwargs)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Bind methods and optional properties from another class to this instance.
 
 
 ``MM_system_helper.corrections_to_ff_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L259>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L278>`__
 
 .. code-block:: python
 
    def corrections_to_ff_(self, verbose)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Default no-op hook for force-field-specific system corrections.
 
 
 ``MM_system_helper._system_mass_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L264>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L284>`__
 
 .. code-block:: python
 
    def _system_mass_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: OpenMM particle masses in daltons.
 
 
 ``MM_system_helper.define_mu_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L267>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L288>`__
 
 .. code-block:: python
 
    def define_mu_(self, index_atom=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Define masses and normalised weights used for COM removal.
+
+   ``index_atom=None`` uses physical mass fractions. An integer produces a
+   one-hot fixed-atom reference; a non-integer index selection is repeated
+   across molecules and mass-weighted.
 
 
 ``MM_system_helper._set_b_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L286>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L313>`__
 
 .. code-block:: python
 
    def _set_b_(self, b)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Set a ``(3, 3)`` periodic box matrix in nanometres.
 
 
 ``MM_system_helper._set_r_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L290>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L318>`__
 
 .. code-block:: python
 
    def _set_r_(self, r)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Set ``(N, 3)`` Cartesian positions in nanometres.
 
 
 ``MM_system_helper._set_v_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L294>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L323>`__
 
 .. code-block:: python
 
    def _set_v_(self, v)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Set ``(N, 3)`` velocities in nanometres per picosecond.
 
 
 ``MM_system_helper.forward_atom_index_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L298>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L328>`__
 
 .. code-block:: python
 
    def forward_atom_index_(self, inds)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Map public indices to OpenMM indices; identity in the base helper.
 
 
 ``MM_system_helper.inverse_atom_index_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L301>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L332>`__
 
 .. code-block:: python
 
    def inverse_atom_index_(self, inds)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Map OpenMM indices to public indices; identity in the base helper.
 
 
 ``MM_system_helper._current_r_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L305>`__
-
-.. code-block:: python
-
-   def _current_r_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._current_COM_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L311>`__
-
-.. code-block:: python
-
-   def _current_COM_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._recenter_simulation_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L315>`__
-
-.. code-block:: python
-
-   def _recenter_simulation_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._current_v_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L319>`__
-
-.. code-block:: python
-
-   def _current_v_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._current_p_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L325>`__
-
-.. code-block:: python
-
-   def _current_p_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._current_K_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L331>`__
-
-.. code-block:: python
-
-   def _current_K_(self)
-
-.. warning:: Docstring pending.
-
-
-``MM_system_helper._current_T_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L337>`__
 
 .. code-block:: python
 
-   def _current_T_(self)
+   def _current_r_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: Current positions in nanometres.
 
 
-``MM_system_helper._current_U_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``MM_system_helper._current_COM_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L344>`__
 
 .. code-block:: python
 
-   def _current_U_(self)
+   def _current_COM_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
 
+.. code-block:: text
 
-``MM_system_helper._current_u_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L350>`__
-
-.. code-block:: python
-
-   def _current_u_(self)
-
-.. warning:: Docstring pending.
+   numpy.ndarray: Current weighted centre of mass shaped ``(1, 3)``.
 
 
-``MM_system_helper._current_F_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``MM_system_helper._recenter_simulation_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L355>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L349>`__
 
 .. code-block:: python
 
-   def _current_F_(self)
+   def _recenter_simulation_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Translate the current structure so its configured COM is zero.
 
 
-``MM_system_helper._current_b_`` (method)
+``MM_system_helper._current_v_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L354>`__
+
+.. code-block:: python
+
+   def _current_v_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: Current velocities in nanometres per picosecond.
+
+
+``MM_system_helper._current_p_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L361>`__
 
 .. code-block:: python
 
-   def _current_b_(self)
+   def _current_p_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: Current momenta in dalton nanometres per picosecond.
 
 
-``MM_system_helper._current_V_`` (method)
+``MM_system_helper._current_K_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L367>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L368>`__
 
 .. code-block:: python
 
-   def _current_V_(self)
+   def _current_K_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Current kinetic energy in kJ/mol.
 
 
-``MM_system_helper._current_rho_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``MM_system_helper._current_T_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L373>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L375>`__
 
 .. code-block:: python
 
-   def _current_rho_(self)
+   def _current_T_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Instantaneous kinetic temperature in kelvin.
 
 
-``MM_system_helper._add_barostat_to_system_`` (method)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``MM_system_helper._current_U_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L383>`__
+
+.. code-block:: python
+
+   def _current_U_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Current potential energy in kJ/mol.
+
+
+``MM_system_helper._current_u_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 `View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L390>`__
 
 .. code-block:: python
 
+   def _current_u_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Current reduced potential energy ``beta * U``.
+
+
+``MM_system_helper._current_F_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L396>`__
+
+.. code-block:: python
+
+   def _current_F_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: Current forces in kJ mol⁻¹ nm⁻¹.
+
+
+``MM_system_helper._current_b_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L403>`__
+
+.. code-block:: python
+
+   def _current_b_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: Current row-vector box matrix in nanometres.
+
+
+``MM_system_helper._current_V_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L410>`__
+
+.. code-block:: python
+
+   def _current_V_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Current box volume in nm³.
+
+
+``MM_system_helper._current_rho_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L417>`__
+
+.. code-block:: python
+
+   def _current_rho_(self)
+
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Current mass density in g/cm³.
+
+
+``MM_system_helper._add_barostat_to_system_`` (method)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L435>`__
+
+.. code-block:: python
+
    def _add_barostat_to_system_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Add the configured isotropic, anisotropic, or flexible barostat.
 
 
 ``MM_system_helper._remove_barostat_from_system_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L413>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L459>`__
 
 .. code-block:: python
 
    def _remove_barostat_from_system_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Remove every recognised Monte Carlo barostat from the system.
 
 
 ``MM_system_helper.initialise_integrator_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L432>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L479>`__
 
 .. code-block:: python
 
    def initialise_integrator_(self, integrator_class, collision_rate=1)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Construct a supported integrator at the configured T and timestep.
 
 
 ``MM_system_helper._list_forces_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L458>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L506>`__
 
 .. code-block:: python
 
    def _list_forces_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Print all OpenMM force names in system order.
 
 
 ``MM_system_helper.turn_ON_nonbonded_SwitchingFunction`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L464>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L513>`__
 
 .. code-block:: python
 
    def turn_ON_nonbonded_SwitchingFunction(self, factor=0.95)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Enable switching for all standard/custom nonbonded forces.
 
 
 ``MM_system_helper.adjust_EwaldErrorTolerance`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L471>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L521>`__
 
 .. code-block:: python
 
    def adjust_EwaldErrorTolerance(self, tol, verbose=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Set Ewald error tolerance on every standard nonbonded force.
 
 
 ``MM_system_helper._reset_temperature_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L480>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L531>`__
 
 .. code-block:: python
 
    def _reset_temperature_(self, T: float)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Update stored and integrator temperatures in kelvin.
 
 
 ``MM_system_helper._print_potential_enrrgy_contributions_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L487>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L539>`__
 
 .. code-block:: python
 
    def _print_potential_enrrgy_contributions_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Placeholder for reporting force-group energy contributions.
 
 
 ``MM_system_helper._U_GPU_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L518>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L571>`__
 
 .. code-block:: python
 
    def _U_GPU_(self, r, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Evaluate dimensional potential energies for a coordinate batch.
+
+   Returns ``(frames, 1)`` energies in kJ/mol and restores the original
+   context positions and box before returning.
 
 
 ``MM_system_helper.u_GPU_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L540>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L598>`__
 
 .. code-block:: python
 
    def u_GPU_(self, r, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Evaluate batched reduced potential energies ``beta * U``.
 
 
 ``MM_system_helper.F_GPU_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L546>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L605>`__
 
 .. code-block:: python
 
    def F_GPU_(self, r, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Evaluate batched forces in kJ mol⁻¹ nm⁻¹, restoring context state.
 
 
 ``MM_system_helper.minimise_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L568>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L628>`__
 
 .. code-block:: python
 
    def minimise_(self, verbose=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Minimise the current OpenMM context positions at fixed box.
 
 
 ``MM_system_helper.minimise_xyz_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L575>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L636>`__
 
 .. code-block:: python
 
@@ -614,31 +796,43 @@ Classes and functions
 ``MM_system_helper.minimise_xyz_.check_shape_`` (nested helper)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L583>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L644>`__
 
 .. code-block:: python
 
    def check_shape_(x)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Normalise one frame or a trajectory to a three-dimensional array.
 
 
 ``MM_system_helper._Hessian_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L619>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L681>`__
 
 .. code-block:: python
 
    def _Hessian_(self, r, b=None, dr=0.0001, fixed_atom_index=None, temperature_reduced=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Estimate the Cartesian Hessian by central differences of forces.
+
+   ``dr`` is in nanometres. A fixed atom's three coordinates are omitted;
+   by default the returned matrix is multiplied by ``beta`` and therefore
+   has reduced units of nm⁻².
 
 
 ``MM_system_helper.harmonic_FE_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L648>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L716>`__
 
 .. code-block:: python
 
@@ -671,43 +865,55 @@ Classes and functions
 ``MM_system_helper.set_arrays_blank_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L730>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L798>`__
 
 .. code-block:: python
 
    def set_arrays_blank_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Reset trajectory buffers, frame count, and measured integration time.
 
 
 ``MM_system_helper.save_frame_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L741>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L810>`__
 
 .. code-block:: python
 
    def save_frame_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Append current coordinates, reduced energy, T, box, and COM.
 
 
 ``MM_system_helper.run_simulation_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L752>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L822>`__
 
 .. code-block:: python
 
    def run_simulation_(self, n_saves, stride_save_frame: int=100, verbose_info: str='')
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Advance OpenMM and save ``n_saves`` frames at the requested stride.
 
 
 ``MM_system_helper.run_simulation_w_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L762>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L833>`__
 
 .. code-block:: python
 
@@ -723,139 +929,183 @@ Classes and functions
 ``MM_system_helper.xyz`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L776>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L847>`__
 
 .. code-block:: python
 
    def xyz(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved coordinates in nanometres.
 
 
 ``MM_system_helper.velicities`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L781>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L853>`__
 
 .. code-block:: python
 
    def velicities(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved velocities; historical spelling retained.
 
 
 ``MM_system_helper.COMs`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L786>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L859>`__
 
 .. code-block:: python
 
    def COMs(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved weighted centres of mass in nanometres.
 
 
 ``MM_system_helper.boxes`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L791>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L865>`__
 
 .. code-block:: python
 
    def boxes(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved box matrices in nanometres.
 
 
 ``MM_system_helper.u`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L796>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L871>`__
 
 .. code-block:: python
 
    def u(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved reduced energies shaped ``(frames, 1)``.
 
 
 ``MM_system_helper.temperature`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L801>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L877>`__
 
 .. code-block:: python
 
    def temperature(self, verbose=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray or None: Saved instantaneous temperatures in kelvin.
 
 
 ``MM_system_helper.dt`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L806>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L883>`__
 
 .. code-block:: python
 
    def dt(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Integration timestep in picoseconds.
 
 
 ``MM_system_helper.timescale`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L810>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L888>`__
 
 .. code-block:: python
 
    def timescale(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float or None: Sampled trajectory duration in nanoseconds.
 
 
 ``MM_system_helper.average_temperature`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L822>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L901>`__
 
 .. code-block:: python
 
    def average_temperature(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Mean saved temperature in kelvin.
 
 
 ``MM_system_helper.average_energy`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L825>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L905>`__
 
 .. code-block:: python
 
    def average_energy(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Mean saved reduced potential energy.
 
 
 ``MM_system_helper.average_volume`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L828>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L909>`__
 
 .. code-block:: python
 
    def average_volume(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   float: Mean saved box volume in nm³.
 
 
 ``MM_system_helper.plot_simulation_info_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L833>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L915>`__
 
 .. code-block:: python
 
@@ -871,127 +1121,167 @@ Classes and functions
 ``MM_system_helper.plot_temperature_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L837>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L919>`__
 
 .. code-block:: python
 
    def plot_temperature_(self, window: float=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Plot instantaneous and cumulative-average temperatures.
 
 
 ``MM_system_helper.temperature_plot`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L849>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L932>`__
 
 .. code-block:: python
 
    def temperature_plot(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Print mean temperature and create the default temperature plot.
 
 
 ``MM_system_helper.plot_energy_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L853>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L937>`__
 
 .. code-block:: python
 
    def plot_energy_(self, window: float=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Plot instantaneous and cumulative-average reduced energies.
 
 
 ``MM_system_helper.energy_plot`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L864>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L949>`__
 
 .. code-block:: python
 
    def energy_plot(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Print mean energy and create the default energy plot.
 
 
 ``MM_system_helper.plot_volume_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L868>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L954>`__
 
 .. code-block:: python
 
    def plot_volume_(self, window: float=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Plot instantaneous and cumulative-average volumes in nm³.
 
 
 ``MM_system_helper.volume_plot`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L879>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L966>`__
 
 .. code-block:: python
 
    def volume_plot(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Print initial/mean volume and create the default volume plot.
 
 
 ``MM_system_helper.box_lengths_plot`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L885>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L973>`__
 
 .. code-block:: python
 
    def box_lengths_plot(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Plot diagonal box lengths and the minimum cutoff-compatible length.
 
 
 ``MM_system_helper.index_frame_average_box_othorhombic_case_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L890>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L979>`__
 
 .. code-block:: python
 
    def index_frame_average_box_othorhombic_case_(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return frames closest to mean orthorhombic shape and volume.
 
 
 ``MM_system_helper.box_shapes`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L898>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L988>`__
 
 .. code-block:: python
 
    def box_shapes(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return initial and, when available, sampled cell lengths/angles.
 
 
 ``MM_system_helper.partial_charges_mol`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L905>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L996>`__
 
 .. code-block:: python
 
    def partial_charges_mol(self)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   numpy.ndarray: First molecule's partial charges in elementary charge.
 
 
 ``MM_system_helper.box_line`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L925>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1017>`__
 
 .. code-block:: python
 
@@ -1007,55 +1297,71 @@ Classes and functions
 ``MM_system_helper.load_structures_with_mdtraj_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L941>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1033>`__
 
 .. code-block:: python
 
    def load_structures_with_mdtraj_(self, r, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Create an MDTraj trajectory from coordinates and optional boxes.
 
 
 ``MM_system_helper.save_gro_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L968>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1061>`__
 
 .. code-block:: python
 
    def save_gro_(self, r, name: str, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Save coordinates and per-frame boxes in GROMACS GRO format.
 
 
 ``MM_system_helper.save_pdb_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L975>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1069>`__
 
 .. code-block:: python
 
    def save_pdb_(self, r, name: str, b=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Save coordinates as a PDB trajectory using MDTraj.
 
 
 ``MM_system_helper.save_xtc_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L982>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1077>`__
 
 .. code-block:: python
 
    def save_xtc_(self, r, name: str, b=None, save_reference=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Save an XTC trajectory and optionally a first-frame reference PDB.
 
 
 ``plot_simulation_info_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L999>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1095>`__
 
 .. code-block:: python
 
@@ -1079,7 +1385,7 @@ Classes and functions
 ``cell_lengths_and_angles_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1109>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1205>`__
 
 .. code-block:: python
 
@@ -1100,55 +1406,71 @@ Classes and functions
 ``cell_lengths_and_angles_.get_angle_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1119>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1215>`__
 
 .. code-block:: python
 
    def get_angle_(v1, v2, radians=True)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return clipped vector angles in radians or degrees.
 
 
 ``save_gro_as_pdb_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1140>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1237>`__
 
 .. code-block:: python
 
    def save_gro_as_pdb_(GRO: str, PDB: str=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Convert a GRO file to PDB using MDTraj, with MDAnalysis fallback.
 
 
 ``PDB_to_xyz_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1155>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1253>`__
 
 .. code-block:: python
 
    def PDB_to_xyz_(PDB: str)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return the first PDB frame as ``(N, 3)`` coordinates in nanometres.
 
 
 ``PDB_to_box_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1158>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1257>`__
 
 .. code-block:: python
 
    def PDB_to_box_(PDB: str)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return the first PDB frame's ``(3, 3)`` box in nanometres.
 
 
 ``box_to_lengths_angles_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1161>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1261>`__
 
 .. code-block:: python
 
@@ -1164,7 +1486,7 @@ Classes and functions
 ``lengths_angles_to_box_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1166>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1266>`__
 
 .. code-block:: python
 
@@ -1180,43 +1502,59 @@ Classes and functions
 ``get_index_average_box_automatic_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1171>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1271>`__
 
 .. code-block:: python
 
    def get_index_average_box_automatic_(boxes, n_bins=30, rules=['av'] * 3 + ['max_prob'] * 3, verbose=False)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Select the sampled box closest to marginal representative values.
+
+   Each length/angle marginal is summarised by its mean, mode, or minimum as
+   specified by ``rules``. Standardised six-dimensional distance identifies the
+   nearest actual frame; ``verbose`` also plots the marginal histograms.
 
 
 ``get_index_average_box_automatic_.peak_finder_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1194>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1300>`__
 
 .. code-block:: python
 
    def peak_finder_(x, i)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Summarise marginal ``i`` using its configured histogram rule.
 
 
 ``get_index_average_box_automatic_.plot_box_lengths_angles_histograms_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1210>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1317>`__
 
 .. code-block:: python
 
    def plot_box_lengths_angles_histograms_(boxes, b0=None, b1=None)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Plot sampled cell marginals with input and selected boxes.
 
 
 ``get_unitcell_stack_order_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1253>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1361>`__
 
 .. code-block:: python
 
@@ -1243,7 +1581,7 @@ Classes and functions
 ``supercell_from_unitcell_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1319>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1427>`__
 
 .. code-block:: python
 
@@ -1266,19 +1604,23 @@ Classes and functions
 ``supercell_from_unitcell_.expand_mdtraj_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1332>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1440>`__
 
 .. code-block:: python
 
    def expand_mdtraj_(input_instance, n_copies)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Stack ``n_copies`` identical MDTraj topologies.
 
 
 ``box_in_reduced_form_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1374>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1483>`__
 
 .. code-block:: python
 
@@ -1298,7 +1640,7 @@ Classes and functions
 ``reducePeriodicBoxVectors_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1398>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1507>`__
 
 .. code-block:: python
 
@@ -1318,7 +1660,7 @@ Classes and functions
 ``reorder_atoms_mol_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1417>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1526>`__
 
 .. code-block:: python
 
@@ -1334,7 +1676,7 @@ Classes and functions
 ``validate_reorder_atoms_mol_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1466>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1575>`__
 
 .. code-block:: python
 
@@ -1350,7 +1692,7 @@ Classes and functions
 ``reorder_atoms_unitcell_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1490>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1599>`__
 
 .. code-block:: python
 
@@ -1371,31 +1713,39 @@ Classes and functions
 ``reorder_atoms_unitcell_.split_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1501>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1610>`__
 
 .. code-block:: python
 
    def split_(PDB, n_atoms_mol, ref=False)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Split a structure into temporary one-molecule PDB files.
 
 
 ``reorder_atoms_unitcell_.expand_mdtraj_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1524>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1634>`__
 
 .. code-block:: python
 
    def expand_mdtraj_(input_instance, n_copies)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Stack a molecular MDTraj object to rebuild the full cell.
 
 
 ``vectors_between_atoms_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1551>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1662>`__
 
 .. code-block:: python
 
@@ -1421,7 +1771,7 @@ Classes and functions
 ``change_box_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1595>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1706>`__
 
 .. code-block:: python
 
@@ -1437,19 +1787,23 @@ Classes and functions
 ``change_box_.wrap_points_1box_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1599>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1710>`__
 
 .. code-block:: python
 
    def wrap_points_1box_(Ri, box)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Wrap points into one triclinic box through fractional coordinates.
 
 
 ``remove_clashes_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1638>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1750>`__
 
 .. code-block:: python
 
@@ -1465,43 +1819,55 @@ Classes and functions
 ``remove_clashes_.wrap_points_1box_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1651>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1763>`__
 
 .. code-block:: python
 
    def wrap_points_1box_(Ri, box)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Wrap points into one box through fractional coordinates.
 
 
 ``remove_clashes_.minimum_image_othorhombic_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1657>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1770>`__
 
 .. code-block:: python
 
    def minimum_image_othorhombic_(r, b)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Return orthorhombic minimum-image distances, masks, and vectors.
 
 
 ``rename_atoms_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1726>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1840>`__
 
 .. code-block:: python
 
    def rename_atoms_(PDB, n_atoms_mol)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Compatibility placeholder for atom renaming; currently performs no edit.
 
 
 ``process_mercury_output_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1761>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1876>`__
 
 .. code-block:: python
 
@@ -1517,7 +1883,7 @@ Classes and functions
 ``extract_subcell_from_supercell_`` (function)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1791>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1906>`__
 
 .. code-block:: python
 
@@ -1537,22 +1903,30 @@ Classes and functions
 ``extract_subcell_from_supercell_.check_shape_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1801>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1916>`__
 
 .. code-block:: python
 
    def check_shape_(x)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Normalise a matrix or matrix batch to three axes.
 
 
 ``extract_subcell_from_supercell_.dot_`` (method)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1808>`__
+`View source on GitHub <https://github.com/mme-ucl/FEcrys/blob/main/O/MM/mm_helper.py#L1924>`__
 
 .. code-block:: python
 
    def dot_(Ri, mat)
 
-.. warning:: Docstring pending.
+.. rubric:: Docstring
+
+.. code-block:: text
+
+   Apply one matrix per frame to batched atom vectors.

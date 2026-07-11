@@ -117,597 +117,842 @@
   <section id="o-mm-ff-setup">
 <span id="api-o-mm-ff-setup"></span><h1>O.MM.ff_setup<a class="headerlink" href="#o-mm-ff-setup" title="Link to this heading">¶</a></h1>
 <p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py">View module on GitHub</a></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Module docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prepare molecular force fields and reconcile topology atom ordering.
+
+This module edits GROMACS topology fragments, builds OpenMM systems through
+ParmEd, and provides force-field variants used by :class:`SingleComponent`.
+Coordinate arrays exposed to FEcrys retain the input-PDB atom order even when a
+loaded topology uses a different order; :class:`methods_for_permutation`
+performs that translation at the OpenMM boundary.
+</pre></div>
 </div>
 <section id="classes-and-functions">
 <h2>Classes and functions<a class="headerlink" href="#classes-and-functions" title="Link to this heading">¶</a></h2>
 <section id="change-charges-itp-top-function">
 <h3><code class="docutils literal notranslate"><span class="pre">change_charges_itp_top_</span></code> (function)<a class="headerlink" href="#change-charges-itp-top-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L6">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L15">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">change_charges_itp_top_</span><span class="p">(</span><span class="n">path_top_or_itp_file_in</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_top_or_itp_file_out</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n_atoms_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">replacement_charges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">neutralise_charge</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Write a topology copy with modified per-atom partial charges.
+
+Parameters
+----------
+path_top_or_itp_file_in : str
+    Input GROMACS ``.top`` or ``.itp`` file containing an ``[ atoms ]``
+    section.
+path_top_or_itp_file_out : str
+    Destination file. Existing content is overwritten.
+n_atoms_mol : int
+    Number of atom records to read from the first ``[ atoms ]`` section.
+replacement_charges : numpy.ndarray, optional
+    Explicit charges in topology atom order, in elementary-charge units.
+    Its length must equal ``n_atoms_mol``.
+neutralise_charge : bool, optional
+    When no replacement is supplied, subtract the mean atomic charge so
+    the molecule&#39;s total charge is zero. If false, copy charges unchanged.
+
+Returns
+-------
+numpy.ndarray
+    Charges written to the output file, in elementary-charge units.
+
+Notes
+-----
+The routine performs textual replacement and assumes the charge and mass
+occupy the conventional columns of the GROMACS atom records.
+</pre></div>
 </div>
 </section>
 <section id="change-n-mol-top-function">
 <h3><code class="docutils literal notranslate"><span class="pre">change_n_mol_top_</span></code> (function)<a class="headerlink" href="#change-n-mol-top-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L77">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L114">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">change_n_mol_top_</span><span class="p">(</span><span class="n">path_top_file_in</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path_top_file_out</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace_n_mol</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Write a topology copy with a new molecule count.
+
+Parameters
+----------
+path_top_file_in : str
+    Input GROMACS topology containing one entry in ``[ molecules ]``.
+path_top_file_out : str
+    Destination topology. Existing content is overwritten.
+replace_n_mol : int
+    New molecule count for the first non-comment entry in the section.
+verbose : bool, optional
+    Print the replaced line and output path.
+
+Returns
+-------
+None
+    The result is written to ``path_top_file_out``.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-class">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation</span></code> (class)<a class="headerlink" href="#methods-for-permutation-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L127">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L182">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">methods_for_permutation</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Adapt simulation access when topology and PDB atom orders differ.
+
+This mixin is injected into a force-field object only when a non-identity
+atom permutation is detected. OpenMM positions are permuted on input and
+restored to the FEcrys/PDB order on output.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-current-r-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_r_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-r-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L133">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L194">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Current positions in PDB order, in nanometres.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-current-v-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_v_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-v-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L139">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L201">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Current velocities in PDB order, in nm/ps.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-current-f-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._current_F_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-current-f-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L145">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L208">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_current_F_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Current forces in PDB order, in kJ mol⁻¹ nm⁻¹.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-system-mass-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._system_mass_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-system-mass-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L151">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L215">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_system_mass_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Particle masses in PDB order, in daltons.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-set-r-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._set_r_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-r-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L155">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L220">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_r_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Set OpenMM positions from a PDB-ordered coordinate array.
+
+Parameters
+----------
+r : numpy.ndarray
+    Cartesian coordinates shaped ``(N, 3)`` in nanometres.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-set-v-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation._set_v_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-v-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L159">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L231">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_set_v_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Set OpenMM velocities from a PDB-ordered array.
+
+Parameters
+----------
+v : numpy.ndarray
+    Velocities shaped ``(N, 3)`` in nanometres per picosecond.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-forward-atom-index-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.forward_atom_index_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-forward-atom-index-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L163">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L242">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">forward_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map PDB-order atom indices to indices used by OpenMM.
+
+Parameters
+----------
+inds : int or array_like of int
+    Atom indices in the public FEcrys/PDB ordering.
+
+Returns
+-------
+int or numpy.ndarray
+    Corresponding topology-order indices.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-inverse-atom-index-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.inverse_atom_index_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-inverse-atom-index-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L167">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L258">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">inverse_atom_index_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inds</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Map OpenMM topology indices back to the PDB atom ordering.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-set-arrays-blank-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.set_arrays_blank_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-set-arrays-blank-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L173">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L265">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_arrays_blank_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Reset all in-memory trajectory buffers and the saved-frame count.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-save-frame-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.save_frame_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-save-frame-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L184">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L277">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_frame_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Append the current OpenMM state to trajectory buffers.
+
+Positions are temporarily retained in topology order; reduced potential
+energy, temperature, box vectors, and centre of mass are saved in their
+standard FEcrys units.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-run-simulation-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.run_simulation_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-run-simulation-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L194">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L293">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Advance a simulation and save frames in public PDB atom order.
+
+Parameters
+----------
+n_saves : int
+    Number of trajectory frames to append.
+stride_save_frame : int, optional
+    OpenMM integration steps between saved frames.
+verbose_info : str, optional
+    Text appended to the live progress message.
+
+Notes
+-----
+Topology-ordered positions are converted only after the requested block
+finishes. Interrupting the loop can therefore lose coordinates from the
+unfinished block even though other frame data were appended.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-run-simulation-w-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.run_simulation_w_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-run-simulation-w-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L206">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L322">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_w_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run and save frames after wrapping molecules into the periodic box.
+
+Parameters are identical to :meth:`run_simulation_`. Before every save,
+OpenMM positions are requested with ``enforcePeriodicBox=True`` and set
+back into the context, then converted from topology to PDB atom order.
+</pre></div>
 </div>
 </section>
 <section id="methods-for-permutation-u-method">
 <h3><code class="docutils literal notranslate"><span class="pre">methods_for_permutation.u_</span></code> (method)<a class="headerlink" href="#methods-for-permutation-u-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L220">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L342">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>speed up evaluation also # ..
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate reduced potential energies for a batch of structures.
+
+Parameters
+----------
+r : numpy.ndarray
+    PDB-ordered coordinates shaped ``(frames, N, 3)`` in nanometres.
+b : numpy.ndarray, optional
+    Per-frame box matrices shaped ``(frames, 3, 3)`` in nanometres. If
+    omitted, the context&#39;s current box is used for every frame.
+
+Returns
+-------
+numpy.ndarray
+    Reduced potential energies ``beta * U`` shaped ``(frames, 1)``.
+
+Notes
+-----
+The original context positions and box are restored before returning.
 </pre></div>
 </div>
 </section>
 <section id="itp2ff-class">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF</span></code> (class)<a class="headerlink" href="#itp2ff-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L248">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L386">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">itp2FF</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Base class for force fields loaded from GROMACS ``.itp`` files.
+
+Subclasses define force-field naming, GROMACS defaults, and optional
+post-loading corrections. Generated support files live in ``misc_dir`` and
+are named from the molecular-system ``name``.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.__init__</span></code> (method)<a class="headerlink" href="#itp2ff-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L249">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L394">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise the shared MM helper and select the GROMACS loader.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-itp-mol-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.itp_mol</span></code> (method)<a class="headerlink" href="#itp2ff-itp-mol-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L254">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L400">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">itp_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Input molecule include-topology file.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-itp-mol-adjusted-charges-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.itp_mol_adjusted_charges</span></code> (method)<a class="headerlink" href="#itp2ff-itp-mol-adjusted-charges-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L258">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L405">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">itp_mol_adjusted_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Generated topology with adjusted partial charges.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-top-crys-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.top_crys</span></code> (method)<a class="headerlink" href="#itp2ff-top-crys-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L263">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L411">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">top_crys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Generated crystal-level GROMACS topology.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-gro-mol-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.gro_mol</span></code> (method)<a class="headerlink" href="#itp2ff-gro-mol-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L267">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L416">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gro_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Molecule coordinates associated with the topology.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-pdb-mol-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.pdb_mol</span></code> (method)<a class="headerlink" href="#itp2ff-pdb-mol-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L271">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L421">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pdb_mol</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: PDB converted from the topology&#39;s GRO coordinates.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-single-mol-pdb-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_pdb</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L275">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L426">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_pdb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Single-molecule PDB extracted from the input crystal.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-single-mol-pdb-file-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF._single_mol_pdb_file_</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-file-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L278">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L430">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_single_mol_pdb_file_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Compatibility alias for :attr:`single_mol_pdb`.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-single-mol-pdb-permuted-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_pdb_permuted</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-pdb-permuted-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L282">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L435">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_pdb_permuted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Single-molecule PDB reordered to topology atom order.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-single-mol-permutations-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.single_mol_permutations</span></code> (method)<a class="headerlink" href="#itp2ff-single-mol-permutations-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L286">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L440">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">single_mol_permutations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>pathlib.Path: Pickle containing forward and inverse atom permutations.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-set-pemutation-to-match-topology-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.set_pemutation_to_match_topology_</span></code> (method)<a class="headerlink" href="#itp2ff-set-pemutation-to-match-topology-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L289">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L444">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_pemutation_to_match_topology_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Determine and install the PDB-to-topology atom permutation.
+
+A cached permutation is loaded when available. Otherwise the topology
+GRO file is converted to PDB, reordered against the input molecule, and
+matched by a Cartesian distance matrix. Molecular permutations are then
+tiled over ``n_mol`` to form whole-crystal mappings.
+
+Notes
+-----
+If the resulting mapping is non-identity, methods from
+:class:`methods_for_permutation` are injected into the instance so all
+public coordinates remain in PDB order. The algorithm assumes every
+crystal molecule has the same internal atom ordering as the first.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-a-step-after-initialise-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.a_step_after_initialise_</span></code> (method)<a class="headerlink" href="#itp2ff-a-step-after-initialise-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L345">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L514">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">a_step_after_initialise_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Extension hook executed after topology files and charges are prepared.
+</pre></div>
 </div>
 </section>
 <section id="itp2ff-initialise-ff-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.initialise_FF_</span></code> (method)<a class="headerlink" href="#itp2ff-initialise-ff-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L348">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L518">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">initialise_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neuralise_net_charge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">replacement_charges</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this only after (n_mol and n_atoms_mol) defined in __init__ of SingleComponent
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prepare topology files after molecular counts have been defined.
+
+Parameters
+----------
+neuralise_net_charge : bool, optional
+    Subtract the mean molecular partial charge before topology loading.
+    The historical parameter name is retained for compatibility.
+replacement_charges : array_like, optional
+    Explicit per-atom charges in topology order. Supplying this also
+    selects the adjusted-charge topology.
+
+Notes
+-----
+``n_mol`` and ``n_atoms_mol`` must already be set by the molecular-system
+constructor. The method extracts a single-molecule PDB if necessary,
+determines atom permutation, and runs the subclass extension hook.
 </pre></div>
 </div>
 </section>
 <section id="itp2ff-set-ff-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.set_FF_</span></code> (method)<a class="headerlink" href="#itp2ff-set-ff-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L373">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L559">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_FF_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>run this just before self.system initialisation
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generate the crystal topology and load it with ParmEd.
+
+This method is called immediately before OpenMM system construction and
+sets ``self.ff`` to a :class:`parmed.gromacs.GromacsTopologyFile`.
 </pre></div>
 </div>
 </section>
 <section id="itp2ff-reset-n-mol-top-method">
 <h3><code class="docutils literal notranslate"><span class="pre">itp2FF.reset_n_mol_top_</span></code> (method)<a class="headerlink" href="#itp2ff-reset-n-mol-top-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L379">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L569">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reset_n_mol_top_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rewrite the crystal topology for the current molecule count.
+
+The generated file includes either the original or charge-adjusted ITP,
+followed by the subclass-specific defaults, system, and molecule
+sections required by the GROMACS topology loader.
+</pre></div>
 </div>
 </section>
 <section id="opls-general-class">
 <h3><code class="docutils literal notranslate"><span class="pre">OPLS_general</span></code> (class)<a class="headerlink" href="#opls-general-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L405">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L601">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OPLS_general</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generic OPLS topology loader with geometric Lennard-Jones mixing.
+</pre></div>
 </div>
 </section>
 <section id="opls-general-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">OPLS_general.__init__</span></code> (method)<a class="headerlink" href="#opls-general-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L406">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L604">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure OPLS GROMACS defaults and generic topology labels.
+</pre></div>
 </div>
 </section>
 <section id="opls-general-ff-name-method">
 <h3><code class="docutils literal notranslate"><span class="pre">OPLS_general.FF_name</span></code> (method)<a class="headerlink" href="#opls-general-ff-name-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L416">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L615">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Public force-field identifier ``&#39;OPLS&#39;``.
+</pre></div>
 </div>
 </section>
 <section id="gaff-general-class">
 <h3><code class="docutils literal notranslate"><span class="pre">GAFF_general</span></code> (class)<a class="headerlink" href="#gaff-general-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L419">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L619">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">GAFF_general</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Generic GAFF topology loader with Lorentz-Berthelot mixing.
+</pre></div>
 </div>
 </section>
 <section id="gaff-general-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">GAFF_general.__init__</span></code> (method)<a class="headerlink" href="#gaff-general-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L420">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L622">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure GAFF scaling factors and generic topology labels.
+</pre></div>
 </div>
 </section>
 <section id="gaff-general-ff-name-method">
 <h3><code class="docutils literal notranslate"><span class="pre">GAFF_general.FF_name</span></code> (method)<a class="headerlink" href="#gaff-general-ff-name-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L430">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L633">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Public force-field identifier ``&#39;GAFF&#39;``.
+</pre></div>
 </div>
 </section>
 <section id="remove-force-by-names-function">
 <h3><code class="docutils literal notranslate"><span class="pre">remove_force_by_names_</span></code> (function)<a class="headerlink" href="#remove-force-by-names-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L435">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L639">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_force_by_names_</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">names</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove every OpenMM force whose name is in ``names``.
+
+Parameters
+----------
+system : openmm.System
+    System modified in place.
+names : list of str
+    Force names to remove. Repeated forces with the same name are all
+    removed.
+verbose : bool, optional
+    Report how many forces were removed.
+
+Returns
+-------
+None
+</pre></div>
 </div>
 </section>
 <section id="remove-force-by-names-remove-force-by-name-method">
 <h3><code class="docutils literal notranslate"><span class="pre">remove_force_by_names_.remove_force_by_name_</span></code> (method)<a class="headerlink" href="#remove-force-by-names-remove-force-by-name-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L436">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L657">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_force_by_name_</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove the first force named ``_name`` and report its name.
+</pre></div>
 </div>
 </section>
 <section id="get-pairs-mol-inner-function">
 <h3><code class="docutils literal notranslate"><span class="pre">_get_pairs_mol_inner_</span></code> (function)<a class="headerlink" href="#get-pairs-mol-inner-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L452">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L674">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_pairs_mol_inner_</span><span class="p">(</span><span class="n">single_mol_pdb_file</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>n atoms in a row is n-1 bonds
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mark intramolecular atom pairs separated by fewer than ``n`` atoms.
 
-n = 3 for this velff because nrexcl = 2
-    within 2 bonds away removed
-    within 3 bonds away kept (1-2-3-4 ; 1-4 kept)
+Parameters
+----------
+single_mol_pdb_file : str or pathlib.Path
+    Molecule PDB in the same atom order as the topology.
+n : int, optional
+    Maximum number of atoms in the shortest graph path to mark. Because a
+    path of ``n`` atoms contains ``n - 1`` bonds, ``n=3`` marks 1–2 and 1–3
+    pairs while retaining 1–4 nonbonded interactions.
+
+Returns
+-------
+numpy.ndarray
+    Square molecular mask where one means the pair is internal/excluded and
+    zero means it remains eligible for nonbonded interaction.
 </pre></div>
 </div>
 </section>
 <section id="get-pairs-function">
 <h3><code class="docutils literal notranslate"><span class="pre">_get_pairs_</span></code> (function)<a class="headerlink" href="#get-pairs-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L489">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L721">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_get_pairs_</span><span class="p">(</span><span class="n">remove_mol_ij</span><span class="p">,</span> <span class="n">n_mol</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Tile a molecular exclusion mask across a crystal.
+
+Parameters
+----------
+remove_mol_ij : numpy.ndarray
+    Square single-molecule mask; one denotes an excluded intramolecular pair.
+n_mol : int
+    Number of identical molecules in the crystal.
+
+Returns
+-------
+numpy.ndarray
+    ``(N, N)`` mask where one denotes an included nonbonded pair and zero an
+    excluded pair. Intermolecular pairs are always included.
+</pre></div>
 </div>
 </section>
 <section id="custom-lj-force-function">
 <h3><code class="docutils literal notranslate"><span class="pre">custom_LJ_force_</span></code> (function)<a class="headerlink" href="#custom-lj-force-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L501">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L748">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_LJ_force_</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">C6_C12_types_dictionary</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LJ : all Lennard-Jones
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct a tabulated all-pairs Lennard-Jones force.
+
+Parameters
+----------
+sc : SingleComponent
+    Initialised molecular system providing topology atom types, cutoff
+    settings, particle count, and molecule PDB.
+C6_C12_types_dictionary : dict
+    Mapping ``(atom_type_A, atom_type_B)`` to ``(C6, C12)`` parameters in
+    the units expected by OpenMM&#39;s reduced Lennard-Jones expression.
+
+Returns
+-------
+list of openmm.CustomNonbondedForce
+    One force with intramolecular 1–2 and 1–3 exclusions. Periodic crystals
+    use a switched cutoff and long-range correction; isolated molecules use
+    no cutoff.
 </pre></div>
 </div>
 </section>
 <section id="custom-c-force-function">
 <h3><code class="docutils literal notranslate"><span class="pre">custom_C_force_</span></code> (function)<a class="headerlink" href="#custom-c-force-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L570">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L834">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">custom_C_force_</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>C : all Coulombic
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct the Coulombic complement to :func:`custom_LJ_force_`.
+
+Parameters
+----------
+sc : SingleComponent
+    Initialised system providing molecular charges and nonbonded settings.
+
+Returns
+-------
+list of openmm.NonbondedForce
+    One charge-only force with zero Lennard-Jones parameters and molecular
+    1–2/1–3 exceptions. Its nonbonded method follows the system&#39;s original
+    ``NonbondedForce``.
 </pre></div>
 </div>
 </section>
 <section id="tmff-class">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF</span></code> (class)<a class="headerlink" href="#tmff-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L647">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L924">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">tmFF</span><span class="p">()</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tailor-made FF
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load tailor-made pair parameters not supported by standard mixing rules.
+
+``[ nonbond_params ]`` supplies explicit C6/C12 values for every unordered
+atom-type pair. The automatically generated OpenMM nonbonded forces are
+replaced by separate tabulated Lennard-Jones and Coulombic forces.
 </pre></div>
 </div>
 </section>
 <section id="tmff-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF.__init__</span></code> (method)<a class="headerlink" href="#tmff-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L649">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L932">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure topology names and unit scaling factors for ``tmFF``.
+</pre></div>
 </div>
 </section>
 <section id="tmff-ff-name-method">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF.FF_name</span></code> (method)<a class="headerlink" href="#tmff-ff-name-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L659">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L943">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Public force-field identifier ``&#39;tmFF&#39;``.
+</pre></div>
 </div>
 </section>
 <section id="tmff-a-step-after-initialise-method">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF.a_step_after_initialise_</span></code> (method)<a class="headerlink" href="#tmff-a-step-after-initialise-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L662">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L947">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">a_step_after_initialise_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Read and validate explicit C6/C12 atom-type pair parameters.
+
+The ``[ nonbond_params ]`` section of :attr:`itp_mol` is parsed into
+``nonbond_params``. The number of records must equal the triangular
+number ``n_types * (n_types + 1) / 2``, ensuring every unordered type
+pair has an explicit parameter set.
+</pre></div>
 </div>
 </section>
 <section id="tmff-recast-nb-method">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF.recast_NB_</span></code> (method)<a class="headerlink" href="#tmff-recast-nb-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L691">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L983">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">recast_NB_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Replace automatically loaded nonbonded forces with custom forces.
+
+Parameters
+----------
+verbose : bool, optional
+    Report removed and added OpenMM force names.
+
+Notes
+-----
+The system is modified in place. Existing ``CustomNonbondedForce`` and
+``NonbondedForce`` instances are removed before the tabulated
+Lennard-Jones and charge-only replacements are added.
+</pre></div>
 </div>
 </section>
 <section id="tmff-corrections-to-ff-method">
 <h3><code class="docutils literal notranslate"><span class="pre">tmFF.corrections_to_ff_</span></code> (method)<a class="headerlink" href="#tmff-corrections-to-ff-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L706">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L1011">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">corrections_to_ff_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbos</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Apply tailor-made nonbonded corrections after system construction.
+
+Parameters
+----------
+verbos : bool, optional
+    Historical spelling of the verbosity flag passed to
+    :meth:`recast_NB_`.
+</pre></div>
 </div>
 </section>
 <section id="velff-class">
 <h3><code class="docutils literal notranslate"><span class="pre">velff</span></code> (class)<a class="headerlink" href="#velff-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L709">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L1022">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">velff</span><span class="p">()</span>
 </pre></div>
 </div>
 <p class="rubric">Docstring</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>keeping seperate to load pickled files
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Veliparib-specific name-compatible subclass of :class:`tmFF`.
+
+The separate class is retained so historical pickled simulations continue
+to resolve their original class path.
 </pre></div>
 </div>
 </section>
 <section id="velff-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">velff.__init__</span></code> (method)<a class="headerlink" href="#velff-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L711">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L1029">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Configure veliparib topology identifiers and GROMACS defaults.
+</pre></div>
 </div>
 </section>
 <section id="velff-ff-name-method">
 <h3><code class="docutils literal notranslate"><span class="pre">velff.FF_name</span></code> (method)<a class="headerlink" href="#velff-ff-name-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L721">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ff_setup.py#L1040">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">FF_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>str: Public force-field identifier ``&#39;velff&#39;``.
+</pre></div>
 </div>
 </section>
 </section>

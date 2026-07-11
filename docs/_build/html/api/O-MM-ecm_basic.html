@@ -172,14 +172,17 @@ Output:
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LAMBDA_0</span><span class="p">(</span><span class="n">n_bodies</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">V</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">R0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inds_valid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Analytical Einstein-crystal reference state at coupling ``lambda=0``.
+
+The object stores the reference centroid, harmonic spring constant, COM
+convention, and analytical dimensionless free-energy contributions.
+</pre></div>
 </div>
 </section>
 <section id="lambda-0-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_0.__init__</span></code> (method)<a class="headerlink" href="#lambda-0-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L65">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L70">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_bodies</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mu</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">V</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">R0</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inds_valid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n_atoms_in_molecule</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -194,7 +197,7 @@ n_atoms_in_molecule : number of atoms in a single molecule
 </section>
 <section id="lambda-0-energy0-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_0.energy0_</span></code> (method)<a class="headerlink" href="#lambda-0-energy0-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L102">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L107">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">energy0_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -206,51 +209,81 @@ the input (r) should have the relevant COM already removed if checking this)
 </section>
 <section id="lambda-system-class">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM</span></code> (class)<a class="headerlink" href="#lambda-system-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L111">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L116">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LAMBDA_SYSTEM</span><span class="p">(</span><span class="n">args_initialise_object</span><span class="p">,</span> <span class="n">args_initialise_system</span><span class="p">,</span> <span class="n">args_initialise_simulation</span><span class="p">,</span> <span class="n">COM_removal_by_fixing_one_atom_index_of_this_atom</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">k_EC</span><span class="o">=</span><span class="mf">6000.0</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">remove_warmup</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>One simulated state along the Einstein-crystal coupling path.
+
+The reduced potential is a linear coupling between the physical crystal and
+a harmonic Einstein crystal: the physical force field is scaled by
+``lambda`` and the harmonic restraint by ``1 - lambda``. Translational
+freedom is removed either globally or by fixing one atom.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.__init__</span></code> (method)<a class="headerlink" href="#lambda-system-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L112">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L125">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args_initialise_object</span><span class="p">,</span> <span class="n">args_initialise_system</span><span class="p">,</span> <span class="n">args_initialise_simulation</span><span class="p">,</span> <span class="n">COM_removal_by_fixing_one_atom_index_of_this_atom</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">k_EC</span><span class="o">=</span><span class="mf">6000.0</span><span class="p">,</span> <span class="n">stride_save_frame</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">remove_warmup</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct and initialise one lambda-state simulation.
+
+Parameters
+----------
+args_initialise_object, args_initialise_system, args_initialise_simulation : dict
+    Arguments forwarded to the three :class:`SingleComponent` setup
+    stages. The simulation dictionary is modified to disable its first
+    minimisation.
+COM_removal_by_fixing_one_atom_index_of_this_atom : int, optional
+    Physical atom index assigned zero mass. If omitted, OpenMM COM
+    removal and mass-weighted recentering are used. A non-integer,
+    non-``None`` value selects the custom constrained-COM integrator.
+lam : float, optional
+    Coupling coordinate in the closed interval ``[0, 1]``.
+k_EC : float, optional
+    Einstein-crystal spring constant in kJ mol⁻¹ nm⁻².
+stride_save_frame : int, optional
+    Integration steps between saved trajectory frames.
+remove_warmup : int, optional
+    Number of initial saved frames discarded as equilibration.
+
+Notes
+-----
+The centroid ``r0`` is the recentered initial structure. At ``lambda=0``
+an accompanying :class:`LAMBDA_0` provides the analytical reference free
+energy. Reduced-energy evaluations are exposed through ``u_``.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-plot-check-harmonic-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.plot_check_harmonic</span></code> (method)<a class="headerlink" href="#lambda-system-plot-check-harmonic-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L226">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L266">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_check_harmonic</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot the one-dimensional harmonic Boltzmann factor over the cutoff.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-reinitialise-simulation-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.reinitialise_simulation_</span></code> (method)<a class="headerlink" href="#lambda-system-reinitialise-simulation-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L235">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L276">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">reinitialise_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Recreate the OpenMM context and reset positions to the EC centroid.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-simulation-timescale-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.simulation_timescale</span></code> (method)<a class="headerlink" href="#lambda-system-simulation-timescale-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L240">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L282">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">simulation_timescale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -261,557 +294,812 @@ the input (r) should have the relevant COM already removed if checking this)
 </section>
 <section id="lambda-system-set-arrays-blank-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.set_arrays_blank_</span></code> (method)<a class="headerlink" href="#lambda-system-set-arrays-blank-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L246">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L288">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">set_arrays_blank_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Clear the underlying trajectory buffers.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-run-simulation-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.run_simulation_</span></code> (method)<a class="headerlink" href="#lambda-system-run-simulation-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L249">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L292">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">,</span> <span class="n">verbose_info</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample this lambda state, removing warm-up data once.
+
+Parameters
+----------
+n_saves : int
+    Number of production frames to append after any equilibration.
+verbose_info : str, optional
+    Additional text in the live simulation status.
+
+Notes
+-----
+Non-fixed systems are recentered before sampling. On the first call,
+``remove_warmup`` frames are generated and discarded before production.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-xyz-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.xyz</span></code> (method)<a class="headerlink" href="#lambda-system-xyz-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L277">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L334">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">xyz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Saved physical coordinates in nanometres.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-u-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.u</span></code> (method)<a class="headerlink" href="#lambda-system-u-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L281">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L339">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Saved reduced potential energies, shaped ``(frames, 1)``.
+</pre></div>
 </div>
 </section>
 <section id="lambda-system-temperature-method">
 <h3><code class="docutils literal notranslate"><span class="pre">LAMBDA_SYSTEM.temperature</span></code> (method)<a class="headerlink" href="#lambda-system-temperature-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L285">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L344">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>numpy.ndarray: Saved instantaneous temperatures shaped ``(frames, 1)``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-class">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic</span></code> (class)<a class="headerlink" href="#ecm-basic-class" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L290">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L350">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ECM_basic</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">working_dir_folder_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ARGS_oss</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">k_EC</span><span class="o">=</span><span class="mf">6000.0</span><span class="p">,</span> <span class="n">COM_removal_by_fixing_one_atom_index_of_this_atom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">path_lambda_1_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Manage an Einstein-crystal coupling path and its BAR/MBAR analysis.
+
+The workflow owns simulations and datasets at multiple lambda values,
+caches every cross-potential evaluation, adaptively adds or samples states,
+and combines the analytical lambda-zero free energy with numerical
+free-energy differences to obtain the physical crystal free energy.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-init-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.__init__</span></code> (method)<a class="headerlink" href="#ecm-basic-init-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L291">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L359">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">working_dir_folder_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ARGS_oss</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">k_EC</span><span class="o">=</span><span class="mf">6000.0</span><span class="p">,</span> <span class="n">COM_removal_by_fixing_one_atom_index_of_this_atom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">path_lambda_1_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Initialise a coupling-path workflow and optionally restore saved data.
+
+Parameters
+----------
+name : str
+    Prefix identifying this polymorph or molecular system.
+working_dir_folder_name : str
+    Directory containing per-lambda trajectory arrays and analysis logs.
+ARGS_oss : list of dict
+    ``[object_args, system_args, simulation_args]`` used to construct
+    every :class:`LAMBDA_SYSTEM`.
+k_EC : float, optional
+    Einstein-crystal spring constant in kJ mol⁻¹ nm⁻².
+COM_removal_by_fixing_one_atom_index_of_this_atom : int, optional
+    Atom fixed to remove translation; otherwise global mass-weighted COM
+    removal is used.
+overwrite : bool, optional
+    Skip automatic import of existing datasets and analysis results.
+path_lambda_1_dataset : str, optional
+    External physical-state MD dataset used instead of new lambda-one
+    sampling.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-lambda-evaluations-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_lambda_evaluations_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-lambda-evaluations-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L354">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L444">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_lambda_evaluations_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Persist cached cross-potential evaluations for all lambda pairs.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-lambda-evaluations-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_lambda_evaluations_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-lambda-evaluations-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L358">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L449">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_lambda_evaluations_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore cached cross-potential evaluations from the working directory.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-bar-results-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_BAR_results_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-bar-results-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L362">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L454">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_BAR_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Persist the chronological log of cumulative two-state BAR results.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-bar-results-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_BAR_results_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-bar-results-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L366">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L459">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_BAR_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore the saved two-state BAR result log.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-mbar-results-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_mBAR_results_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-mbar-results-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L370">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L464">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_mBAR_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Persist the latest multistate BAR result log.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-mbar-results-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_mBAR_results_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-mbar-results-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L374">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L469">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_mBAR_results_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore the saved multistate BAR result log.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-usupervised-sample-sizes-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_usupervised_sample_sizes_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-usupervised-sample-sizes-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L378">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L474">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_usupervised_sample_sizes_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Persist adaptive per-lambda sample-size targets.
+
+The filename retains the historical ``usupervised`` spelling.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-usupervised-sample-sizes-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_usupervised_sample_sizes_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-usupervised-sample-sizes-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L382">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L482">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_usupervised_sample_sizes_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Restore adaptive per-lambda sample-size targets.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-inds-rand-lambda1-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_inds_rand_lambda1_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-inds-rand-lambda1-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L386">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L487">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_inds_rand_lambda1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Save representative physical-state indices for subset size ``m``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-inds-rand-lambda1-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_inds_rand_lambda1_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-inds-rand-lambda1-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L390">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L492">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_inds_rand_lambda1_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load representative physical-state indices for subset size ``m``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-lambdas-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.lambdas</span></code> (method)<a class="headerlink" href="#ecm-basic-lambdas-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L397">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L500">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lambdas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>list of float: Active coupling values in ascending order.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-n-lambdas-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.n_lambdas</span></code> (method)<a class="headerlink" href="#ecm-basic-n-lambdas-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L401">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L505">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">n_lambdas</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>int: Number of active coupling states.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-lambda-exists-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.lambda_exists_</span></code> (method)<a class="headerlink" href="#ecm-basic-lambda-exists-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L404">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L509">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lambda_exists_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return whether coupling value ``lam`` is active.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-add-lambda-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.add_lambda_</span></code> (method)<a class="headerlink" href="#ecm-basic-add-lambda-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L407">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L513">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">add_lambda_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Construct and register a coupling-state simulation.
+
+Parameters
+----------
+lam : float
+    Coupling value in ``[0, 1]``.
+verbose : bool, optional
+    Explain when the state already exists.
+
+Notes
+-----
+New coordinate, energy, temperature, and plotting entries are initialised
+alongside the :class:`LAMBDA_SYSTEM`. The save stride corresponds to
+approximately 0.1 ps under the configured integration timestep.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-remove-lambda-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.remove_lambda_</span></code> (method)<a class="headerlink" href="#ecm-basic-remove-lambda-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L433">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L554">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_lambda_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove a state and invalidate cached evaluations involving it.
+
+The in-memory trajectory metadata and colour are deleted. If a saved
+evaluation cache exists, entries whose key contains ``lam`` are removed
+from that file and the cache is reloaded.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-is-converged-else-remove-all-unconverged-datasets-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.is_converged_else_remove_all_unconverged_datasets_</span></code> (method)<a class="headerlink" href="#ecm-basic-is-converged-else-remove-all-unconverged-datasets-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L458">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L585">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">is_converged_else_remove_all_unconverged_datasets_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Check sampled-energy convergence for every lambda state.
+
+Parameters
+----------
+remove : bool, optional
+    Remove states failing :class:`TestConverged_1D`. An externally
+    supplied physical-state dataset is never allowed to be removed.
+
+Returns
+-------
+bool
+    True only when all active self-potential energy series pass.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-run-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.run_</span></code> (method)<a class="headerlink" href="#ecm-basic-run-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L482">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L622">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_saves</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample, save, and reload one lambda-state dataset.
+
+Parameters
+----------
+lam : float
+    State to run; it is constructed if absent.
+n_saves : int
+    Number of production frames requested from its simulation.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-last-m-frames-converged-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.last_m_frames_converged_</span></code> (method)<a class="headerlink" href="#ecm-basic-last-m-frames-converged-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L491">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L640">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">last_m_frames_converged_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">average_temperature_error_allowed</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Test whether the trailing cumulative temperatures remain near target.
+
+Parameters
+----------
+lam : float
+    Coupling state to inspect.
+m : int
+    Number of final cumulative-average values required.
+average_temperature_error_allowed : float, optional
+    Maximum absolute deviation from target temperature in kelvin.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-run-to-get-m-coverged-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.run_to_get_m_coverged_</span></code> (method)<a class="headerlink" href="#ecm-basic-run-to-get-m-coverged-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L506">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L666">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_to_get_m_coverged_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">average_temperature_error_allowed</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Sample in blocks until ``m`` temperature-converged frames are available.
+
+Sampling stops after at most ``m`` newly requested frames. The outcome is
+stored in ``lambda_dataset_converged[lam]``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-lambda-sample-sizes-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.lambda_sample_sizes_</span></code> (method)<a class="headerlink" href="#ecm-basic-lambda-sample-sizes-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L521">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L686">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">lambda_sample_sizes_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Get or set adaptive sample-size targets.
+
+With ``m=None``, return the target for ``lam``. Otherwise set one state,
+or all active states when ``lam=None``, to ``m``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-which-lambda-to-add-next-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.which_lambda_to_add_next_</span></code> (method)<a class="headerlink" href="#ecm-basic-which-lambda-to-add-next-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L530">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L700">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">which_lambda_to_add_next_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_dataset_size_per_lambda</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Prioritise a new midpoint and existing states using BAR uncertainty.
+
+Returns the midpoint of the adjacent pair with largest finite-adjusted
+error, that pair itself, and existing lambdas ordered by accumulated
+neighbouring error while below the sample-size ceiling.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-unsupervised-fe-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.unsupervised_FE_</span></code> (method)<a class="headerlink" href="#ecm-basic-unsupervised-fe-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L571">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L747">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">unsupervised_FE_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_size_increments</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_dataset_size_per_lambda</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">max_n_lambdas</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">SE_tol_per_molecule</span><span class="o">=</span><span class="mf">0.03125</span><span class="p">,</span> <span class="n">re_evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rerun_questionable_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Adaptively sample lambda states until the BAR uncertainty target is met.
+
+Parameters
+----------
+batch_size_increments : int, optional
+    Frames added when creating or extending a state.
+max_dataset_size_per_lambda : int, optional
+    Per-state sampling ceiling.
+max_n_lambdas : int, optional
+    Maximum number of coupling states, including endpoints.
+SE_tol_per_molecule : float, optional
+    Target standard error per molecule in reduced ``kT`` units.
+re_evaluate : bool, optional
+    Clear cached cross-potential evaluations before BAR calculations.
+rerun_questionable_data : bool, optional
+    Remove energy-series convergence failures and attempt resampling, up
+    to three adaptive passes.
+
+Notes
+-----
+Endpoint datasets are filled first. New midpoint states are introduced
+at the least-overlapping interval, after which sampling is added to
+existing states in uncertainty-priority order.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-unsupervised-fe-main-nested-helper">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.unsupervised_FE_.main_</span></code> (nested helper)<a class="headerlink" href="#ecm-basic-unsupervised-fe-main-nested-helper" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L602">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L802">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main_</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Run one adaptive state-addition and sample-enrichment pass.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-save-simulations-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.save_simulations_</span></code> (method)<a class="headerlink" href="#ecm-basic-save-simulations-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L652">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L853">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save_simulations_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which_lambdas</span><span class="p">:</span> <span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Append newly sampled frames to per-lambda files.
+
+Parameters
+----------
+which_lambdas : list of float, optional
+    States to save; defaults to every active lambda.
+
+Notes
+-----
+Coordinates, reduced energies, and temperatures are stored separately.
+In-memory simulation buffers are cleared after a successful append.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-which-lambdas-exist-in-folder-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.which_lambdas_exist_in_folder</span></code> (method)<a class="headerlink" href="#ecm-basic-which-lambdas-exist-in-folder-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L678">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L891">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">which_lambdas_exist_in_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>list of float or None: Lambda values inferred from saved filenames.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-load-dataset-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.load_dataset_</span></code> (method)<a class="headerlink" href="#ecm-basic-load-dataset-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L693">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L907">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_dataset_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">custom_generic_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load coordinate, energy, and temperature arrays for one state.
+
+Parameters
+----------
+lam : float
+    Coupling value; its simulation object is added if absent.
+verbose : bool, optional
+    Report when matching files cannot be found.
+custom_generic_name : str, optional
+    Alternative filename prefix for importing compatible data.
+
+Returns
+-------
+tuple
+    ``(xyz, u, T)`` arrays, or three ``None`` values when absent.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-load-lambda1-dataset-seperately-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.load_lambda1_dataset_seperately_</span></code> (method)<a class="headerlink" href="#ecm-basic-load-lambda1-dataset-seperately-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L723">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L953">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_lambda1_dataset_seperately_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Import the physical endpoint from a standard saved MD dataset.
+
+Parameters
+----------
+m : int, optional
+    Select a representative subset of this size. A cached permutation is
+    reused, or a new split is searched for whose subset and complement
+    have mean energies close to the full trajectory.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-import-data-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.import_data_</span></code> (method)<a class="headerlink" href="#ecm-basic-import-data-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L766">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1006">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">import_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">which_lambdas</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">custom_generic_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Load multiple per-lambda datasets into the workflow.
+
+Parameters
+----------
+which_lambdas : list of float or None
+    Coupling states to import; ``None`` uses currently active states.
+verbose : bool, optional
+    Report how many datasets were located.
+custom_generic_name : str, optional
+    Alternative filename prefix passed to :meth:`load_dataset_`.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-stat-amount-of-data-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.stat_amount_of_data</span></code> (method)<a class="headerlink" href="#ecm-basic-stat-amount-of-data-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L788">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1039">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">stat_amount_of_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Record and optionally print the number of samples at each lambda.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-global-com-remover-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.global_COM_remover_</span></code> (method)<a class="headerlink" href="#ecm-basic-global-com-remover-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L797">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1049">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">global_COM_remover_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Remove the mass-weighted global centre of mass from coordinates ``r``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-atom-based-com-remover-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.atom_based_COM_remover_</span></code> (method)<a class="headerlink" href="#ecm-basic-atom-based-com-remover-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L801">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1054">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">atom_based_COM_remover_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Translate coordinates so the configured fixed atom lies at the origin.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-u-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.u_</span></code> (method)<a class="headerlink" href="#ecm-basic-u-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L805">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1059">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate a lambda potential on coordinates after translation removal.
+
+Returns ``None`` if the requested lambda state has not been constructed.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-u-on-r-faster-helper-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.u_on_r_faster_helper_</span></code> (method)<a class="headerlink" href="#ecm-basic-u-on-r-faster-helper-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L810">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1068">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_on_r_faster_helper_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam_u</span><span class="p">,</span> <span class="n">lam_r</span><span class="p">,</span> <span class="n">_from</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Evaluate potential ``lam_u`` on unsolved samples from state ``lam_r``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-u-on-r-faster-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.u_on_r_faster_</span></code> (method)<a class="headerlink" href="#ecm-basic-u-on-r-faster-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L815">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1074">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_on_r_faster_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam_u</span><span class="p">,</span> <span class="n">lam_r</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return cached cross-potential energies, evaluating only missing frames.
+
+Parameters
+----------
+lam_u : float
+    Lambda of the evaluated reduced potential.
+lam_r : float
+    Lambda whose coordinate dataset supplies configurations.
+m : int, optional
+    Return only the first ``m`` evaluations after updating the full cache.
+
+Returns
+-------
+numpy.ndarray
+    Reduced energies shaped ``(frames, 1)``.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-plot-overlaps-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.plot_overlaps_</span></code> (method)<a class="headerlink" href="#ecm-basic-plot-overlaps-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L838">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1113">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_overlaps_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam_i</span><span class="p">,</span> <span class="n">lam_j</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="n">separate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Plot cross-evaluated energy histograms for two lambda states.
+
+Parameters
+----------
+lam_i, lam_j : float
+    Coupling states whose mutual phase-space overlap is shown.
+m : int, optional
+    Maximum samples used from each state.
+figsize : tuple, optional
+    Matplotlib figure size.
+separate : bool, optional
+    Place the two target-potential comparisons in separate figures.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-estimate-local-fe-difference-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.estimate_local_FE_difference_</span></code> (method)<a class="headerlink" href="#ecm-basic-estimate-local-fe-difference-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L861">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1149">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimate_local_FE_difference_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam_i</span><span class="p">,</span> <span class="n">lam_j</span><span class="p">,</span> <span class="n">m_i</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">m_j</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate a neighbouring-state free-energy difference with MBAR/BAR.
+
+Parameters
+----------
+lam_i, lam_j : float
+    Two sampled coupling states; results are stored under the lower value.
+m_i, m_j : int, optional
+    Sample limits for the corresponding input states.
+verbose : bool, optional
+    Print the dimensionless estimate and standard error.
+
+Returns
+-------
+Delta_f, dDelta_f : float
+    Dimensionless free-energy difference from lower to higher lambda and
+    its PyMBAR standard error.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-estimate-fe-using-mbar-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.estimate_FE_using_mBAR_</span></code> (method)<a class="headerlink" href="#ecm-basic-estimate-fe-using-mbar-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L924">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1229">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimate_FE_using_mBAR_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate the endpoint free-energy difference using all states jointly.
+
+Parameters
+----------
+re_evaluate : bool, optional
+    Discard cached cross-potential energies before constructing the full
+    MBAR matrix.
+
+Notes
+-----
+Stores pairwise free-energy and uncertainty matrices, the lambda-zero to
+lambda-one result, neighbouring-pair errors, and a persistent analysis
+log. The printed absolute value includes the analytical EC reference.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-estimate-fe-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.estimate_FE_</span></code> (method)<a class="headerlink" href="#ecm-basic-estimate-fe-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L969">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1288">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">estimate_FE_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Estimate absolute crystal free energy by summing adjacent BAR windows.
+
+Parameters
+----------
+m : int, optional
+    Common sample limit per lambda state.
+verbose : bool, optional
+    Print window and cumulative results.
+
+Notes
+-----
+The analytical lambda-zero free energy is added to all adjacent
+``Delta_f`` values. Historical behaviour sums window standard errors
+linearly rather than in quadrature.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-gather-bar-info-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.gather_BAR_info_</span></code> (method)<a class="headerlink" href="#ecm-basic-gather-bar-info-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1008">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1342">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gather_BAR_info_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m_lambdas</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Pack the current cumulative BAR result and sampling diagnostics.
+
+Parameters
+----------
+m_lambdas : dict, optional
+    Per-state prefix lengths used for cumulative-window analysis.
+
+Returns
+-------
+list
+    Absolute FE and SE, numerical and analytical contributions, window
+    estimates/errors, a ``(n_lambda, 3)`` array of lambda/mean-energy/
+    mean-temperature, and per-state sample counts.
+</pre></div>
 </div>
 </section>
 <section id="ecm-basic-rerun-cumulative-bar-result-method">
 <h3><code class="docutils literal notranslate"><span class="pre">ECM_basic.rerun_cumulative_BAR_result_</span></code> (method)<a class="headerlink" href="#ecm-basic-rerun-cumulative-bar-result-method" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1040">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1388">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rerun_cumulative_BAR_result_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_windows</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">re_evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reruning_logs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">save_evaluations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Recompute BAR convergence as progressively larger data prefixes.
+
+Parameters
+----------
+n_windows : int, optional
+    Number of equal-count cumulative checkpoints per state.
+re_evaluate : bool, optional
+    Clear cached energy evaluations first.
+reruning_logs : bool, optional
+    Clear previous BAR history before appending the checkpoints.
+save_evaluations : bool, optional
+    Persist the updated cross-potential cache.
+</pre></div>
 </div>
 </section>
 <section id="succinic-acid-args-oss-function">
 <h3><code class="docutils literal notranslate"><span class="pre">succinic_acid_ARGS_oss</span></code> (function)<a class="headerlink" href="#succinic-acid-args-oss-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1106">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1467">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">succinic_acid_ARGS_oss</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return standard 300 K NVT ECM setup dictionaries for succinic acid.
+
+``form`` and ``cell`` select the equilibrated PDB filename; ``key`` controls
+the separator before ``cell``. The system contains 14 atoms per molecule and
+uses GAFF with a 0.36 nm PME cutoff and 2 fs timestep.
+</pre></div>
 </div>
 </section>
 <section id="veliparib-args-oss-function">
 <h3><code class="docutils literal notranslate"><span class="pre">veliparib_ARGS_oss</span></code> (function)<a class="headerlink" href="#veliparib-args-oss-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1134">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1501">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">veliparib_ARGS_oss</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return standard 300 K NVT ECM setup dictionaries for veliparib.
+
+The generated configuration uses 34 atoms per molecule, GAFF, a 0.36 nm PME
+cutoff, and a 0.5 fs integration timestep.
+</pre></div>
 </div>
 </section>
 <section id="mivebresib-args-oss-function">
 <h3><code class="docutils literal notranslate"><span class="pre">mivebresib_ARGS_oss</span></code> (function)<a class="headerlink" href="#mivebresib-args-oss-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1162">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1534">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mivebresib_ARGS_oss</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Docstring pending.</p>
+<p class="rubric">Docstring</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Return standard 300 K NVT ECM setup dictionaries for mivebresib.
+
+The generated configuration uses 51 atoms per molecule, GAFF, a 0.36 nm PME
+cutoff, and a 0.5 fs integration timestep.
+</pre></div>
 </div>
 </section>
 <section id="remove-lambda-from-lambda-evaluations-function">
 <h3><code class="docutils literal notranslate"><span class="pre">remove_lambda_from_lambda_evaluations_</span></code> (function)<a class="headerlink" href="#remove-lambda-from-lambda-evaluations-function" title="Link to this heading">¶</a></h3>
-<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1192">View source on GitHub</a></p>
+<p><a class="reference external" href="https://github.com/mme-ucl/FEcrys/blob/main/O/MM/ecm_basic.py#L1569">View source on GitHub</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remove_lambda_from_lambda_evaluations_</span><span class="p">(</span><span class="n">name_old</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">name_new</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>

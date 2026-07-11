@@ -1,3 +1,12 @@
+"""Prepare molecular force fields and reconcile topology atom ordering.
+
+This module edits GROMACS topology fragments, builds OpenMM systems through
+ParmEd, and provides force-field variants used by :class:`SingleComponent`.
+Coordinate arrays exposed to FEcrys retain the input-PDB atom order even when a
+loaded topology uses a different order; :class:`methods_for_permutation`
+performs that translation at the OpenMM boundary.
+"""
+
 from .mm_helper import *
 
 ## ## ## ## ## ## ## ## ## ## ## ##
@@ -9,6 +18,34 @@ def change_charges_itp_top_(path_top_or_itp_file_in : str,
                             replacement_charges : np.ndarray = None, #! correct permuation of atoms
                             neutralise_charge : bool = True,
                             ):
+    """Write a topology copy with modified per-atom partial charges.
+
+    Parameters
+    ----------
+    path_top_or_itp_file_in : str
+        Input GROMACS ``.top`` or ``.itp`` file containing an ``[ atoms ]``
+        section.
+    path_top_or_itp_file_out : str
+        Destination file. Existing content is overwritten.
+    n_atoms_mol : int
+        Number of atom records to read from the first ``[ atoms ]`` section.
+    replacement_charges : numpy.ndarray, optional
+        Explicit charges in topology atom order, in elementary-charge units.
+        Its length must equal ``n_atoms_mol``.
+    neutralise_charge : bool, optional
+        When no replacement is supplied, subtract the mean atomic charge so
+        the molecule's total charge is zero. If false, copy charges unchanged.
+
+    Returns
+    -------
+    numpy.ndarray
+        Charges written to the output file, in elementary-charge units.
+
+    Notes
+    -----
+    The routine performs textual replacement and assumes the charge and mass
+    occupy the conventional columns of the GROMACS atom records.
+    """
     print('')
     print('__ changing charges in top/itp: __________________________')
     file_in_path = str(path_top_or_itp_file_in)
@@ -79,6 +116,24 @@ def change_n_mol_top_(path_top_file_in : str,
                       replace_n_mol : int,
                       verbose = True,
                      ):
+    """Write a topology copy with a new molecule count.
+
+    Parameters
+    ----------
+    path_top_file_in : str
+        Input GROMACS topology containing one entry in ``[ molecules ]``.
+    path_top_file_out : str
+        Destination topology. Existing content is overwritten.
+    replace_n_mol : int
+        New molecule count for the first non-comment entry in the section.
+    verbose : bool, optional
+        Print the replaced line and output path.
+
+    Returns
+    -------
+    None
+        The result is written to ``path_top_file_out``.
+    """
     if verbose: print_ = lambda *x : print(*x)
     else: print_ = lambda *x : None
     print_('')
@@ -125,52 +180,90 @@ def change_n_mol_top_(path_top_file_in : str,
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class methods_for_permutation:
+    """Adapt simulation access when topology and PDB atom orders differ.
+
+    This mixin is injected into a force-field object only when a non-identity
+    atom permutation is detected. OpenMM positions are permuted on input and
+    restored to the FEcrys/PDB order on output.
+    """
 
     ## ## ## ## ## ## ## ## ## ## ## ##
     ## moved from OPLS:
 
     @property
     def _current_r_(self,):
+        """numpy.ndarray: Current positions in PDB order, in nanometres."""
         # positions
         # unit = nanometer
         return self._unpermute_(self.simulation.context.getState(getPositions=True).getPositions(asNumpy=True)._value)
 
     @property
     def _current_v_(self,):
+        """numpy.ndarray: Current velocities in PDB order, in nm/ps."""
         # velocities
         # unit = nanometer/picosecond
         return self._unpermute_(self.simulation.context.getState(getVelocities=True).getVelocities(asNumpy=True)._value)
     
     @property
     def _current_F_(self,):
+        """numpy.ndarray: Current forces in PDB order, in kJ mol⁻¹ nm⁻¹."""
         # forces
         # unit = kilojoule/(nanometer*mole) ; [F = -∇U]
         return self._unpermute_(self.simulation.context.getState(getForces=True).getForces(asNumpy=True)._value)
     
     @property
     def _system_mass_(self,):
+        """numpy.ndarray: Particle masses in PDB order, in daltons."""
         return self._unpermute_(np.array([self.system.getParticleMass(i)._value for i in range(self.system.getNumParticles())]),
                                 axis=0)
 
     def _set_r_(self, r):
+        """Set OpenMM positions from a PDB-ordered coordinate array.
+
+        Parameters
+        ----------
+        r : numpy.ndarray
+            Cartesian coordinates shaped ``(N, 3)`` in nanometres.
+        """
         assert r.shape == (self.N,3)
         self.simulation.context.setPositions(self._permute_(r))
 
     def _set_v_(self, v):
+        """Set OpenMM velocities from a PDB-ordered array.
+
+        Parameters
+        ----------
+        v : numpy.ndarray
+            Velocities shaped ``(N, 3)`` in nanometres per picosecond.
+        """
         assert v.shape == (self.N,3)
         self.simulation.context.setVelocities(self._permute_(v))
 
     def forward_atom_index_(self, inds):
+        """Map PDB-order atom indices to indices used by OpenMM.
+
+        Parameters
+        ----------
+        inds : int or array_like of int
+            Atom indices in the public FEcrys/PDB ordering.
+
+        Returns
+        -------
+        int or numpy.ndarray
+            Corresponding topology-order indices.
+        """
         # select atom in openmm using this layer that converts to the intended index
         return self._unpermute_crystal_from_top_[inds]
     
     def inverse_atom_index_(self, inds):
+        """Map OpenMM topology indices back to the PDB atom ordering."""
         return self._permute_crystal_to_top_[inds]
 
     ## ## ## ## ## ## ## ## ## ## ## ##
     ## moved from COST_FIX_permute_xyz_after_a_trajectory:
 
     def set_arrays_blank_(self,):
+        """Reset all in-memory trajectory buffers and the saved-frame count."""
         self._xyz_top_ = []
         self._xyz = []
         self._u = []
@@ -182,6 +275,12 @@ class methods_for_permutation:
         # self._v = []
 
     def save_frame_(self,):
+        """Append the current OpenMM state to trajectory buffers.
+
+        Positions are temporarily retained in topology order; reduced potential
+        energy, temperature, box vectors, and centre of mass are saved in their
+        standard FEcrys units.
+        """
         self._xyz_top_.append( self.simulation.context.getState(getPositions=True).getPositions(asNumpy=True)._value ) # nm
         self._u.append( self._current_u_ )            #  kT
         self._temperature.append( self._current_T_  ) # K
@@ -192,6 +291,23 @@ class methods_for_permutation:
         # self._v.append(self._current_v_)
 
     def run_simulation_(self, n_saves, stride_save_frame:int=100, verbose_info : str = ''):
+        """Advance a simulation and save frames in public PDB atom order.
+
+        Parameters
+        ----------
+        n_saves : int
+            Number of trajectory frames to append.
+        stride_save_frame : int, optional
+            OpenMM integration steps between saved frames.
+        verbose_info : str, optional
+            Text appended to the live progress message.
+
+        Notes
+        -----
+        Topology-ordered positions are converted only after the requested block
+        finishes. Interrupting the loop can therefore lose coordinates from the
+        unfinished block even though other frame data were appended.
+        """
         self.stride_save_frame = stride_save_frame
         for i in range(n_saves):
             self.simulation.step(stride_save_frame)
@@ -204,6 +320,12 @@ class methods_for_permutation:
         # ! interupting run_simulation_ will not save any xyz data. 
 
     def run_simulation_w_(self, n_saves, stride_save_frame:int=100, verbose_info : str = ''):
+        """Run and save frames after wrapping molecules into the periodic box.
+
+        Parameters are identical to :meth:`run_simulation_`. Before every save,
+        OpenMM positions are requested with ``enforcePeriodicBox=True`` and set
+        back into the context, then converted from topology to PDB atom order.
+        """
         self.stride_save_frame = stride_save_frame
         for i in range(n_saves):
             self.simulation.step(stride_save_frame)
@@ -218,9 +340,25 @@ class methods_for_permutation:
         # ! interupting run_simulation_ will not save any xyz data. 
   
     def u_(self, r, b=None):
-        '''
-        speed up evaluation also # ..
-        '''
+        """Evaluate reduced potential energies for a batch of structures.
+
+        Parameters
+        ----------
+        r : numpy.ndarray
+            PDB-ordered coordinates shaped ``(frames, N, 3)`` in nanometres.
+        b : numpy.ndarray, optional
+            Per-frame box matrices shaped ``(frames, 3, 3)`` in nanometres. If
+            omitted, the context's current box is used for every frame.
+
+        Returns
+        -------
+        numpy.ndarray
+            Reduced potential energies ``beta * U`` shaped ``(frames, 1)``.
+
+        Notes
+        -----
+        The original context positions and box are restored before returning.
+        """
         n_frames = r.shape[0]
         r = np.array(self._permute_(r)) # permute before 
         
@@ -246,47 +384,78 @@ class methods_for_permutation:
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class itp2FF(MM_system_helper):
+    """Base class for force fields loaded from GROMACS ``.itp`` files.
+
+    Subclasses define force-field naming, GROMACS defaults, and optional
+    post-loading corrections. Generated support files live in ``misc_dir`` and
+    are named from the molecular-system ``name``.
+    """
+
     def __init__(self,):
+        """Initialise the shared MM helper and select the GROMACS loader."""
         super().__init__()
         self.using_gmx_loader = True
 
     @property
     def itp_mol(self) -> Path:
+        """pathlib.Path: Input molecule include-topology file."""
         return self.misc_dir / f"{self._FF_name_}_{self.name}.itp"
     
     @property
     def itp_mol_adjusted_charges(self) -> Path:
+        """pathlib.Path: Generated topology with adjusted partial charges."""
         # default : not written or used
         return self.misc_dir / f"{self._FF_name_}_{self.name}_adjusted_charges.itp"
     
     @property
     def top_crys(self) -> Path:
+        """pathlib.Path: Generated crystal-level GROMACS topology."""
         return self.misc_dir / f"x_x_{self._FF_name_}_{self.name}.top"
 
     @property
     def gro_mol(self) -> Path:
+        """pathlib.Path: Molecule coordinates associated with the topology."""
         return self.misc_dir / f"{self._FF_name_}_{self.name}.gro"
 
     @property
     def pdb_mol(self) -> Path:
+        """pathlib.Path: PDB converted from the topology's GRO coordinates."""
         return self.misc_dir / f"{self._FF_name_}_{self.name}.pdb"
 
     @property
     def single_mol_pdb(self) -> Path:
+        """pathlib.Path: Single-molecule PDB extracted from the input crystal."""
         return self.misc_dir / f"{self._FF_name_}_single_mol_{self.name}.pdb" 
     @property
     def _single_mol_pdb_file_(self):
+        """pathlib.Path: Compatibility alias for :attr:`single_mol_pdb`."""
         return self.misc_dir / f"{self._FF_name_}_single_mol_{self.name}.pdb" 
     
     @property
     def single_mol_pdb_permuted(self) -> Path:
+        """pathlib.Path: Single-molecule PDB reordered to topology atom order."""
         return self.misc_dir / f"{self._FF_name_}_single_mol_permuted_{self.name}.pdb" # to match itp
     
     @property
     def single_mol_permutations(self,) -> Path:
+        """pathlib.Path: Pickle containing forward and inverse atom permutations."""
         return self.misc_dir / f"{self._FF_name_}_single_mol_permutations_{self.name}"
 
     def set_pemutation_to_match_topology_(self,):
+        """Determine and install the PDB-to-topology atom permutation.
+
+        A cached permutation is loaded when available. Otherwise the topology
+        GRO file is converted to PDB, reordered against the input molecule, and
+        matched by a Cartesian distance matrix. Molecular permutations are then
+        tiled over ``n_mol`` to form whole-crystal mappings.
+
+        Notes
+        -----
+        If the resulting mapping is non-identity, methods from
+        :class:`methods_for_permutation` are injected into the instance so all
+        public coordinates remain in PDB order. The algorithm assumes every
+        crystal molecule has the same internal atom ordering as the first.
+        """
         try: 
             self._permute_molecule_to_top_, self._unpermute_molecule_from_top_ = load_pickle_(str(self.single_mol_permutations.absolute()))
         except:
@@ -343,10 +512,27 @@ class itp2FF(MM_system_helper):
             self.inject_methods_from_another_class_(methods_for_permutation, include_properties=True)
 
     def a_step_after_initialise_(self,):
+        """Extension hook executed after topology files and charges are prepared."""
         pass
 
     def initialise_FF_(self, neuralise_net_charge=False, replacement_charges=None):
-        ''' run this only after (n_mol and n_atoms_mol) defined in __init__ of SingleComponent '''
+        """Prepare topology files after molecular counts have been defined.
+
+        Parameters
+        ----------
+        neuralise_net_charge : bool, optional
+            Subtract the mean molecular partial charge before topology loading.
+            The historical parameter name is retained for compatibility.
+        replacement_charges : array_like, optional
+            Explicit per-atom charges in topology order. Supplying this also
+            selects the adjusted-charge topology.
+
+        Notes
+        -----
+        ``n_mol`` and ``n_atoms_mol`` must already be set by the molecular-system
+        constructor. The method extracts a single-molecule PDB if necessary,
+        determines atom permutation, and runs the subclass extension hook.
+        """
         if os.path.exists(self.single_mol_pdb.absolute()): pass
         else: process_mercury_output_(self.PDB, self.n_atoms_mol, single_mol = True, custom_path_name=str(self.single_mol_pdb.absolute()))
             
@@ -371,12 +557,22 @@ class itp2FF(MM_system_helper):
         self.a_step_after_initialise_()
 
     def set_FF_(self,):
-        ''' run this just before self.system initialisation  '''
+        """Generate the crystal topology and load it with ParmEd.
+
+        This method is called immediately before OpenMM system construction and
+        sets ``self.ff`` to a :class:`parmed.gromacs.GromacsTopologyFile`.
+        """
         self.reset_n_mol_top_()
         self.ff = parmed.gromacs.GromacsTopologyFile(str(self.top_crys.absolute())) # better
         # self.ff = mm.app.GromacsTopFile(self.top_crys.absolute(), periodicBoxVectors=self.b0)
     
     def reset_n_mol_top_(self,):
+        """Rewrite the crystal topology for the current molecule count.
+
+        The generated file includes either the original or charge-adjusted ITP,
+        followed by the subclass-specific defaults, system, and molecule
+        sections required by the GROMACS topology loader.
+        """
         if self.adjusted_charges: line0 = f'#include "{self._FF_name_}_{self.name}_adjusted_charges.itp"'
         else:                     line0 = f'#include "{self._FF_name_}_{self.name}.itp"'
 
@@ -403,7 +599,10 @@ class itp2FF(MM_system_helper):
 
 
 class OPLS_general(itp2FF):
+    """Generic OPLS topology loader with geometric Lennard-Jones mixing."""
+
     def __init__(self,):
+        """Configure OPLS GROMACS defaults and generic topology labels."""
         super().__init__()
         self._FF_name_ = 'OPLS'
         #                           '; nbfunc        comb-rule       gen-pairs       fudgeLJ      fudgeQQ',
@@ -414,10 +613,14 @@ class OPLS_general(itp2FF):
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'OPLS'``."""
         return 'OPLS'
 
 class GAFF_general(itp2FF):
+    """Generic GAFF topology loader with Lorentz-Berthelot mixing."""
+
     def __init__(self,):
+        """Configure GAFF scaling factors and generic topology labels."""
         super().__init__()
         self._FF_name_ = 'GAFF'
         #                           '; nbfunc        comb-rule       gen-pairs       fudgeLJ      fudgeQQ',
@@ -428,12 +631,31 @@ class GAFF_general(itp2FF):
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'GAFF'``."""
         return 'GAFF'
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 def remove_force_by_names_(system, names:list, verbose=True):
+    """Remove every OpenMM force whose name is in ``names``.
+
+    Parameters
+    ----------
+    system : openmm.System
+        System modified in place.
+    names : list of str
+        Force names to remove. Repeated forces with the same name are all
+        removed.
+    verbose : bool, optional
+        Report how many forces were removed.
+
+    Returns
+    -------
+    None
+    """
+
     def remove_force_by_name_(_name):
+        """Remove the first force named ``_name`` and report its name."""
         index = 0
         for force in system.getForces():
             if force.getName() == _name: 
@@ -450,13 +672,23 @@ def remove_force_by_names_(system, names:list, verbose=True):
     else: pass
 
 def _get_pairs_mol_inner_(single_mol_pdb_file, n=3):
-    '''
-    n atoms in a row is n-1 bonds
+    """Mark intramolecular atom pairs separated by fewer than ``n`` atoms.
 
-        n = 3 for this velff because nrexcl = 2
-            within 2 bonds away removed
-            within 3 bonds away kept (1-2-3-4 ; 1-4 kept)
-    '''
+    Parameters
+    ----------
+    single_mol_pdb_file : str or pathlib.Path
+        Molecule PDB in the same atom order as the topology.
+    n : int, optional
+        Maximum number of atoms in the shortest graph path to mark. Because a
+        path of ``n`` atoms contains ``n - 1`` bonds, ``n=3`` marks 1–2 and 1–3
+        pairs while retaining 1–4 nonbonded interactions.
+
+    Returns
+    -------
+    numpy.ndarray
+        Square molecular mask where one means the pair is internal/excluded and
+        zero means it remains eligible for nonbonded interaction.
+    """
     # important that this is the pdb taken from the .gro file
     # in velff no permutaion was used, but in general should not use self.mol here.
     mol = Chem.MolFromPDBFile(str(single_mol_pdb_file), removeHs=False)
@@ -487,6 +719,21 @@ def _get_pairs_mol_inner_(single_mol_pdb_file, n=3):
     return within_n_bonds_away # 1 : inner, 0 : outer
 
 def _get_pairs_(remove_mol_ij, n_mol):
+    """Tile a molecular exclusion mask across a crystal.
+
+    Parameters
+    ----------
+    remove_mol_ij : numpy.ndarray
+        Square single-molecule mask; one denotes an excluded intramolecular pair.
+    n_mol : int
+        Number of identical molecules in the crystal.
+
+    Returns
+    -------
+    numpy.ndarray
+        ``(N, N)`` mask where one denotes an included nonbonded pair and zero an
+        excluded pair. Intermolecular pairs are always included.
+    """
 
     n_atoms_mol = len(remove_mol_ij)
 
@@ -499,7 +746,24 @@ def _get_pairs_(remove_mol_ij, n_mol):
     return include_ij # 1 : include, 0 : dont include
 
 def custom_LJ_force_(sc, C6_C12_types_dictionary):
-    ''' LJ : all Lennard-Jones '''
+    """Construct a tabulated all-pairs Lennard-Jones force.
+
+    Parameters
+    ----------
+    sc : SingleComponent
+        Initialised molecular system providing topology atom types, cutoff
+        settings, particle count, and molecule PDB.
+    C6_C12_types_dictionary : dict
+        Mapping ``(atom_type_A, atom_type_B)`` to ``(C6, C12)`` parameters in
+        the units expected by OpenMM's reduced Lennard-Jones expression.
+
+    Returns
+    -------
+    list of openmm.CustomNonbondedForce
+        One force with intramolecular 1–2 and 1–3 exclusions. Periodic crystals
+        use a switched cutoff and long-range correction; isolated molecules use
+        no cutoff.
+    """
 
     include_ij = _get_pairs_(_get_pairs_mol_inner_(sc.pdb_mol, n=3), sc.n_mol)
     atom_types = [x.type for x in sc.ff.atoms]
@@ -568,7 +832,20 @@ def custom_LJ_force_(sc, C6_C12_types_dictionary):
     return [force]
 
 def custom_C_force_(sc):
-    ''' C : all Coulombic '''
+    """Construct the Coulombic complement to :func:`custom_LJ_force_`.
+
+    Parameters
+    ----------
+    sc : SingleComponent
+        Initialised system providing molecular charges and nonbonded settings.
+
+    Returns
+    -------
+    list of openmm.NonbondedForce
+        One charge-only force with zero Lennard-Jones parameters and molecular
+        1–2/1–3 exceptions. Its nonbonded method follows the system's original
+        ``NonbondedForce``.
+    """
     include_ij = _get_pairs_(_get_pairs_mol_inner_(sc.pdb_mol, n=3), sc.n_mol)
 
     q = np.concatenate([sc.partial_charges_mol]*sc.n_mol,axis=0) # (N,)
@@ -645,8 +922,15 @@ atoms types : itp file has LJ parameters already as combined as C6_ij and C12_ij
 '''
 
 class tmFF(itp2FF):
-    ''' tailor-made FF '''
+    """Load tailor-made pair parameters not supported by standard mixing rules.
+
+    ``[ nonbond_params ]`` supplies explicit C6/C12 values for every unordered
+    atom-type pair. The automatically generated OpenMM nonbonded forces are
+    replaced by separate tabulated Lennard-Jones and Coulombic forces.
+    """
+
     def __init__(self,):
+        """Configure topology names and unit scaling factors for ``tmFF``."""
         super().__init__()
         self._FF_name_ = 'tmFF'
         #                           '; nbfunc        comb-rule       gen-pairs       fudgeLJ      fudgeQQ',
@@ -657,9 +941,17 @@ class tmFF(itp2FF):
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'tmFF'``."""
         return 'tmFF'
     
     def a_step_after_initialise_(self,):
+        """Read and validate explicit C6/C12 atom-type pair parameters.
+
+        The ``[ nonbond_params ]`` section of :attr:`itp_mol` is parsed into
+        ``nonbond_params``. The number of records must equal the triangular
+        number ``n_types * (n_types + 1) / 2``, ensuring every unordered type
+        pair has an explicit parameter set.
+        """
         file_name = str(self.itp_mol.absolute())
         self.nonbond_params = {}
         start = False
@@ -689,6 +981,19 @@ class tmFF(itp2FF):
         assert len(keys) == int(check)
         
     def recast_NB_(self, verbose=True):
+        """Replace automatically loaded nonbonded forces with custom forces.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            Report removed and added OpenMM force names.
+
+        Notes
+        -----
+        The system is modified in place. Existing ``CustomNonbondedForce`` and
+        ``NonbondedForce`` instances are removed before the tabulated
+        Lennard-Jones and charge-only replacements are added.
+        """
 
         forces_add = custom_LJ_force_(self, C6_C12_types_dictionary=self.nonbond_params) + custom_C_force_(self) 
 
@@ -704,11 +1009,25 @@ class tmFF(itp2FF):
         else: pass
 
     def corrections_to_ff_(self, verbos=True):
+        """Apply tailor-made nonbonded corrections after system construction.
+
+        Parameters
+        ----------
+        verbos : bool, optional
+            Historical spelling of the verbosity flag passed to
+            :meth:`recast_NB_`.
+        """
         self.recast_NB_(verbose=verbos)
 
 class velff(tmFF, itp2FF):
-    ''' keeping seperate to load pickled files '''
+    """Veliparib-specific name-compatible subclass of :class:`tmFF`.
+
+    The separate class is retained so historical pickled simulations continue
+    to resolve their original class path.
+    """
+
     def __init__(self,):
+        """Configure veliparib topology identifiers and GROMACS defaults."""
         super().__init__()
         self._FF_name_ = 'velff'
         #                           '; nbfunc        comb-rule       gen-pairs       fudgeLJ      fudgeQQ',
@@ -719,6 +1038,7 @@ class velff(tmFF, itp2FF):
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'velff'``."""
         return 'velff'
   
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 

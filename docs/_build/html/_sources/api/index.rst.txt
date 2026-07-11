@@ -5,7 +5,7 @@ These pages are generated directly from the active Python syntax tree.
 This avoids importing optional simulation and machine-learning stacks
 during a documentation-only build.
 
-**Coverage:** 623 of 863 active classes and functions have docstrings; 240 are marked as pending.
+**Coverage:** 863 of 863 active classes and functions have docstrings; 0 are marked as pending.
 
 .. toctree::
    :maxdepth: 2

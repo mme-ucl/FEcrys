@@ -1,3 +1,11 @@
+"""Construct, simulate, save, and restore single-component molecular systems.
+
+``SingleComponent`` combines a common OpenMM lifecycle with a dynamically
+selected force-field mixin. Public coordinate arrays contain only physical
+atoms, use nanometres, and retain the input-PDB atom order; individual mixins
+translate to topology order or add virtual sites at the OpenMM boundary.
+"""
+
 from .mm_helper import *
 
 from .ff_setup import *
@@ -8,6 +16,13 @@ OPLS = OPLS_general
 ''' TODO: explain how to use in a notebook '''
 
 class SingleComponent:
+    """Represent a crystal or isolated system containing one molecular species.
+
+    The class owns molecular metadata, an OpenMM ``System`` and ``Simulation``,
+    trajectory buffers, and the arguments needed to reconstruct a saved run.
+    A force-field mixin is selected dynamically by :meth:`__new__`.
+    """
+
     def __new__(cls,
                 PDB,
                 n_atoms_mol,
@@ -16,6 +31,26 @@ class SingleComponent:
                 atom_order_PDB_match_itp = False, # depreceated
                 FF_class = None,
                 ):
+        """Create a runtime subclass combining the system and force-field APIs.
+
+        Parameters
+        ----------
+        PDB, n_atoms_mol, name
+            Forwarded to :meth:`__init__`; they are accepted here because object
+            construction uses the public ``SingleComponent`` signature.
+        FF_name : {'GAFF', 'OPLS', 'TIP4P'}, optional
+            Built-in force-field mixin selected when ``FF_class`` is omitted.
+        atom_order_PDB_match_itp : bool, optional
+            Deprecated compatibility argument; atom ordering is detected later.
+        FF_class : type, optional
+            Custom mixin implementing at least ``initialise_FF_`` and ``set_FF_``.
+
+        Returns
+        -------
+        SingleComponent
+            Instance of a generated subclass whose method resolution order also
+            includes the selected force-field class.
+        """
         
         if FF_class is None: mixin = {'GAFF': GAFF, 'OPLS': OPLS, 'TIP4P':TIP4P}[FF_name]
         else:                mixin = FF_class
@@ -33,6 +68,30 @@ class SingleComponent:
                  atom_order_PDB_match_itp = False, # not used, assumed False and if True that is detected later
                  FF_class = None,                  # last minute update: a more general way of using any  simple class that has methods (initialise_FF_ and set_FF_)
                 ):
+        """Load molecular geometry and prepare force-field input files.
+
+        Parameters
+        ----------
+        PDB : str
+            Crystal or isolated-molecule PDB including hydrogens and periodic
+            box metadata. Coordinates are interpreted in nanometres by MDTraj.
+        n_atoms_mol : int
+            Number of physical atoms per molecule, including hydrogens.
+        name : str
+            Molecular-system identifier used in generated filenames.
+        FF_name : {'GAFF', 'OPLS', 'TIP4P'}, optional
+            Built-in force field; ignored when ``FF_class`` is supplied.
+        atom_order_PDB_match_itp : bool, optional
+            Deprecated and retained only for reconstruction of historical saves.
+        FF_class : type, optional
+            Custom force-field mixin selected during :meth:`__new__`.
+
+        Notes
+        -----
+        The atom count must be an integer multiple of ``n_atoms_mol``. Box
+        vectors are converted to OpenMM's reduced form when necessary. This
+        stage does not yet construct an OpenMM ``System`` or ``Simulation``.
+        """
         super(SingleComponent, self).__init__()
         '''
         folders necesary: (/name1/misc/, /name1/data/) for any FF, and /name1/temp/
@@ -98,13 +157,22 @@ class SingleComponent:
         self.print('')
 
     def set_rdkit_mol_(self):
-        ' not used in this class, just to check atom indices '
+        """Create an index-labelled, conformer-free RDKit reference molecule."""
         self.mol = Chem.MolFromPDBFile(str(self._single_mol_pdb_file_.absolute()),
                                        removeHs = False)
         for i, a in enumerate(self.mol.GetAtoms()): a.SetAtomMapNum(i)
         self.mol.RemoveConformer(0)
 
     def print(self, *text, verbose=False):
+        """Print diagnostic text under the instance verbosity policy.
+
+        Parameters
+        ----------
+        *text
+            Objects forwarded to the built-in :func:`print`.
+        verbose : bool, optional
+            Force output even when ``self.verbose`` is false.
+        """
         if self.verbose: print(*text)
         elif verbose: print(*text)
         else: pass
@@ -118,6 +186,32 @@ class SingleComponent:
                            constraints = None, # can use # app.HBonds
                            SwitchingFunction_factor = 0.95,
                            ):
+        """Construct and configure the OpenMM force-field system.
+
+        Parameters
+        ----------
+        PME_cutoff : float, optional
+            Nonbonded cutoff in nanometres. By default, 95% of half the smallest
+            diagonal box length is used.
+        removeCMMotion : bool, optional
+            Add OpenMM centre-of-mass motion removal and subtract three degrees
+            of freedom.
+        nonbondedMethod : openmm.app nonbonded method, optional
+            Method passed to the topology loader. Isolated single molecules are
+            forced to ``NoCutoff``.
+        custom_EwaldErrorTolerance : float, optional
+            Ewald/PME relative force-error tolerance.
+        constraints : openmm.app constraint option, optional
+            Bond constraints passed to ``createSystem``.
+        SwitchingFunction_factor : float, optional
+            Switching distance as a fraction of ``PME_cutoff``.
+
+        Notes
+        -----
+        The method sets ``ff``, ``topology``, ``system``, mass and charge data,
+        constraint counts, and ``n_DOF``. Force-field-specific corrections are
+        applied last. No integrator or OpenMM context is created here.
+        """
         self.print('# initialise_system:')
 
         self.args_initialise_system = {'PME_cutoff'                 : PME_cutoff,
@@ -226,6 +320,43 @@ class SingleComponent:
                                stride_barostat = 25,
                                custom_integrator = None, # lambda function with other parameters specified
                               ):
+        """Create an OpenMM simulation context and initialise its thermodynamic state.
+
+        Parameters
+        ----------
+        rbv : sequence, optional
+            Restart tuple ``(positions, box, velocities)`` in public atom order;
+            positions and box use nanometres and velocities use nm/ps. Defaults
+            to the input PDB structure and box.
+        minimise : bool, optional
+            Minimise potential energy after loading the initial state.
+        T : float, optional
+            Temperature in kelvin.
+        timestep_ps : float, optional
+            Integration timestep in picoseconds.
+        collision_rate : float, optional
+            Stored Langevin collision rate in inverse picoseconds. The default
+            integrator currently uses ``1 / ps`` directly.
+        P : float, optional
+            Pressure in atmospheres. ``None`` selects NVT; otherwise a barostat
+            is added for NPT simulation.
+        barostat_type : int, optional
+            Barostat implementation selected by the MM helper.
+        barostat_1_scaling : sequence of bool, optional
+            Allowed axis scaling for the anisotropic barostat variant.
+        stride_barostat : int, optional
+            Monte Carlo barostat attempt interval in integration steps.
+        custom_integrator : callable, optional
+            Factory accepting temperature, collision rate, and timestep OpenMM
+            quantities and returning an integrator.
+
+        Notes
+        -----
+        Sets ``kT`` in kJ/mol and ``beta`` in mol/kJ. When centre-of-mass motion
+        removal is enabled, initial positions are translated to zero COM. The
+        reduced-energy evaluator defaults to ``u_GPU_`` if a mixin did not
+        provide a specialised implementation.
+        """
         self.args_initialise_simulation = { 'rbv'                : rbv,
                                             'minimise'           : minimise,
                                             'T'                  : T,
@@ -300,9 +431,21 @@ class SingleComponent:
         self.print('')
 
     def save_simulation_data_(self, path_and_name:str):
-        '''
-        simulation timescale = len(u) * stride_save_frame * timestep_ps
-        '''
+        """Save trajectory data and all reconstruction arguments.
+
+        Parameters
+        ----------
+        path_and_name : str
+            Pickle destination or filename prefix accepted by :func:`save_pickle_`.
+
+        Notes
+        -----
+        Saved MD fields are positions and COMs in nanometres, box matrices in
+        nanometres, reduced potential energies ``beta * U``, and temperatures in
+        kelvin. ``rbv`` stores the current position, box, and velocity state for
+        resuming. The sampled physical time is
+        ``n_frames * stride_save_frame * timestep_ps`` picoseconds.
+        """
         # print(f'Saving MD data. This took {self.time_elapsed} seconds to sample.')
         dataset = {'xyz':self.xyz,
                    'COMs':self.COMs,
@@ -323,10 +466,42 @@ class SingleComponent:
 
     @staticmethod
     def load_simulation_data_(path_and_name):
+        """Load a saved simulation-data dictionary.
+
+        Parameters
+        ----------
+        path_and_name : str
+            Pickle path or prefix previously passed to
+            :meth:`save_simulation_data_`.
+
+        Returns
+        -------
+        dict
+            MD dataset plus object, system, and simulation initialisation args.
+        """
         return load_pickle_(path_and_name)
 
     @staticmethod
     def initialise_from_save_(path_and_name:str, resume_simulation=True, verbose=True):
+        """Reconstruct a system and repopulate its trajectory buffers.
+
+        Parameters
+        ----------
+        path_and_name : str or dict
+            Saved simulation path, or an already loaded simulation dictionary.
+        resume_simulation : bool, optional
+            Initialise the OpenMM context from saved ``rbv`` state. If false,
+            use the original simulation initial conditions while still loading
+            trajectory history.
+        verbose : bool, optional
+            Verbosity assigned before system and simulation initialisation.
+
+        Returns
+        -------
+        SingleComponent
+            Fully reconstructed object with saved frames restored to its
+            in-memory buffers.
+        """
 
         if type(path_and_name) is str:
             dataset = SingleComponent.load_simulation_data_(path_and_name=path_and_name)
@@ -351,6 +526,26 @@ class SingleComponent:
         return sc
 
 def concatenate_datasets_(paths_datasets : list, remove_warmup=None, stride=1):
+    """Concatenate compatible saved MD datasets.
+
+    Parameters
+    ----------
+    paths_datasets : list of str
+        Saved simulation dictionaries in concatenation order.
+    remove_warmup : int or None, optional
+        Slice start applied independently to every trajectory. ``None`` starts
+        from the first frame.
+    stride : int, optional
+        Frame stride applied after warm-up removal.
+
+    Returns
+    -------
+    dict
+        Combined simulation-data dictionary. Position, COM, box, reduced-energy,
+        and temperature arrays are concatenated; reconstruction arguments and
+        save stride must match exactly across inputs. The restart state ``rbv``
+        is retained from the first dataset.
+    """
     dataset_concat = {}
     a = 0
     keys = ['xyz', 'COMs', 'b', 'u', 'T']
@@ -386,20 +581,29 @@ def concatenate_datasets_(paths_datasets : list, remove_warmup=None, stride=1):
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## 
 
 class LJ(MM_system_helper):
+    """Force-field mixin for monatomic Lennard-Jones systems."""
 
     def __init__(self,):
+        """Initialise common molecular-mechanics helper state."""
         super().__init__()
 
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'LJ'``."""
         return 'LJ'
     
     @property
     def _single_mol_pdb_file_(self) -> Path:
+        """pathlib.Path: Single-particle PDB used for index inspection."""
         return self.misc_dir / f"{self.name}_single_mol.pdb" 
 
     def initialise_FF_(self,):
+        """Validate a monatomic system and create its single-particle PDB.
+
+        Every physical atom must be treated as a separate one-atom molecule.
+        The actual particle parameters are expected in the associated ITP file.
+        """
         assert self.n_mol == self.N
         assert self.n_atoms_mol == 1
 
@@ -409,9 +613,11 @@ class LJ(MM_system_helper):
             
     @property
     def top_file_gmx_crys(self) -> Path:
+        """pathlib.Path: Generated crystal GROMACS topology."""
         return self.misc_dir / f"x_x_{self.name}_gmx.top"
 
     def reset_n_mol_top_(self,):
+        """Write a minimal GROMACS topology with the current particle count."""
 
         lines_top = [f'#include "{self.name}.itp"',
                      '',
@@ -427,6 +633,7 @@ class LJ(MM_system_helper):
         file_top.close()
 
     def set_FF_(self,):
+        """Regenerate and load the Lennard-Jones GROMACS topology with ParmEd."""
 
         self.reset_n_mol_top_()
         self.ff = parmed.gromacs.GromacsTopologyFile(str(self.top_file_gmx_crys.absolute()))
@@ -434,25 +641,30 @@ class LJ(MM_system_helper):
 ##
 
 class TIP4P(MM_system_helper):
-    ''' mixin class for SingleComponent. Methods relevant only for using TIP4P are here.
-    '''
+    """Force-field mixin for three-site input mapped to four-site TIP4P water.
+
+    FEcrys exposes only O, H1, and H2 coordinates. The massless M site is added
+    before values enter OpenMM and removed from queried coordinates, velocities,
+    forces, and masses.
+    """
 
     def __init__(self,):
+        """Initialise common molecular-mechanics helper state."""
         super().__init__()
 
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'TIP4P'``."""
         return 'TIP4P'
     
     @property
     def _single_mol_pdb_file_(self) -> Path:
+        """pathlib.Path: Extracted three-atom water PDB."""
         return self.misc_dir / f"{self.name}_single_mol.pdb" 
 
     def initialise_FF_(self):
-        '''
-        run this after (n_mol and n_atoms_mol) defined in __init__ of SingleComponent
-        '''
+        """Validate three physical atoms per water and extract one molecule."""
         if os.path.exists(self._single_mol_pdb_file_.absolute()):
             pass
         else:
@@ -466,9 +678,11 @@ class TIP4P(MM_system_helper):
 
     @property
     def top_file_gmx_crys(self) -> Path:
+        """pathlib.Path: Generated crystal topology including TIP4P-ice files."""
         return self.misc_dir / f"x_x_{self.name}_gmx.top"
 
     def reset_n_mol_top_(self,):
+        """Write a GROMACS topology containing the current number of waters."""
 
         lines_top = ['#include "forcefield.itp"',
                      '#include "tip4p-ice.itp"',
@@ -485,6 +699,7 @@ class TIP4P(MM_system_helper):
         file_top.close()
 
     def set_FF_(self,):
+        """Regenerate and load the TIP4P-ice GROMACS topology with ParmEd."""
 
         self.reset_n_mol_top_()
         self.ff = parmed.gromacs.GromacsTopologyFile(str(self.top_file_gmx_crys.absolute()))
@@ -492,6 +707,20 @@ class TIP4P(MM_system_helper):
     ## ##
 
     def add_v_sites_(self, r):
+        """Insert the TIP4P massless M site into water coordinates.
+
+        Parameters
+        ----------
+        r : numpy.ndarray
+            Coordinates shaped ``(N, 3)`` or ``(batch, N, 3)`` with three
+            physical sites per molecule, in nanometres.
+
+        Returns
+        -------
+        numpy.ndarray
+            Coordinates with four sites per molecule and the same optional batch
+            convention. ``M = O + 0.13458335 * (H1 + H2 - 2 O)``.
+        """
 
         if len(r.shape) == 2: r = r[np.newaxis,...] ; remove_batch_axis = True
         else: remove_batch_axis = False
@@ -508,6 +737,11 @@ class TIP4P(MM_system_helper):
         else: return r
 
     def remove_v_sites_(self, r):
+        """Remove the fourth TIP4P site from batched or unbatched arrays.
+
+        The final site of each four-site molecule is discarded. Units are
+        unchanged, so the helper is shared by positions, velocities, and forces.
+        """
 
         if len(r.shape) == 2: r = r[np.newaxis,...] ; remove_batch_axis = True
         else: remove_batch_axis = False
@@ -525,67 +759,89 @@ class TIP4P(MM_system_helper):
 
     @property
     def _current_r_(self,):
+        """numpy.ndarray: Current physical-site positions in nanometres."""
         # positions
         # unit = nanometer
         return self.remove_v_sites_(self.simulation.context.getState(getPositions=True).getPositions(asNumpy=True)._value)
 
     @property
     def _current_v_(self,):
+        """numpy.ndarray: Current physical-site velocities in nm/ps."""
         # velocities
         # unit = nanometer/picosecond
         return self.remove_v_sites_(self.simulation.context.getState(getVelocities=True).getVelocities(asNumpy=True)._value)
     
     @property
     def _current_F_(self,):
+        """numpy.ndarray: Current physical-site forces in kJ mol⁻¹ nm⁻¹."""
         # forces
         # unit = kilojoule/(nanometer*mole) ; [F = -∇U]
         return self.remove_v_sites_(self.simulation.context.getState(getForces=True).getForces(asNumpy=True)._value)
 
     def _set_r_(self, r):
+        """Set physical-site coordinates after constructing M sites.
+
+        Parameters
+        ----------
+        r : numpy.ndarray
+            Three-site coordinates shaped ``(N, 3)`` in nanometres.
+        """
         assert r.shape == (self.N,3)
         self.simulation.context.setPositions(self.add_v_sites_(r))
 
     def _set_v_(self, v):
+        """Set physical-site velocities after expanding to four sites."""
         assert v.shape == (self.N,3)
         self.simulation.context.setVelocities(self.add_v_sites_(v))
 
     def forward_atom_index_(self, inds):
+        """Map three-site public atom indices to four-site OpenMM indices."""
         forward_mask = np.concatenate([np.arange(3) + i*4 for i in range(self.n_mol)],axis=0)
         return forward_mask[inds]
     
     @property
     def _system_mass_(self,):
+        """numpy.ndarray: Masses of physical sites only, in daltons."""
         mass_with_v_sites =  np.array([self.system.getParticleMass(i)._value for i in range(self.system.getNumParticles())])
         return mass_with_v_sites[self.forward_atom_index_(np.arange(self.N))]
 
     def inverse_atom_index_(self, inds):
+        """Report that a general four-site-to-three-site index map is undefined.
+
+        Returns
+        -------
+        None
+            The method currently emits a warning and performs no conversion.
+        """
         print('!! inverse_atom_index_ : undefined')
 
 ##
 
 class GAFF(MM_system_helper):
-    ''' mixin class for SingleComponent. Methods relevant only for using GAFF are here.
+    """Force-field mixin that prepares GAFF parameters with AmberTools.
 
-    attribes needed before running self.initialise_FF_
+    A single molecule is parameterised by ``antechamber`` and ``parmchk2``;
+    ``tleap`` creates an Amber topology that is converted to GROMACS format for
+    the supported ParmEd/OpenMM loading route.
+    """
 
-    self.misc_dir
-    self.name
-    .. add
-
-    '''
     def __init__(self,):
+        """Initialise common molecular-mechanics helper state."""
         super().__init__()
 
     @classmethod
     @property
     def FF_name(self,):
+        """str: Public force-field identifier ``'GAFF'``."""
         return 'GAFF'
     
     def initialise_FF_(self,):
-        '''
-        run this after (n_mol and n_atoms_mol) defined near the end of __init__ of SingleComponent
-        this is at the end of __init__
-        '''
+        """Ensure AmberTools inputs exist and build a one-molecule PRMTOP.
+
+        ``n_mol`` and ``n_atoms_mol`` must already be defined. Missing PREPI,
+        FRCMOD, and MOL2 files trigger :meth:`first_time_molecule_`; the PRMTOP
+        is then regenerated for the GROMACS conversion workflow.
+        """
 
         if self.can_run_tleap: pass
         else: 
@@ -601,18 +857,33 @@ class GAFF(MM_system_helper):
 
     @property
     def _single_mol_pdb_file_(self) -> Path:
+        """pathlib.Path: Extracted single-molecule PDB."""
         return self.misc_dir / f"{self.name}_single_mol.pdb" 
     @property
     def _single_mol_prepi_file_(self) -> Path:
+        """pathlib.Path: Antechamber PREPI parameter file."""
         return self.misc_dir / f"{self.name}_single_mol.prepi"
     @property
     def _single_mol_frcmod_file_(self) -> Path:
+        """pathlib.Path: Parmchk2 force-field modification file."""
         return self.misc_dir / f"{self.name}_single_mol.frcmod"
     @property
     def _single_mol_mol2_file_(self) -> Path:
+        """pathlib.Path: Antechamber MOL2 file with GAFF types and charges."""
         return self.misc_dir / f"{self.name}_single_mol.mol2"
 
     def first_time_molecule_(self,):
+        """Generate the initial GAFF molecule files with AmberTools.
+
+        The first molecule is extracted from the crystal PDB. ``antechamber``
+        generates PREPI and MOL2 files with AM1-BCC charges, and ``parmchk2``
+        generates missing parameters in FRCMOD format.
+
+        Notes
+        -----
+        External executables must be available on ``PATH``. Their output files
+        are written beneath ``misc_dir`` and existing files may be replaced.
+        """
         # make *single_mol.pdb
         # first single-molecule conformer from crystal PDB is extracted and saved as *single_mol.pdb :
         process_mercury_output_(self.PDB,
@@ -674,6 +945,7 @@ class GAFF(MM_system_helper):
 
     @property
     def can_run_tleap(self,):
+        """bool: Whether PREPI, FRCMOD, and MOL2 inputs all exist."""
         paths_needed = [self._single_mol_prepi_file_.absolute(),
                         self._single_mol_frcmod_file_.absolute(),
                         self._single_mol_mol2_file_.absolute(),
@@ -684,15 +956,24 @@ class GAFF(MM_system_helper):
 
     @property
     def tleap_file(self) -> Path:
+        """pathlib.Path: Generated tleap instruction file."""
         return self.misc_dir / f"{self.name}.tleap"
     @property
     def prmtop_file(self) -> Path: # the main file of interest
+        """pathlib.Path: Amber topology generated by tleap."""
         return self.misc_dir / f"{self.name}.prmtop"
     @property
     def _inpcrd_file_(self) -> Path:
+        """pathlib.Path: Amber coordinate file generated alongside PRMTOP."""
         return self.misc_dir / f"{self.name}.inpcrd"
     
     def create_prmtop_(self,):
+        """Run tleap to create Amber topology and coordinate files.
+
+        With the supported GROMACS loader, the Amber topology contains one
+        molecule and is later replicated by editing the GROMACS topology. The
+        deprecated Amber loader instead requests ``n_molecules`` copies.
+        """
         if self.using_gmx_loader: n = 1
         else: n = self.n_molecules
         # 
@@ -727,17 +1008,21 @@ class GAFF(MM_system_helper):
 
     @property
     def top_file_gmx(self) -> Path:
+        """pathlib.Path: ParmEd conversion of the one-molecule Amber topology."""
         return self.misc_dir / f"{self.name+'_gmx'}.top"
     
     @property
     def top_file_gmx_adjusted_charges(self) -> Path:
+        """pathlib.Path: One-molecule GROMACS topology with neutralised charge."""
         return self.misc_dir / f"x_{self.name}_gmx.top"
 
     @property
     def top_file_gmx_crys(self) -> Path:
+        """pathlib.Path: Crystal GROMACS topology with the current molecule count."""
         return self.misc_dir / f"x_x_{self.name}_gmx.top"
 
     def reset_n_mol_top_(self,):
+        """Regenerate the crystal topology from the neutralised molecule topology."""
         change_n_mol_top_(path_top_file_in = str(self.top_file_gmx_adjusted_charges.absolute()),
                           path_top_file_out = str(self.top_file_gmx_crys.absolute()),
                           replace_n_mol = self.n_mol,
@@ -748,10 +1033,17 @@ class GAFF(MM_system_helper):
     # set_FF (GAFF):
 
     def set_FF_amber_(self,):
+        """Load GAFF directly through OpenMM's deprecated Amber topology route."""
         print('!!! using amber loader for GAFF; this may have problems')
         self.ff = app.AmberPrmtopFile(self.prmtop)
         
     def set_FF_gmx_(self,):
+        """Convert, neutralise, replicate, and load the GAFF topology.
+
+        ParmEd converts PRMTOP to GROMACS format on first use. Molecular charges
+        are neutralised, the topology molecule count is set to ``n_mol``, and
+        the resulting crystal topology is loaded with ParmEd.
+        """
         
         if os.path.exists(self.top_file_gmx.absolute()): pass
         else:
@@ -777,6 +1069,7 @@ class GAFF(MM_system_helper):
         self.ff = parmed.gromacs.GromacsTopologyFile(str(self.top_file_gmx_crys.absolute()))
 
     def set_FF_(self,):
+        """Select the supported GROMACS loader or deprecated Amber loader."""
         if self.using_gmx_loader: self.set_FF_gmx_()
         else: self.set_FF_amber_()
 
