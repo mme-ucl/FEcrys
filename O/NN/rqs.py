@@ -127,7 +127,6 @@ def normalize_knot_slopes_(x, # elementwise
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 
-ZERO_64 = cast_64_(0.0)
 def rqs_bin_(x, xA, xB, yA, yB, sA=1.0, sB=1.0, forward=True):
     """Evaluate or invert one rational-quadratic spline bin.
 
@@ -157,9 +156,11 @@ def rqs_bin_(x, xA, xB, yA, yB, sA=1.0, sB=1.0, forward=True):
         b = (yB - yA)*sA       - _o
         c = d*(yA - x)
         discriminant = b**2 - 4. * a * c
-        if tf.math.reduce_any(discriminant<ZERO_64):
-            discriminant = tf.where(discriminant<ZERO_64, ZERO_64, discriminant)
-        else: pass
+        # Match the input dtype.  ``rqs_`` normally calls this helper with
+        # float64 tensors, but ``rqs_bin_`` is also useful directly with
+        # float32 values.  Comparing against the module-level float64 zero made
+        # that direct inverse path fail before the numerical clipping occurred.
+        discriminant = tf.maximum(discriminant, tf.zeros_like(discriminant))
         r = - 2. * c / (b + discriminant**0.5)
         y = r * (xB - xA) + xA
         #return y, -f_RQ_(y, xA, xB, yA, yB, sA=sA, sB=sB, forward=True)[-1]

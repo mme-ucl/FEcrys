@@ -18,4 +18,5 @@ The documentation is organised around two complementary views:
 
    architecture
    api/index
+   testing
    contributing-docs

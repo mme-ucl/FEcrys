@@ -939,20 +939,24 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                  DIM_connection = None, # not used. was here before, thinking about pretraining on single molecule before moving conformer params into crystal model
                  n_att_heads = None,    # not used.
                  initialise = True,
+                 identity_init = False,
                 ):
         """Build a conformation-only flow for one isolated molecule.
 
         One compatible ``SingleMolecule_map`` may be supplied per metastable
         state. Translation and global rotation are absent, so only conformer
         coupling layers are created. ``DIM_connection`` and ``n_att_heads`` are
-        retained for API compatibility and unused.
+        retained for API compatibility and unused. ``identity_init`` starts
+        every conformational spline coupling at the identity transformation.
         """
         super().__init__()
         self.init_args = {  'ic_maps' : ic_maps,
                             'n_layers' : n_layers,
                             'optimiser_LR_decay' : optimiser_LR_decay,
+                            'identity_init' : identity_init,
                             }
         self.DIM_connection = None
+        self.identity_init = identity_init
         
         if str(type(ic_maps)) not in ["<class 'list'>","<class 'tensorflow.python.training.tracking.data_structures.ListWrapper'>"]: 
             ic_maps = [ic_maps]
@@ -1006,6 +1010,7 @@ class PGMmol(tf.keras.models.Model, model_helper_PGMcrys_v1, model_helper):
                             kwargs_for_given_half_layer_class = {'n_hidden' : n_hidden_main,
                                                                 'dims_hidden' : None,
                                                                 'hidden_activation' : hidden_activation,
+                                                                'identity_init' : self.identity_init,
                                                                 },
                             use_tfp = False,
                             n_bins = n_bins,

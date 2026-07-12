@@ -1,0 +1,52 @@
+Testing the model architecture
+==============================
+
+The first test layer protects the mathematical contracts of the TensorFlow
+normalising-flow implementation. It is deliberately deterministic and small
+enough to run on a CPU.
+
+Run the complete fast suite from the repository root inside the ``fecrys``
+environment:
+
+.. code-block:: console
+
+   conda activate fecrys
+   python -m pytest
+
+Run only neural-network architecture invariants with:
+
+.. code-block:: console
+
+   python -m pytest -m architecture
+
+Current coverage
+----------------
+
+``tests/test_rqs.py`` checks:
+
+* the exact identity case for one rational-quadratic spline bin;
+* forward/inverse recovery for general splines;
+* cancellation of forward and inverse log-Jacobians;
+* periodic shifts and two-spline periodic compositions;
+* ordered knot grids and minimum bin widths; and
+* the identity-gradient contract of stability clipping.
+
+``tests/test_spline_coupling.py`` checks:
+
+* mixed periodic/ordinary half-layer inversion;
+* neutral behaviour under identity initialisation;
+* full two-half-layer inversion and log-Jacobian cancellation;
+* preservation of auxiliary-only variables; and
+* attention-layer flow masks that freeze selected variables.
+
+The tests use ``pytest.importorskip`` for TensorFlow. Documentation-only or
+molecular-mechanics-only environments therefore report the architecture tests
+as skipped rather than failing during collection.
+
+Next testing layers
+-------------------
+
+The next additions should cover representation-map round trips, complete
+``PGMcrys`` forward/inverse composition, model save/load parity, and the
+analytical harmonic-system benchmark. Those tests require small reusable
+molecular fixtures and are intentionally separate from these pure layer tests.

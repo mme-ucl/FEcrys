@@ -42,6 +42,24 @@ Open `docs/_build/html/index.html` to browse the generated site. The API pages
 are extracted statically, so building the documentation does not import or
 initialise TensorFlow, OpenMM, or the molecular systems.
 
+## Testing
+
+Run the deterministic unit-test suite from the repository root inside the
+activated `fecrys` environment:
+
+```bash
+python -m pytest
+```
+
+The initial suite focuses on rational-quadratic splines and spline coupling
+layers: forward/inverse consistency, log-Jacobian cancellation, periodic
+wrapping, identity initialisation, auxiliary variables, and attention flow
+masks. Run only these architecture invariants with:
+
+```bash
+python -m pytest -m architecture
+```
+
 ## Requirements
 
 - Linux (tested on Ubuntu 20.04/24.04, RHEL 8+, CentOS Stream 9, Fedora 38+,
